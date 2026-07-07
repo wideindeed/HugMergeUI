@@ -2,15 +2,15 @@
 
 Predictive conflict diagnostics for mergekit model merges: sign-conflict and
 redundancy metrics per layer, computed from weight diffs, surfaced as a
-heatmap over a merge-config diagram — before you spend hours running the
+heatmap over a merge-config diagram, before you spend hours running the
 merge on a GPU.
 
 ## Structure
 
-- `backend/` — FastAPI service. YAML config parsing, Hugging Face
+- `backend/` : FastAPI service. YAML config parsing, Hugging Face
   architecture sanity checks, conflict-score engine (safetensors weight
   diffs, TIES-style sign-conflict/redundancy math).
-- `frontend/` — Vite + React + TypeScript. Stacked layer diagram, heatmap
+- `frontend/` : Vite + React + TypeScript. Stacked layer diagram, heatmap
   overlay, config editor.
 
 ## Backend setup
@@ -34,7 +34,7 @@ npm run dev
 Used for backend development/testing throughout Phases 1-3 (no GPU needed
 until Phase 5):
 
-- `Qwen/Qwen2.5-0.5B` + `Qwen/Qwen2.5-0.5B-Instruct` — smallest pair (~1GB
+- `Qwen/Qwen2.5-0.5B` + `Qwen/Qwen2.5-0.5B-Instruct` : smallest pair (~1GB
   each), fastest iteration loop
 - `TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T` +
   `TinyLlama/TinyLlama-1.1B-Chat-v1.0` — same-arch baseline (~2.2GB each)
