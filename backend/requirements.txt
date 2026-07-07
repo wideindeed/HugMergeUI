@@ -1,5 +1,6 @@
 fastapi
 uvicorn[standard]
+pytest
 pydantic
 pyyaml
 huggingface_hub
