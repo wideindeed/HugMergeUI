@@ -6,4 +6,9 @@ pydantic
 pyyaml
 huggingface_hub
 safetensors
+numpy
+
+# torch: install separately with the CUDA index, plain `pip install torch`
+# silently grabs the CPU-only build:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu126
 torch

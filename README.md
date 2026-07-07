@@ -18,7 +18,15 @@ merge on a GPU.
 ```
 .venv\Scripts\activate
 pip install -r backend/requirements.txt
+pip install torch --index-url https://download.pytorch.org/whl/cu126
 uvicorn backend.app.main:app --reload
+```
+
+Verify CUDA is actually being used (plain `pip install torch` silently grabs
+the CPU-only build):
+
+```
+python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
 ```
 
 ## Frontend setup
