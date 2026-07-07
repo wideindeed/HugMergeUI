@@ -46,3 +46,24 @@ models:
     body = response.json()
     assert body["warnings"] == []
     assert body["num_layers"] > 0
+
+
+def test_conflict_score_route():
+    response = client.post("/conflict-score", json={
+        "base_model": "Qwen/Qwen2.5-0.5B",
+        "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+        "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    })
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["layers"]) > 0
+    assert all(layer["conflict"] == 0.0 for layer in body["layers"])
+
+
+def test_conflict_score_route_unknown_model_returns_400():
+    response = client.post("/conflict-score", json={
+        "base_model": "this-org/does-not-exist-hugmergeui-test",
+        "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+        "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    })
+    assert response.status_code == 400

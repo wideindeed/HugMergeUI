@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from .conflict.engine import ModelWeightsFetchError, score_model_pair
 from .hf.service import check_architecture
 from .parser.loader import load_config, parse_raw_config
 
@@ -14,6 +15,13 @@ class ParseConfigRequest(BaseModel):
 
 class CheckArchitectureRequest(BaseModel):
     yaml_text: str
+
+
+class ConflictScoreRequest(BaseModel):
+    base_model: str
+    model_a: str
+    model_b: str
+    density: float = 0.5
 
 
 @app.get("/health")
@@ -37,3 +45,13 @@ def check_architecture_route(request: CheckArchitectureRequest) -> dict:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
     return check_architecture(raw)
+
+
+@app.post("/conflict-score")
+def conflict_score_route(request: ConflictScoreRequest) -> dict:
+    try:
+        return score_model_pair(
+            request.base_model, request.model_a, request.model_b, density=request.density
+        )
+    except ModelWeightsFetchError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
