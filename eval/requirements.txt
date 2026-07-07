@@ -1,0 +1,4 @@
+# Only needed to reproduce Phase 5 (running real merges + perplexity eval).
+# Not required for the backend service itself.
+mergekit
+transformers==4.46.3

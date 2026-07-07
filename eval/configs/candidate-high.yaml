@@ -1,0 +1,14 @@
+merge_method: ties
+base_model: Qwen/Qwen2.5-0.5B
+models:
+  - model: dphn/Dolphin3.0-Qwen2.5-0.5B
+    parameters:
+      weight: 0.5
+      density: 0.5
+  - model: Qwen/Qwen2.5-0.5B-Instruct
+    parameters:
+      weight: 0.5
+      density: 0.5
+parameters:
+  normalize: true
+dtype: float32
