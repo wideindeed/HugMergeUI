@@ -31,3 +31,26 @@ def validate_raw_config(raw: dict) -> None:
 
     if method in METHODS_REQUIRING_MODELS and not has_models:
         raise ValueError(f"merge_method {method!r} requires 'models'")
+
+
+def extract_model_ids(raw: dict) -> list[str]:
+    """All model ids referenced by a raw config, base_model first, in
+    first-seen order, regardless of whether it uses 'models' or 'slices'.
+    """
+    ids: list[str] = []
+
+    def add(model_id: str) -> None:
+        if model_id not in ids:
+            ids.append(model_id)
+
+    if "base_model" in raw:
+        add(raw["base_model"])
+
+    for model_spec in raw.get("models", []):
+        add(model_spec["model"])
+
+    for slice_spec in raw.get("slices", []):
+        for source in slice_spec["sources"]:
+            add(source["model"])
+
+    return ids

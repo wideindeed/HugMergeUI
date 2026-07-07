@@ -32,3 +32,17 @@ def test_parse_config_linear_missing_num_layers_returns_400():
     yaml_text = (FIXTURES / "linear.yml").read_text()
     response = client.post("/parse-config", json={"yaml_text": yaml_text})
     assert response.status_code == 400
+
+
+def test_check_architecture_route():
+    yaml_text = """
+merge_method: linear
+models:
+  - model: Qwen/Qwen2.5-0.5B
+  - model: Qwen/Qwen2.5-0.5B-Instruct
+"""
+    response = client.post("/check-architecture", json={"yaml_text": yaml_text})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["warnings"] == []
+    assert body["num_layers"] > 0
