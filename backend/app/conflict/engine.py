@@ -10,12 +10,13 @@ are averages weighted by tensor element count, so a large down_proj
 doesn't get diluted by a tiny layernorm bias in the same layer.
 """
 
+import json
 import re
 from collections import defaultdict
 
 import torch
 from huggingface_hub import hf_hub_download
-from huggingface_hub.utils import HfHubHTTPError, HFValidationError
+from huggingface_hub.utils import EntryNotFoundError, HfHubHTTPError, HFValidationError
 from safetensors import safe_open
 
 from .redundancy import redundant_magnitude_fraction
@@ -28,11 +29,56 @@ class ModelWeightsFetchError(Exception):
     pass
 
 
-def _download_safetensors(repo_id: str) -> str:
+def _weight_map_from_index(index_json_path: str) -> dict[str, str]:
+    with open(index_json_path) as f:
+        index = json.load(f)
+    return index["weight_map"]
+
+
+def _resolve_tensor_files(repo_id: str) -> dict[str, str]:
+    """Maps every tensor name in a repo to its local (downloaded) shard path.
+
+    Most models under ~5GB ship as a single `model.safetensors`; anything
+    bigger - i.e. most real mergekit targets - is split into numbered shards
+    with a `model.safetensors.index.json` weight map. Both are handled so the
+    engine isn't limited to toy-sized single-file models.
+    """
     try:
-        return hf_hub_download(repo_id=repo_id, filename="model.safetensors")
+        path = hf_hub_download(repo_id=repo_id, filename="model.safetensors")
+        with safe_open(path, framework="pt") as f:
+            return {name: path for name in f.keys()}
+    except EntryNotFoundError:
+        pass
     except (HfHubHTTPError, HFValidationError) as e:
-        raise ModelWeightsFetchError(f"could not fetch model.safetensors for {repo_id!r}: {e}") from e
+        raise ModelWeightsFetchError(f"could not fetch weights for {repo_id!r}: {e}") from e
+
+    try:
+        index_path = hf_hub_download(repo_id=repo_id, filename="model.safetensors.index.json")
+    except (HfHubHTTPError, HFValidationError, EntryNotFoundError) as e:
+        raise ModelWeightsFetchError(f"could not fetch weights for {repo_id!r}: {e}") from e
+
+    weight_map = _weight_map_from_index(index_path)
+    shard_paths: dict[str, str] = {}
+    try:
+        for shard_filename in set(weight_map.values()):
+            shard_paths[shard_filename] = hf_hub_download(repo_id=repo_id, filename=shard_filename)
+    except (HfHubHTTPError, HFValidationError, EntryNotFoundError) as e:
+        raise ModelWeightsFetchError(f"could not fetch shard for {repo_id!r}: {e}") from e
+
+    return {name: shard_paths[shard_filename] for name, shard_filename in weight_map.items()}
+
+
+def _load_tensors(tensor_files: dict[str, str], names: set[str]) -> dict[str, torch.Tensor]:
+    names_by_file: dict[str, list[str]] = defaultdict(list)
+    for name in names:
+        names_by_file[tensor_files[name]].append(name)
+
+    tensors: dict[str, torch.Tensor] = {}
+    for path, names_in_file in names_by_file.items():
+        with safe_open(path, framework="pt") as f:
+            for name in names_in_file:
+                tensors[name] = f.get_tensor(name)
+    return tensors
 
 
 def _extract_layer_index(tensor_name: str) -> int | None:
@@ -95,16 +141,19 @@ def score_tensors(
 def score_model_pair(
     base_repo_id: str, model_a_repo_id: str, model_b_repo_id: str, *, density: float = 0.5
 ) -> dict:
-    base_path = _download_safetensors(base_repo_id)
-    a_path = _download_safetensors(model_a_repo_id)
-    b_path = _download_safetensors(model_b_repo_id)
+    base_files = _resolve_tensor_files(base_repo_id)
+    a_files = _resolve_tensor_files(model_a_repo_id)
+    b_files = _resolve_tensor_files(model_b_repo_id)
 
-    with safe_open(base_path, framework="pt") as f_base, \
-         safe_open(a_path, framework="pt") as f_a, \
-         safe_open(b_path, framework="pt") as f_b:
-        common = set(f_base.keys()) & set(f_a.keys()) & set(f_b.keys())
-        base = {k: f_base.get_tensor(k) for k in common}
-        model_a = {k: f_a.get_tensor(k) for k in common}
-        model_b = {k: f_b.get_tensor(k) for k in common}
+    common = set(base_files) & set(a_files) & set(b_files)
+    if not common:
+        raise ValueError(
+            f"no tensors in common between {base_repo_id!r}, {model_a_repo_id!r}, "
+            f"{model_b_repo_id!r} - check these are compatible architectures"
+        )
+
+    base = _load_tensors(base_files, common)
+    model_a = _load_tensors(a_files, common)
+    model_b = _load_tensors(b_files, common)
 
     return score_tensors(base, model_a, model_b, density=density)

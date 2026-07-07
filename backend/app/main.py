@@ -53,5 +53,5 @@ def conflict_score_route(request: ConflictScoreRequest) -> dict:
         return score_model_pair(
             request.base_model, request.model_a, request.model_b, density=request.density
         )
-    except ModelWeightsFetchError as e:
+    except (ModelWeightsFetchError, ValueError) as e:
         raise HTTPException(status_code=400, detail=str(e)) from e

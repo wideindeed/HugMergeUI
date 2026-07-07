@@ -67,3 +67,13 @@ def test_conflict_score_route_unknown_model_returns_400():
         "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
     })
     assert response.status_code == 400
+
+
+def test_conflict_score_route_invalid_density_returns_400():
+    response = client.post("/conflict-score", json={
+        "base_model": "Qwen/Qwen2.5-0.5B",
+        "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+        "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+        "density": 1.5,
+    })
+    assert response.status_code == 400
