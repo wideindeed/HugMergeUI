@@ -46,7 +46,6 @@ until Phase 5):
 
 ## Build order
 
-See `mergekit_conflict_visualizer_plan (1).txt` for the full phased plan
-(Phase 0: setup, Phase 1: config parser, Phase 2: architecture sanity
-checks, Phase 3: conflict score engine, Phase 4: visual diagram, Phase 5:
-proxy evaluation — stretch goal).
+Phase 0: setup, Phase 1: config parser, Phase 2: architecture sanity checks,
+Phase 3: conflict score engine, Phase 4: visual diagram, Phase 5: proxy
+evaluation (stretch goal).

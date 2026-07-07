@@ -14,6 +14,9 @@ frontend/dist/
 models/
 .cache/
 
+# Planning doc (local reference only)
+mergekit_conflict_visualizer_plan*.txt
+
 # IDE
 .idea/
 
