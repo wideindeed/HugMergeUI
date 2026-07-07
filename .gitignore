@@ -20,6 +20,7 @@ mergekit_conflict_visualizer_plan*.txt
 
 # IDE
 .idea/
+.claude/
 
 # OS
 .DS_Store

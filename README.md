@@ -46,11 +46,13 @@ until Phase 5):
   each), fastest iteration loop
 - `TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T` +
   `TinyLlama/TinyLlama-1.1B-Chat-v1.0` — same-arch baseline (~2.2GB each)
-- Two independent fine-tunes of the same base model (TBD which pair, pick
-  when Phase 3 needs a realistic sign-conflict test case) — the actual
-  target scenario, since independently-drifted fine-tunes are where
-  conflict is expected to show up, unlike a base/instruct pair from the
-  same lineage
+- `dphn/Dolphin3.0-Qwen2.5-0.5B` + `wulli/Qwen2.5-0.5B-sft-capybara`, both
+  SFT'd from `Qwen/Qwen2.5-0.5B` by unrelated authors on different
+  datasets — the actual target scenario. Confirmed architecturally
+  compatible via `/check-architecture`, and confirmed non-trivial: real
+  weight diffs (not near-zero noise), average sign conflict ~0.48 across
+  layers (near chance, as expected for independently-drifted tunes) vs.
+  0.0 for a model merged with itself
 
 ## Build order
 

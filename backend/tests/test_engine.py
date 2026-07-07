@@ -74,3 +74,25 @@ def test_score_model_pair_identical_models_have_near_zero_conflict():
     )
     assert len(result["layers"]) > 0
     assert all(layer["conflict"] == 0.0 for layer in result["layers"])
+
+
+def test_score_model_pair_independent_finetunes_show_real_conflict():
+    """The actual target scenario: two unrelated SFT tunes of the same base
+    (Dolphin3.0, trained by cognitivecomputations, and a Capybara SFT run by
+    a different author) show near-chance sign conflict, unlike the
+    identical-model case above which is exactly 0. Confirms the metric
+    differentiates genuine independent drift from a degenerate self-pair.
+    """
+    result = score_model_pair(
+        "Qwen/Qwen2.5-0.5B",
+        "dphn/Dolphin3.0-Qwen2.5-0.5B",
+        "wulli/Qwen2.5-0.5B-sft-capybara",
+    )
+    layers = result["layers"]
+    assert len(layers) == 24
+
+    avg_conflict = sum(layer["conflict"] for layer in layers) / len(layers)
+    assert 0.4 < avg_conflict < 0.5
+
+    assert all(0.0 < layer["redundancy_a"] < 1.0 for layer in layers)
+    assert all(0.0 < layer["redundancy_b"] < 1.0 for layer in layers)
