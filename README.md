@@ -19,8 +19,13 @@ merge on a GPU.
 .venv\Scripts\activate
 pip install -r backend/requirements.txt
 pip install torch --index-url https://download.pytorch.org/whl/cu126
-uvicorn backend.app.main:app --reload
+uvicorn backend.app.main:app --port 8010 --reload
 ```
+
+Port 8010, not 8000: on Windows, `8000` frequently falls inside the OS's
+dynamic port exclusion range (Hyper-V/WSL reserve chunks of it), which
+fails with a permissions error on bind. The frontend's Vite dev proxy is
+already pointed at `8010` to match.
 
 Verify CUDA is actually being used (plain `pip install torch` silently grabs
 the CPU-only build):
