@@ -88,11 +88,59 @@ Two honest findings, not massaged to look cleaner than they are:
    trained — it doesn't capture that `Qwen2.5-0.5B-Instruct` went through
    much heavier alignment/RLHF-style tuning than a plain SFT run, which
    apparently matters more for merge quality than the sign-conflict rate
-   does. With only 3 data points this isn't conclusive, but it's a real
-   signal that sign-conflict alone may need a second metric (e.g. weight
-   magnitude of the drift, not just its sign) to rank-order quality between
-   two already-divergent pairs, rather than just separating "same" from
-   "different."
+   does.
+
+**Attempted fix, and why it failed:** the natural hypothesis is that plain
+sign-conflict-rate is *magnitude-blind* — for two independent updates it
+converges toward ~50% regardless of whether the disagreements are tiny
+noise or large, load-bearing changes. `magnitude_weighted_conflict_rate`
+(`backend/app/conflict/sign_conflict.py`) weights each element by
+`min(|diff_a|, |diff_b|)` — the amount of update actually contested — instead
+of counting elements uniformly, so a handful of huge disagreements can
+dominate a sea of small ones. Re-running the same three triples:
+
+| variant | conflict (raw) | conflict_weighted | perplexity |
+|---|---|---|---|
+| `anchor-self` | 0.0 | 0.0 | 8.23 |
+| `validated-medium` | 0.482 | 0.471 | 9.23 |
+| `candidate-high` | 0.468 | 0.444 | 10.33 (worst) |
+
+The weighted metric moved both numbers down slightly but **preserved the
+same wrong ordering** — `candidate-high` still scores as less conflicted
+despite the worse merge. So the magnitude-blindness theory was wrong, or at
+least incomplete: weighting conflicts by contested magnitude isn't the fix.
+Current best guess is that the real missing variable is each model's
+*overall drift magnitude from base*, independent of sign conflict —
+`Qwen2.5-0.5B-Instruct` likely underwent far heavier training than a plain
+SFT run, making its update disproportionately large in an absolute sense,
+which neither `conflict` nor `conflict_weighted` normalizes against.
+
+**Second fix, and this one works.** `drift_magnitude`
+(`backend/app/conflict/drift.py`) drops the conflict framing entirely and
+measures relative update size instead: `(rms(diff_a) + rms(diff_b)) /
+rms(base)` per tensor, aggregated the same way as the other metrics. It
+doesn't ask whether the two updates disagree, only how much total change is
+being forced into the merge relative to the weight's own scale. Re-running
+the same three triples through the real engine (`score_model_pair`,
+tensor-count-weighted average across layers):
+
+| variant | conflict | conflict_weighted | drift_magnitude | perplexity |
+|---|---|---|---|---|
+| `anchor-self` | 0.0 | 0.0 | 0.0 | 8.23 |
+| `validated-medium` | 0.482 | 0.471 | 0.1046 | 9.23 |
+| `candidate-high` | 0.468 | 0.444 | 0.1564 | 10.33 (worst) |
+
+`drift_magnitude` rank-orders all three correctly — exactly matching the
+perplexity ordering, where both conflict metrics inverted the middle two.
+It converges with the earlier whole-model observation that
+`Qwen2.5-0.5B-Instruct`'s diff norm (36.2) plus Dolphin3.0's (34.05) sums to
+a much larger combined update than Dolphin3.0 + Capybara-sft's (34.05 +
+16.07), and that combined size — not sign agreement — is what tracked
+perplexity degradation. Still only 3 real data points, so this isn't
+statistically bulletproof, but it's a real, verified result: the conflict
+score's blind spot (magnitude of total drift) has a working second metric
+now, computed by the actual engine and covered by tests
+(`backend/tests/test_drift.py`).
 
 Reproduce: `eval/configs/*.yaml` are the mergekit configs,
 `mergekit-yaml eval/configs/<name>.yaml eval/merged/<name> --cuda` runs the

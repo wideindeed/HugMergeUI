@@ -19,15 +19,19 @@ export interface LayerScore {
   layer: number
   tensor_count: number
   conflict: number
+  conflict_weighted: number
   redundancy_a: number
   redundancy_b: number
+  drift_magnitude: number
 }
 
 export interface OtherScore {
   tensor_count: number
   conflict: number
+  conflict_weighted: number
   redundancy_a: number
   redundancy_b: number
+  drift_magnitude: number
 }
 
 export interface ConflictScoreResult {

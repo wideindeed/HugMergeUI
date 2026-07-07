@@ -44,8 +44,32 @@ def test_aggregates_by_layer_and_buckets_non_layer_tensors():
     layers_by_index = {layer["layer"]: layer for layer in result["layers"]}
     assert layers_by_index[0]["conflict"] == 0.0
     assert layers_by_index[1]["conflict"] == 1.0
+    assert layers_by_index[0]["conflict_weighted"] == 0.0
+    assert layers_by_index[1]["conflict_weighted"] == 1.0
     assert result["other"]["conflict"] == 0.0
     assert result["other"]["tensor_count"] == 1
+
+
+def test_drift_magnitude_reflects_update_size_not_sign_agreement():
+    base = {
+        "model.layers.0.small_update": torch.ones(10),
+        "model.layers.0.large_update": torch.ones(10),
+    }
+    small_diff = torch.full((10,), 0.01)
+    large_diff = torch.full((10,), 1.0)
+    model_a = {
+        "model.layers.0.small_update": small_diff,
+        "model.layers.0.large_update": large_diff,
+    }
+    model_b = {
+        "model.layers.0.small_update": small_diff,     # agrees, tiny update
+        "model.layers.0.large_update": -large_diff,    # opposes, huge update
+    }
+
+    result = score_tensors(base, model_a, model_b)
+    layer = result["layers"][0]
+    assert layer["drift_magnitude"] > 0.0
+    assert layer["conflict"] < 1.0  # not all elements conflict, unlike drift magnitude which ignores sign
 
 
 def test_skips_mismatched_shapes():

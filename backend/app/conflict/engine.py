@@ -19,8 +19,9 @@ from huggingface_hub import hf_hub_download
 from huggingface_hub.utils import EntryNotFoundError, HfHubHTTPError, HFValidationError
 from safetensors import safe_open
 
+from .drift import drift_magnitude
 from .redundancy import redundant_magnitude_fraction
-from .sign_conflict import sign_conflict_rate
+from .sign_conflict import magnitude_weighted_conflict_rate, sign_conflict_rate
 
 _LAYER_PATTERN = re.compile(r"\.layers\.(\d+)\.")
 
@@ -97,8 +98,10 @@ def _summarize(entries: list[tuple]) -> dict:
     return {
         "tensor_count": len(entries),
         "conflict": _weighted_average(entries, 1),
-        "redundancy_a": _weighted_average(entries, 2),
-        "redundancy_b": _weighted_average(entries, 3),
+        "conflict_weighted": _weighted_average(entries, 2),
+        "redundancy_a": _weighted_average(entries, 3),
+        "redundancy_b": _weighted_average(entries, 4),
+        "drift_magnitude": _weighted_average(entries, 5),
     }
 
 
@@ -124,8 +127,10 @@ def score_tensors(
         entry = (
             diff_a.numel(),
             sign_conflict_rate(diff_a, diff_b),
+            magnitude_weighted_conflict_rate(diff_a, diff_b),
             redundant_magnitude_fraction(diff_a, density),
             redundant_magnitude_fraction(diff_b, density),
+            drift_magnitude(diff_a, diff_b, base_t.float()),
         )
         buckets[_extract_layer_index(name)].append(entry)
 
