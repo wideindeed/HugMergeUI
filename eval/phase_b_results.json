@@ -1,0 +1,68 @@
+[
+  {
+    "family": "qwen",
+    "pair": "math+code",
+    "model_a": "pngwn/qwen2.5-0.5b-gsm8k-sft",
+    "model_b": "qgallouedec/Qwen2.5-0.5B-codeforces-SFT",
+    "conflict": 0.4989208818636425,
+    "conflict_weighted": 0.49811461396320145,
+    "drift_magnitude": 0.01104157612155089,
+    "perplexity": 10.832357789680076,
+    "pair_type": "domain-divergent"
+  },
+  {
+    "family": "qwen",
+    "pair": "math+chat",
+    "model_a": "pngwn/qwen2.5-0.5b-gsm8k-sft",
+    "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    "conflict": 0.4991072695137651,
+    "conflict_weighted": 0.4972941108306711,
+    "drift_magnitude": 0.08475479104842083,
+    "perplexity": 11.510513242637415,
+    "pair_type": "domain-divergent"
+  },
+  {
+    "family": "qwen",
+    "pair": "code+chat",
+    "model_a": "qgallouedec/Qwen2.5-0.5B-codeforces-SFT",
+    "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    "conflict": 0.49944054681730893,
+    "conflict_weighted": 0.4987107603738949,
+    "drift_magnitude": 0.08101940628262001,
+    "perplexity": 11.39642145223284,
+    "pair_type": "domain-divergent"
+  },
+  {
+    "family": "smollm2",
+    "pair": "math+code",
+    "model_a": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "model_b": "CodeAtCMU/SmolLM2-360M_full_sft_code_data_120K",
+    "conflict": 0.4994755727069683,
+    "conflict_weighted": 0.4987639626596408,
+    "drift_magnitude": 0.008267404341706823,
+    "perplexity": 9.596865721004141,
+    "pair_type": "domain-divergent"
+  },
+  {
+    "family": "smollm2",
+    "pair": "math+chat",
+    "model_a": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "model_b": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "conflict": 0.494121475897643,
+    "conflict_weighted": 0.49018536387177825,
+    "drift_magnitude": 0.07850342752891644,
+    "perplexity": 10.034424853217311,
+    "pair_type": "domain-divergent"
+  },
+  {
+    "family": "smollm2",
+    "pair": "code+chat",
+    "model_a": "CodeAtCMU/SmolLM2-360M_full_sft_code_data_120K",
+    "model_b": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "conflict": 0.48954333989832843,
+    "conflict_weighted": 0.4857174584057266,
+    "drift_magnitude": 0.08211248256718388,
+    "perplexity": 9.897241373639602,
+    "pair_type": "domain-divergent"
+  }
+]

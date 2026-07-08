@@ -13,6 +13,7 @@ doesn't get diluted by a tiny layernorm bias in the same layer.
 import json
 import re
 from collections import defaultdict
+from collections.abc import Iterator
 
 import torch
 from huggingface_hub import hf_hub_download
@@ -162,3 +163,78 @@ def score_model_pair(
     model_b = _load_tensors(b_files, common)
 
     return score_tensors(base, model_a, model_b, density=density)
+
+
+def score_tensors_progress(
+    base: dict[str, torch.Tensor],
+    model_a: dict[str, torch.Tensor],
+    model_b: dict[str, torch.Tensor],
+    *,
+    density: float = 0.5,
+) -> Iterator[dict]:
+    """Same computation as score_tensors, but yields a progress event after
+    every few tensors so a caller can report real (not simulated) progress
+    on the expensive part of the request."""
+    common = sorted(set(base) & set(model_a) & set(model_b))
+    total = len(common)
+    buckets: dict[int | None, list[tuple]] = defaultdict(list)
+
+    for i, name in enumerate(common):
+        base_t, a_t, b_t = base[name], model_a[name], model_b[name]
+        if base_t.shape != a_t.shape or base_t.shape != b_t.shape:
+            continue
+
+        diff_a = (a_t - base_t).float()
+        diff_b = (b_t - base_t).float()
+
+        entry = (
+            diff_a.numel(),
+            sign_conflict_rate(diff_a, diff_b),
+            magnitude_weighted_conflict_rate(diff_a, diff_b),
+            redundant_magnitude_fraction(diff_a, density),
+            redundant_magnitude_fraction(diff_b, density),
+            drift_magnitude(diff_a, diff_b, base_t.float()),
+        )
+        buckets[_extract_layer_index(name)].append(entry)
+
+        if i % 4 == 0 or i == total - 1:
+            yield {"stage": "scoring", "tensor_index": i + 1, "tensor_total": total}
+
+    layers = [
+        {"layer": layer_index, **_summarize(buckets[layer_index])}
+        for layer_index in sorted(k for k in buckets if k is not None)
+    ]
+    other = _summarize(buckets[None]) if None in buckets else None
+
+    yield {"stage": "scored", "result": {"layers": layers, "other": other}}
+
+
+def score_model_pair_progress(
+    base_repo_id: str, model_a_repo_id: str, model_b_repo_id: str, *, density: float = 0.5
+) -> Iterator[dict]:
+    """Generator variant of score_model_pair that yields progress events for
+    each real stage (resolving repo file lists, downloading/loading tensors,
+    scoring), so a streaming HTTP response can show genuine progress instead
+    of a simulated loading bar."""
+    yield {"stage": "resolve", "repo": base_repo_id}
+    base_files = _resolve_tensor_files(base_repo_id)
+    yield {"stage": "resolve", "repo": model_a_repo_id}
+    a_files = _resolve_tensor_files(model_a_repo_id)
+    yield {"stage": "resolve", "repo": model_b_repo_id}
+    b_files = _resolve_tensor_files(model_b_repo_id)
+
+    common = set(base_files) & set(a_files) & set(b_files)
+    if not common:
+        raise ValueError(
+            f"no tensors in common between {base_repo_id!r}, {model_a_repo_id!r}, "
+            f"{model_b_repo_id!r} - check these are compatible architectures"
+        )
+
+    yield {"stage": "load", "repo": base_repo_id}
+    base = _load_tensors(base_files, common)
+    yield {"stage": "load", "repo": model_a_repo_id}
+    model_a = _load_tensors(a_files, common)
+    yield {"stage": "load", "repo": model_b_repo_id}
+    model_b = _load_tensors(b_files, common)
+
+    yield from score_tensors_progress(base, model_a, model_b, density=density)

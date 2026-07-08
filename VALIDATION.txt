@@ -1,0 +1,237 @@
+HUGMERGEUI — DOES THE CONFLICT SCORE ACTUALLY PREDICT MERGE QUALITY?
+======================================================================
+
+This is the full investigation behind the conflict score, written as it
+happened, including the parts that didn't work out. Nothing here has been
+cleaned up to look more conclusive than it is. If you just want to use the
+app, you don't need to read this. If you're deciding whether to trust the
+score, or you want to pick up where this left off, read on.
+
+eval/ holds the code for all of it.
+
+
+FIRST PASS: n=3, ONE ARCHITECTURE
+----------------------------------
+
+Three merges, all `ties`, density 0.5, equal weight, against
+Qwen/Qwen2.5-0.5B as base. Perplexity measured on a single fixed
+paragraph (eval/measure_perplexity.py).
+
+  variant            | models merged                        | conflict | perplexity
+  -------------------|---------------------------------------|----------|------------
+  anchor-self        | base merged with itself                | 0.0      | 8.23 (= base)
+  validated-medium    | Dolphin3.0 + Capybara-sft               | 0.482    | 9.23
+  candidate-high      | Dolphin3.0 + Qwen2.5-0.5B-Instruct       | 0.468    | 10.33 (worst)
+
+Two findings. First, the binary signal holds perfectly: a conflict score
+of exactly 0.0 predicts exactly zero quality loss, and any independently
+trained pair shows real degradation. Second, the metric does not rank the
+two non-trivial pairs correctly: candidate-high has a lower conflict score
+than validated-medium, but a worse merge.
+
+Attempted fix #1, and why it failed. The hypothesis was that raw
+sign-conflict-rate is magnitude-blind: it saturates near 50% for almost
+any two independent updates, whether the disagreements are tiny noise or
+large, load-bearing changes. magnitude_weighted_conflict_rate
+(backend/app/conflict/sign_conflict.py) weights each element by
+min(|diff_a|, |diff_b|) instead of counting uniformly:
+
+  variant            | conflict (raw) | conflict_weighted | perplexity
+  -------------------|----------------|--------------------|------------
+  anchor-self        | 0.0            | 0.0                | 8.23
+  validated-medium    | 0.482          | 0.471              | 9.23
+  candidate-high      | 0.468          | 0.444              | 10.33 (worst)
+
+Same wrong ordering. Magnitude-weighting the conflict term wasn't the fix.
+
+Attempted fix #2, which looked like it worked at n=3, and didn't survive
+scale. drift_magnitude (backend/app/conflict/drift.py) drops the conflict
+framing entirely and measures relative update size instead:
+(rms(diff_a) + rms(diff_b)) / rms(base) per tensor. On the same 3 triples
+it ranked everything correctly:
+
+  variant            | conflict | conflict_weighted | drift_magnitude | perplexity
+  -------------------|----------|--------------------|------------------|------------
+  anchor-self        | 0.0      | 0.0                | 0.0              | 8.23
+  validated-medium    | 0.482    | 0.471              | 0.1046           | 9.23
+  candidate-high      | 0.468    | 0.444              | 0.1564           | 10.33 (worst)
+
+At the time this looked like a real fix. It wasn't, see below.
+
+
+SCALING UP: n=22, TWO UNRELATED ARCHITECTURES, REAL STATISTICS
+-----------------------------------------------------------------
+
+n=3 is an anecdote, not evidence. eval/big_validation.py redoes this
+properly: every unique fine-tune pair within two architecturally unrelated
+model families, Qwen/Qwen2.5-0.5B (Qwen2 arch, 5 fine-tunes, 10 pairs) and
+HuggingFaceTB/SmolLM2-360M (Llama arch, 5 fine-tunes, 10 pairs), plus one
+self-merge anchor per family (22 points total). Each pair was actually
+merged with mergekit-yaml --cuda, scored with the real engine, and
+perplexity was re-measured as a mean over 5 topically disjoint held-out
+passages instead of one fixed paragraph, to cut ground-truth noise. Full
+results in eval/big_validation_results.json.
+
+  conflict:           pearson r = 0.3830 (p=0.0785) | spearman rho = 0.1768 (p=0.4313)
+  conflict_weighted:  pearson r = 0.3731 (p=0.0872) | spearman rho = 0.1553 (p=0.4901)
+  drift_magnitude:    pearson r = -0.1609 (p=0.4743) | spearman rho = 0.0864 (p=0.7022)
+
+Honest conclusion: none of the three metrics reach statistical
+significance (p<0.05) against perplexity at n=22.
+
+- drift_magnitude, the metric that looked like a clean win at n=3, is the
+  worst performer here: correlation near zero, wrong sign. The n=3 result
+  was small-sample noise dressed up as a finding. Worth stating plainly:
+  a 3-point anecdote that happens to rank correctly is exactly the kind of
+  result that looks like a discovery and isn't.
+- Raw conflict is the best of a weak bunch, a positive trend (r=0.38) that
+  misses conventional significance (p=0.0785). Not nothing, but not
+  something to build a claim on.
+- The binary signal from the n=3 pass still holds at n=22: both self-merge
+  anchors score exactly 0.0 conflict / 0.0 drift and reproduce base
+  perplexity almost exactly (10.71 and 9.56), and one near-duplicate pair
+  (smollm2 instruct + michaelj1_wikitext, conflict ~0.003) also shows one
+  of the lowest perplexities in its family. So "near-zero conflict means
+  near-zero damage" still holds. What breaks is fine-grained ranking among
+  the big cluster of non-trivial pairs, where conflict scores bunch
+  tightly around 0.45-0.50 regardless of the actual perplexity outcome
+  (9.9 to 15.0 within smollm2 alone).
+- Caveat on the stats: n=22 pools two architecture families into one
+  correlation, which isn't fully independent sampling (perplexity scale
+  differs somewhat by family and tokenizer). A cleaner follow-up would
+  report per-family correlations, or use a mixed-effects model.
+
+What this means: the core hypothesis, that sign/magnitude/drift-based
+conflict metrics computed from raw weight diffs predict merge-quality
+degradation, is not supported once tested properly at scale, beyond the
+coarse zero/non-zero signal. That's a real negative result. Two concrete
+next steps came out of it:
+
+1. Perplexity itself might be a noisy or even wrong ground-truth signal
+   once instruct/RLHF-tuned models are involved. Aligned models can show
+   higher perplexity on generic text than their base despite being
+   better, the "alignment tax" effect, which would explain why
+   Instruct-involving pairs don't cleanly separate from plain-SFT pairs.
+   A second, independent quality signal (MMLU/GSM8K task accuracy) needed
+   checking against the same metrics.
+2. All 20 non-trivial pairs tested here are different SFT recipes of a
+   similar generic instruction dataset. TIES-Merging's actual target use
+   case, merging a math specialist with a code specialist with a chat
+   specialist, hadn't been tested. The saturation problem might be an
+   artifact of testing only near-duplicate-domain fine-tunes.
+
+Reproduce the n=3 pass: eval/configs/*.yaml + mergekit-yaml
+eval/configs/<name>.yaml eval/merged/<name> --cuda, then python
+eval/measure_perplexity.py. Reproduce the n=22 pass: python
+eval/big_validation.py (needs pip install mergekit scipy; pin
+transformers==4.46.3, newer 4.x/5.x releases break mergekit 0.1.4's
+pydantic schema build with a misleading "torch is not defined" error).
+
+
+ROUND TWO: TESTING BOTH FOLLOW-UP HYPOTHESES
+-----------------------------------------------
+
+Rather than jumping straight to a bigger model, the two live hypotheses
+for why the n=22 pass failed to rank-order got tested cheaply at the same
+small scale (0.5B/360M) first. A bigger model was only worth trying if one
+of these actually panned out. Neither did.
+
+Hypothesis A: MMLU/GSM8K accuracy as a second ground-truth signal.
+REJECTED. Ran lm-evaluation-harness against MMLU (5 questions/subject, 57
+subjects, 285 questions, 5-shot) and GSM8K (30 questions, 8-shot) for all
+28 merged models validated so far (22 same-domain + 6 domain-divergent, see
+below), on a rented Colab T4. Correlated all three metrics against MMLU
+and GSM8K accuracy independently. Results: eval/phase_a_full_results.json.
+
+  metric              | vs MMLU pearson r (p) | vs MMLU spearman (p) | vs GSM8K pearson r (p) | vs GSM8K spearman (p)
+  --------------------|------------------------|------------------------|--------------------------|------------------------
+  conflict            | 0.11 (0.58)            | -0.12 (0.53)           | 0.08 (0.67)              | -0.17 (0.38)
+  conflict_weighted   | 0.09 (0.64)            | -0.14 (0.49)           | 0.06 (0.76)              | -0.16 (0.41)
+  drift_magnitude     | 0.14 (0.48)            | 0.30 (0.12)            | 0.01 (0.97)              | 0.08 (0.68)
+
+Every p-value is well above 0.05. Swapping the target metric from
+perplexity to real task accuracy didn't rescue the correlation. The
+alignment-tax hypothesis doesn't explain the rank-order failure.
+
+Hypothesis B: genuinely domain-divergent fine-tune pairs. REJECTED. All 20
+non-trivial pairs in the n=22 pass were different SFT flavors of similar
+generic instruction data. Ran 6 domain-divergent pairs instead (math-SFT x
+code-SFT, math-SFT x chat-SFT, code-SFT x chat-SFT, for both the
+Qwen2.5-0.5B and SmolLM2-360M families) through the same
+merge-then-perplexity-then-conflict-score pipeline. Results:
+eval/phase_b_results.json.
+
+Saturation got worse, not better:
+
+  set                                        | conflict score range
+  --------------------------------------------|------------------------
+  same-domain (n=22, non-trivial pairs)        | 0.4548 - 0.5000
+  domain-divergent (n=6)                       | 0.4895 - 0.4995
+
+Merging a math-SFT model with a code-SFT model, genuinely disjoint
+domains, produced almost the same conflict score as merging code-SFT with
+chat-SFT. No correlation against perplexity reached significance either,
+within the domain-divergent set alone or pooled with the original 22.
+
+The "same-domain fine-tunes look artificially similar" hypothesis is
+falsified. Saturation near 0.49-0.50 isn't an artifact of testing
+near-duplicate SFT flavors, it happens just as much on genuinely
+domain-divergent pairs.
+
+
+WHERE THAT LEAVES THINGS
+---------------------------
+
+Both follow-up hypotheses rejected. That's a valid outcome, not a failure
+to find an answer: the raw-weight-diff metric family (conflict,
+conflict_weighted, drift_magnitude, as currently formulated) does not
+predict merge quality at 0.5B/360M scale, against perplexity, MMLU/GSM8K
+accuracy, or domain-divergent pairs. Three independent tests, 28 real
+merged models, zero significant correlations.
+
+A bigger model was not pursued on the current metric. Spending GPU budget
+to re-run a metric that already failed three independent validations at
+small scale, hoping scale alone fixes it, isn't a good bet without a
+reason to expect scale changes the underlying problem. The failure mode
+(score saturation near 0.49-0.50) showed up identically at 0.5B and 360M
+across three separate test designs, it doesn't look scale-dependent.
+
+The real fix, if pursued, is a different metric family entirely, for
+example activation-based probing (CKA / representation divergence between
+parent models on a probe set) instead of static weight diffs. That reuses
+the existing merge pipeline, validation methodology, and layer-heatmap UI,
+but is a bigger scope: needs a probe dataset, forward-hook code, and a
+divergence metric. Not started.
+
+One cheap, untried angle on the current metric worth a quick retest before
+committing to a new metric family: the sign-conflict rate between two
+large, mostly independent weight-delta vectors likely has a noise floor
+around 0.5 by construction, most of a fine-tune's delta is small numerical
+drift, not a meaningful update, and comparing signs on that noise
+contributes roughly 50/50 agreement regardless of real conflict. Two cheap
+adjustments to the existing formula, neither tried yet:
+
+  1. Threshold out near-zero deltas before computing sign agreement, only
+     count weights that moved meaningfully in both models.
+  2. The MMLU/GSM8K samples were small (5/subject, 30 GSM8K questions),
+     part of the null result could be measurement noise on the target
+     metric itself, not just saturation on the conflict score.
+
+Neither is guaranteed to fix the rank-order failure. Worth a cheap retest
+before or alongside a Phase 7 metric redesign.
+
+
+HARDWARE, FOR CONTEXT
+------------------------
+
+RTX 2060 Super, 8GB VRAM (~6.2GB free idle), 32GB system RAM (~9.8GB free
+under load), ~400GB+ free disk. Clean fp16 inference tops out around 3-4B
+params without quantization or CPU offload on this machine. A 7B model run
+would additionally need a streaming rewrite of
+backend/app/conflict/engine.py's _load_tensors (it currently materializes
+all common tensors for base/model_a/model_b into RAM upfront, ~3x full
+model size, which would exceed 32GB at 7B) plus either 4-bit/8-bit
+quantization or accelerate CPU offload for the perplexity/task-accuracy
+side, since 8GB VRAM can't hold a 7B model in fp16. None of this was
+needed or attempted, since the metric itself was the bottleneck, not
+model size.

@@ -1,0 +1,222 @@
+[
+  {
+    "family": "qwen",
+    "pair": "base+base2",
+    "model_a": "Qwen/Qwen2.5-0.5B",
+    "model_b": "Qwen/Qwen2.5-0.5B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 10.709006275334913
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+capybara",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "conflict": 0.4819034700095539,
+    "conflict_weighted": 0.4706013614885889,
+    "drift_magnitude": 0.10463435572275591,
+    "perplexity": 12.348541749341774
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+instruct",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    "conflict": 0.4680710360697468,
+    "conflict_weighted": 0.44383905908295884,
+    "drift_magnitude": 0.15637741271167183,
+    "perplexity": 13.037351150631768
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+jayhyeon",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4917157965876414,
+    "conflict_weighted": 0.4874258659960633,
+    "drift_magnitude": 0.09446855805091871,
+    "perplexity": 11.937954590360748
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+qgallouedec",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4972653851870217,
+    "conflict_weighted": 0.49578401151594104,
+    "drift_magnitude": 0.08405837724766935,
+    "perplexity": 11.725578830053808
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+instruct",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "Qwen/Qwen2.5-0.5B-Instruct",
+    "conflict": 0.49482520070989533,
+    "conflict_weighted": 0.4917081428831225,
+    "drift_magnitude": 0.10298956422057405,
+    "perplexity": 11.054336083808465
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+jayhyeon",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4779832536761146,
+    "conflict_weighted": 0.465645256663858,
+    "drift_magnitude": 0.04108070955982093,
+    "perplexity": 11.34642451645453
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+qgallouedec",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4547551641846531,
+    "conflict_weighted": 0.43025127669999486,
+    "drift_magnitude": 0.030670528756571582,
+    "perplexity": 11.53352813551052
+  },
+  {
+    "family": "qwen",
+    "pair": "instruct+jayhyeon",
+    "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_b": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "conflict": 0.496015079263692,
+    "conflict_weighted": 0.49407006216437716,
+    "drift_magnitude": 0.09282376654873685,
+    "perplexity": 10.867297673991272
+  },
+  {
+    "family": "qwen",
+    "pair": "instruct+qgallouedec",
+    "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_b": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4982906403368072,
+    "conflict_weighted": 0.497367875240747,
+    "drift_magnitude": 0.08241358574548749,
+    "perplexity": 10.962627437191076
+  },
+  {
+    "family": "qwen",
+    "pair": "jayhyeon+qgallouedec",
+    "model_a": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "model_b": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "conflict": 0.46303501244912343,
+    "conflict_weighted": 0.44392375219978303,
+    "drift_magnitude": 0.020504731084734374,
+    "perplexity": 11.157292339284247
+  },
+  {
+    "family": "smollm2",
+    "pair": "base+base2",
+    "model_a": "HuggingFaceTB/SmolLM2-360M",
+    "model_b": "HuggingFaceTB/SmolLM2-360M",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 9.562887296582769
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+michaelj1",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "Michaelj1/finetune-smolLM2-360M",
+    "conflict": 0.4994003177630975,
+    "conflict_weighted": 0.4989740265701382,
+    "drift_magnitude": 0.08102884291718844,
+    "perplexity": 10.08134665602452
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+cot",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "prithivMLmods/SmolLM2-CoT-360M",
+    "conflict": 0.49454744598166595,
+    "conflict_weighted": 0.49150758522124227,
+    "drift_magnitude": 0.08291005408238114,
+    "perplexity": 10.949204149649733
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+rickified",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "Masorian06/SmolLM2-360M-Rickified",
+    "conflict": 0.4932852118802593,
+    "conflict_weighted": 0.4896997489770168,
+    "drift_magnitude": 0.07874584156263759,
+    "perplexity": 9.887385391580377
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+michaelj1_wikitext",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "conflict": 0.002638347348243534,
+    "conflict_weighted": 4.067227678162614e-05,
+    "drift_magnitude": 0.15234634961195292,
+    "perplexity": 9.8672890410236
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+cot",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "prithivMLmods/SmolLM2-CoT-360M",
+    "conflict": 0.49997699331789064,
+    "conflict_weighted": 0.4999258466876733,
+    "drift_magnitude": 0.011590391245176086,
+    "perplexity": 14.985430201943585
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+rickified",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "Masorian06/SmolLM2-360M-Rickified",
+    "conflict": 0.4995912269885328,
+    "conflict_weighted": 0.49922908666351584,
+    "drift_magnitude": 0.007426178725432521,
+    "perplexity": 11.505674376893808
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+michaelj1_wikitext",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "conflict": 0.4913785405029698,
+    "conflict_weighted": 0.48937359829751503,
+    "drift_magnitude": 0.08102668677474786,
+    "perplexity": 10.526074523407672
+  },
+  {
+    "family": "smollm2",
+    "pair": "cot+rickified",
+    "model_a": "prithivMLmods/SmolLM2-CoT-360M",
+    "model_b": "Masorian06/SmolLM2-360M-Rickified",
+    "conflict": 0.4873507728746461,
+    "conflict_weighted": 0.4788696728793622,
+    "drift_magnitude": 0.009307389890625213,
+    "perplexity": 13.77589429783423
+  },
+  {
+    "family": "smollm2",
+    "pair": "cot+michaelj1_wikitext",
+    "model_a": "prithivMLmods/SmolLM2-CoT-360M",
+    "model_b": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "conflict": 0.49475804994665346,
+    "conflict_weighted": 0.49161761096879164,
+    "drift_magnitude": 0.08290789793994055,
+    "perplexity": 11.040950546733514
+  },
+  {
+    "family": "smollm2",
+    "pair": "rickified+michaelj1_wikitext",
+    "model_a": "Masorian06/SmolLM2-360M-Rickified",
+    "model_b": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "conflict": 0.49353032321518125,
+    "conflict_weighted": 0.4898842954251891,
+    "drift_magnitude": 0.078743685420197,
+    "perplexity": 10.028362685807945
+  }
+]

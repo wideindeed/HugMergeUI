@@ -1,5 +1,6 @@
 interface Props {
   models: string[]
+  baseModelOptions: string[]
   baseModel: string
   modelA: string
   modelB: string
@@ -14,6 +15,7 @@ interface Props {
 
 export function ModelPicker({
   models,
+  baseModelOptions,
   baseModel,
   modelA,
   modelB,
@@ -26,13 +28,13 @@ export function ModelPicker({
   loading,
 }: Props) {
   return (
-    <section className="panel">
+    <section className="panel" data-tour-id="picker">
       <h2>Conflict score inputs</h2>
       <label>
         Base / ancestor model (used as the diff reference — doesn't have to
         match mergekit's own <code>base_model</code> field)
         <select value={baseModel} onChange={(e) => onBaseModelChange(e.target.value)}>
-          {models.map((m) => (
+          {baseModelOptions.map((m) => (
             <option key={m} value={m}>
               {m}
             </option>

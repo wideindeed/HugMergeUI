@@ -1,7 +1,10 @@
+import json
+
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from .conflict.engine import ModelWeightsFetchError, score_model_pair
+from .conflict.engine import ModelWeightsFetchError, score_model_pair, score_model_pair_progress
 from .hf.service import check_architecture
 from .parser.loader import load_config, parse_raw_config
 
@@ -55,3 +58,15 @@ def conflict_score_route(request: ConflictScoreRequest) -> dict:
         )
     except (ModelWeightsFetchError, ValueError) as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@app.get("/conflict-score-stream")
+def conflict_score_stream(base_model: str, model_a: str, model_b: str, density: float = 0.5) -> StreamingResponse:
+    def events():
+        try:
+            for event in score_model_pair_progress(base_model, model_a, model_b, density=density):
+                yield f"data: {json.dumps(event)}\n\n"
+        except (ModelWeightsFetchError, ValueError) as e:
+            yield f"data: {json.dumps({'stage': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(events(), media_type="text/event-stream")

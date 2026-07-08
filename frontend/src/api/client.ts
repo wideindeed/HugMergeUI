@@ -1,4 +1,4 @@
-import type { ArchitectureCheckResult, ConflictScoreResult, ParsedConfig } from './types'
+import type { ArchitectureCheckResult, ConflictScoreResult, ParsedConfig, ScoreProgressEvent } from './types'
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`/api${path}`, {
@@ -28,4 +28,40 @@ export function conflictScore(
   density: number,
 ): Promise<ConflictScoreResult> {
   return post('/conflict-score', { base_model: baseModel, model_a: modelA, model_b: modelB, density })
+}
+
+export function streamConflictScore(
+  baseModel: string,
+  modelA: string,
+  modelB: string,
+  density: number,
+  onProgress: (event: ScoreProgressEvent) => void,
+): Promise<ConflictScoreResult> {
+  const params = new URLSearchParams({
+    base_model: baseModel,
+    model_a: modelA,
+    model_b: modelB,
+    density: String(density),
+  })
+
+  return new Promise((resolve, reject) => {
+    const source = new EventSource(`/api/conflict-score-stream?${params.toString()}`)
+
+    source.onmessage = (raw) => {
+      const event = JSON.parse(raw.data) as ScoreProgressEvent
+      onProgress(event)
+      if (event.stage === 'scored') {
+        source.close()
+        resolve(event.result)
+      } else if (event.stage === 'error') {
+        source.close()
+        reject(new Error(event.message))
+      }
+    }
+
+    source.onerror = () => {
+      source.close()
+      reject(new Error('lost connection to /conflict-score-stream'))
+    }
+  })
 }

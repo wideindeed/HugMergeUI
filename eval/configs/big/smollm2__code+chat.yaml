@@ -1,0 +1,14 @@
+base_model: HuggingFaceTB/SmolLM2-360M
+dtype: float32
+merge_method: ties
+models:
+- model: CodeAtCMU/SmolLM2-360M_full_sft_code_data_120K
+  parameters:
+    density: 0.5
+    weight: 0.5
+- model: HuggingFaceTB/SmolLM2-360M-Instruct
+  parameters:
+    density: 0.5
+    weight: 0.5
+parameters:
+  normalize: true

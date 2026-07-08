@@ -1,0 +1,14 @@
+base_model: HuggingFaceTB/SmolLM2-360M
+dtype: float32
+merge_method: ties
+models:
+- model: Masorian06/SmolLM2-360M-Rickified
+  parameters:
+    density: 0.5
+    weight: 0.5
+- model: Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1
+  parameters:
+    density: 0.5
+    weight: 0.5
+parameters:
+  normalize: true

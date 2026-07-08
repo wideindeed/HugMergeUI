@@ -7,7 +7,7 @@ interface Props {
 
 export function ConfigEditor({ value, onChange, onAnalyze, loading }: Props) {
   return (
-    <section className="panel">
+    <section className="panel" data-tour-id="editor">
       <h2>Merge config</h2>
       <textarea
         className="config-editor"
