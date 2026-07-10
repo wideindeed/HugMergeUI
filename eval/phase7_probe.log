@@ -1,0 +1,19 @@
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--HuggingFaceTB--SmolLM2-360M. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+num layers (incl. embedding output): 33
+
+[anchor-self] scoring...
+[anchor-self] mean divergence_a=0.0000 divergence_b=0.0000 combined=0.0000
+[anchor-self] per-layer divergence_a: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[anchor-self] per-layer divergence_b: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+[instruct+michaelj1_wikitext] scoring...
+[instruct+michaelj1_wikitext] mean divergence_a=0.0068 divergence_b=0.0052 combined=0.0121
+[instruct+michaelj1_wikitext] per-layer divergence_a: [0.0002, 0.0091, 0.0078, 0.0066, 0.0037, 0.0037, 0.0037, 0.0037, 0.0037, 0.0037, 0.0037, 0.0037, 0.0038, 0.0038, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0036, 0.0036, 0.0036, 0.0036, 0.0037, 0.0037, 0.004, 0.0042, 0.005, 0.004, 0.0973]
+[instruct+michaelj1_wikitext] per-layer divergence_b: [0.0002, 0.0093, 0.0066, 0.0064, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0028, 0.0026, 0.0026, 0.0026, 0.0026, 0.0026, 0.0026, 0.0026, 0.0026, 0.0027, 0.0027, 0.0027, 0.0027, 0.0028, 0.0028, 0.003, 0.0031, 0.0037, 0.0031, 0.0725]
+
+[michaelj1+cot] scoring...
+[michaelj1+cot] mean divergence_a=0.0007 divergence_b=0.0036 combined=0.0043
+[michaelj1+cot] per-layer divergence_a: [0.0, 0.0012, 0.0014, 0.0007, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0002, 0.0002, 0.0175]
+[michaelj1+cot] per-layer divergence_b: [0.0, 0.0024, 0.0018, 0.0015, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0003, 0.0003, 0.0003, 0.0003, 0.0003, 0.0003, 0.0003, 0.0003, 0.0003, 0.0004, 0.0004, 0.0004, 0.0004, 0.0004, 0.0005, 0.0005, 0.0006, 0.0007, 0.1024]

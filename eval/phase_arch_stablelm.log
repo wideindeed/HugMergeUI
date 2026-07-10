@@ -1,0 +1,293 @@
+[stablelm2_1.6b__base+base2] launching worker (attempt 1)...
+[stablelm2_1.6b__base+base2] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--stabilityai--stablelm-2-1_6b. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Warmup loader cache:   0%|          | 0/1 [00:00<?, ?it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][A
+Fetching 7 files:  29%|##8       | 2/7 [00:01<00:02,  1.84it/s][A
+Fetching 7 files:  43%|####2     | 3/7 [01:11<01:58, 29.54s/it][AFetching 7 files: 100%|##########| 7/7 [01:11<00:00, 10.17s/it]
+Warmup loader cache: 100%|##########| 1/1 [01:11<00:00, 71.71s/it]Warmup loader cache: 100%|##########| 1/1 [01:11<00:00, 71.71s/it]
+Executing graph:   0%|          | 0/1362 [00:00<?, ?it/s]Executing graph:   0%|          | 2/1362 [00:00<03:13,  7.04it/s]Executing graph:   0%|          | 4/1362 [00:00<04:32,  4.99it/s]Executing graph:   1%|          | 8/1362 [00:01<03:17,  6.86it/s]Executing graph:   4%|3         | 48/1362 [00:01<00:22, 58.73it/s]Executing graph:   6%|6         | 84/1362 [00:01<00:12, 105.89it/s]Executing graph:  10%|#         | 138/1362 [00:01<00:06, 185.72it/s]Executing graph:  14%|#4        | 192/1362 [00:01<00:04, 248.74it/s]Executing graph:  18%|#8        | 246/1362 [00:01<00:03, 312.09it/s]Executing graph:  22%|##2       | 300/1362 [00:01<00:03, 349.55it/s]Executing graph:  26%|##5       | 354/1362 [00:01<00:02, 394.49it/s]Executing graph:  29%|##9       | 400/1362 [00:02<00:02, 400.06it/s]Executing graph:  33%|###2      | 446/1362 [00:02<00:02, 415.93it/s]Executing graph:  36%|###6      | 492/1362 [00:02<00:02, 420.45it/s]Executing graph:  39%|###9      | 537/1362 [00:02<00:02, 410.36it/s]Executing graph:  43%|####2     | 584/1362 [00:02<00:01, 420.33it/s]Executing graph:  47%|####6     | 640/1362 [00:02<00:01, 435.04it/s]Executing graph:  51%|#####1    | 696/1362 [00:02<00:01, 448.95it/s]Executing graph:  55%|#####5    | 750/1362 [00:02<00:01, 471.20it/s]Executing graph:  59%|#####8    | 798/1362 [00:02<00:01, 458.30it/s]Executing graph:  62%|######2   | 845/1362 [00:03<00:01, 441.71it/s]Executing graph:  65%|######5   | 890/1362 [00:03<00:01, 427.50it/s]Executing graph:  69%|######8   | 933/1362 [00:08<00:14, 28.62it/s] Executing graph:  72%|#######1  | 980/1362 [00:08<00:09, 39.83it/s]Executing graph:  76%|#######6  | 1036/1362 [00:08<00:05, 57.89it/s]Executing graph:  80%|########  | 1092/1362 [00:08<00:03, 81.29it/s]Executing graph:  84%|########4 | 1148/1362 [00:08<00:01, 110.65it/s]Executing graph:  88%|########8 | 1202/1362 [00:08<00:01, 145.58it/s]Executing graph:  92%|#########2| 1256/1362 [00:09<00:00, 185.54it/s]Executing graph:  96%|#########6| 1312/1362 [00:09<00:00, 229.14it/s]Executing graph: 100%|##########| 1362/1362 [00:10<00:00, 87.54it/s] Executing graph: 100%|##########| 1362/1362 [00:10<00:00, 128.35it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|##########| 7/7 [00:00<00:00, 244.37it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|##########| 7/7 [00:00<00:00, 127.32it/s]
+[stablelm2_1.6b__base+base2] measuring perplexity...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards: 100%|##########| 2/2 [00:00<00:00, 12.76it/s]Loading checkpoint shards: 100%|##########| 2/2 [00:00<00:00, 12.76it/s]
+[stablelm2_1.6b__base+base2] scoring conflict metrics...
+[stablelm2_1.6b__base+base2] done: {'family': 'stablelm2_1.6b', 'pair': 'base+base2', 'model_a': 'stabilityai/stablelm-2-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b', 'conflict': 0.0, 'conflict_weighted': 0.0, 'drift_magnitude': 0.0, 'perplexity': 9.028852573308493}
+[stablelm2_1.6b__base+base2] done: {'family': 'stablelm2_1.6b', 'pair': 'base+base2', 'model_a': 'stabilityai/stablelm-2-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b', 'conflict': 0.0, 'conflict_weighted': 0.0, 'drift_magnitude': 0.0, 'perplexity': 9.028852573308493}
+[stablelm2_1.6b__zephyr+chat] launching worker (attempt 1)...
+[stablelm2_1.6b__zephyr+chat] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--stabilityai--stablelm-2-1_6b-chat. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--stabilityai--stablelm-2-zephyr-1_6b. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][A
+Fetching 9 files:  22%|##2       | 2/9 [00:01<00:05,  1.24it/s][A
+Fetching 9 files:  33%|###3      | 3/9 [01:48<04:30, 45.13s/it][AFetching 9 files: 100%|##########| 9/9 [01:48<00:00, 12.09s/it]
+Warmup loader cache:  33%|###3      | 1/3 [01:49<03:39, 109.54s/it]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 2335.36it/s]
+Warmup loader cache:  67%|######6   | 2/3 [01:50<00:45, 45.39s/it] 
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][A
+Fetching 7 files:  29%|##8       | 2/7 [00:01<00:02,  1.82it/s][A
+Fetching 7 files:  43%|####2     | 3/7 [01:01<01:41, 25.36s/it][AFetching 7 files: 100%|##########| 7/7 [01:01<00:00,  8.74s/it]
+Warmup loader cache: 100%|##########| 3/3 [02:52<00:00, 53.28s/it]Warmup loader cache: 100%|##########| 3/3 [02:52<00:00, 57.56s/it]
+Executing graph:   0%|          | 0/2042 [00:00<?, ?it/s]Executing graph:   0%|          | 2/2042 [00:00<07:27,  4.56it/s]Executing graph:   0%|          | 4/2042 [00:00<04:08,  8.19it/s]Executing graph:   0%|          | 6/2042 [00:08<1:02:47,  1.85s/it]Executing graph:   0%|          | 8/2042 [00:08<38:45,  1.14s/it]  Executing graph:   0%|          | 10/2042 [00:08<26:21,  1.28it/s]Executing graph:   1%|          | 12/2042 [00:15<54:38,  1.61s/it]Executing graph:   1%|1         | 30/2042 [00:15<10:14,  3.27it/s]Executing graph:   2%|2         | 42/2042 [00:15<05:55,  5.62it/s]Executing graph:   5%|4         | 96/2042 [00:15<01:34, 20.63it/s]Executing graph:   6%|5         | 120/2042 [00:15<01:07, 28.39it/s]Executing graph:   7%|7         | 150/2042 [00:15<00:45, 41.86it/s]Executing graph:  10%|9         | 194/2042 [00:16<00:26, 68.63it/s]Executing graph:  11%|#         | 221/2042 [00:16<00:23, 76.61it/s]Executing graph:  13%|#2        | 264/2042 [00:16<00:16, 109.27it/s]Executing graph:  14%|#4        | 290/2042 [00:16<00:14, 117.52it/s]Executing graph:  16%|#5        | 318/2042 [00:16<00:12, 138.89it/s]Executing graph:  18%|#7        | 364/2042 [00:16<00:08, 190.65it/s]Executing graph:  19%|#9        | 394/2042 [00:16<00:09, 170.11it/s]Executing graph:  21%|##1       | 432/2042 [00:17<00:07, 201.50it/s]Executing graph:  23%|##2       | 460/2042 [00:17<00:08, 190.93it/s]Executing graph:  24%|##3       | 486/2042 [00:17<00:07, 204.31it/s]Executing graph:  26%|##5       | 528/2042 [00:17<00:06, 252.11it/s]Executing graph:  27%|##7       | 558/2042 [00:17<00:07, 193.40it/s]Executing graph:  29%|##9       | 600/2042 [00:17<00:06, 228.44it/s]Executing graph:  31%|###       | 628/2042 [00:18<00:06, 205.45it/s]Executing graph:  32%|###2      | 654/2042 [00:18<00:06, 216.38it/s]Executing graph:  34%|###4      | 699/2042 [00:18<00:04, 269.67it/s]Executing graph:  36%|###5      | 730/2042 [00:18<00:06, 209.14it/s]Executing graph:  38%|###7      | 768/2042 [00:18<00:05, 235.45it/s]Executing graph:  39%|###8      | 796/2042 [00:18<00:05, 209.05it/s]Executing graph:  40%|####      | 822/2042 [00:18<00:05, 219.19it/s]Executing graph:  42%|####2     | 867/2042 [00:18<00:04, 272.96it/s]Executing graph:  44%|####3     | 898/2042 [00:19<00:05, 204.44it/s]Executing graph:  46%|####5     | 936/2042 [00:19<00:04, 231.22it/s]Executing graph:  47%|####7     | 964/2042 [00:19<00:05, 208.07it/s]Executing graph:  48%|####8     | 990/2042 [00:19<00:04, 217.94it/s]Executing graph:  50%|#####     | 1030/2042 [00:19<00:03, 259.60it/s]Executing graph:  52%|#####1    | 1059/2042 [00:19<00:04, 198.02it/s]Executing graph:  54%|#####4    | 1104/2042 [00:20<00:03, 240.21it/s]Executing graph:  55%|#####5    | 1132/2042 [00:20<00:06, 147.46it/s]Executing graph:  57%|#####6    | 1158/2042 [00:20<00:05, 162.68it/s]Executing graph:  59%|#####8    | 1202/2042 [00:20<00:03, 211.38it/s]Executing graph:  60%|######    | 1231/2042 [00:20<00:04, 178.30it/s]Executing graph:  62%|######2   | 1272/2042 [00:21<00:03, 213.74it/s]Executing graph:  64%|######3   | 1299/2042 [00:21<00:03, 197.54it/s]Executing graph:  65%|######4   | 1323/2042 [00:21<00:03, 205.77it/s]Executing graph:  66%|######6   | 1356/2042 [00:21<00:03, 224.87it/s]Executing graph:  68%|######7   | 1381/2042 [00:26<00:39, 16.90it/s] Executing graph:  69%|######8   | 1399/2042 [00:29<00:50, 12.65it/s]Executing graph:  69%|######9   | 1412/2042 [00:30<00:46, 13.66it/s]Executing graph:  70%|######9   | 1422/2042 [00:30<00:41, 15.07it/s]Executing graph:  70%|#######   | 1430/2042 [00:31<00:42, 14.25it/s]Executing graph:  70%|#######   | 1436/2042 [00:31<00:37, 15.99it/s]Executing graph:  71%|#######   | 1442/2042 [00:31<00:37, 16.17it/s]Executing graph:  71%|#######1  | 1454/2042 [00:32<00:31, 18.83it/s]Executing graph:  71%|#######1  | 1458/2042 [00:33<00:51, 11.30it/s]Executing graph:  72%|#######1  | 1461/2042 [00:33<00:54, 10.74it/s]Executing graph:  72%|#######1  | 1464/2042 [00:34<01:13,  7.82it/s]Executing graph:  72%|#######1  | 1466/2042 [00:35<01:16,  7.51it/s]Executing graph:  72%|#######1  | 1468/2042 [00:35<01:21,  7.01it/s]Executing graph:  72%|#######1  | 1470/2042 [00:36<01:43,  5.55it/s]Executing graph:  73%|#######2  | 1490/2042 [00:36<00:31, 17.76it/s]Executing graph:  73%|#######3  | 1495/2042 [00:36<00:34, 15.80it/s]Executing graph:  73%|#######3  | 1499/2042 [00:37<00:37, 14.42it/s]Executing graph:  74%|#######3  | 1502/2042 [00:37<00:39, 13.53it/s]Executing graph:  74%|#######3  | 1508/2042 [00:37<00:31, 16.80it/s]Executing graph:  74%|#######3  | 1511/2042 [00:37<00:35, 15.13it/s]Executing graph:  74%|#######4  | 1514/2042 [00:38<00:37, 13.99it/s]Executing graph:  74%|#######4  | 1520/2042 [00:38<00:30, 17.00it/s]Executing graph:  75%|#######4  | 1523/2042 [00:38<00:32, 15.89it/s]Executing graph:  75%|#######4  | 1525/2042 [00:39<00:41, 12.33it/s]Executing graph:  75%|#######5  | 1538/2042 [00:39<00:24, 20.73it/s]Executing graph:  75%|#######5  | 1541/2042 [00:39<00:32, 15.23it/s]Executing graph:  76%|#######5  | 1543/2042 [00:40<00:44, 11.23it/s]Executing graph:  76%|#######5  | 1545/2042 [00:40<00:52,  9.53it/s]Executing graph:  76%|#######5  | 1547/2042 [00:41<01:04,  7.64it/s]Executing graph:  76%|#######5  | 1548/2042 [00:41<01:34,  5.21it/s]Executing graph:  76%|#######5  | 1550/2042 [00:42<01:40,  4.91it/s]Executing graph:  76%|#######6  | 1552/2042 [00:42<01:41,  4.82it/s]Executing graph:  76%|#######6  | 1554/2042 [00:43<01:52,  4.33it/s]Executing graph:  77%|#######7  | 1574/2042 [00:43<00:24, 18.91it/s]Executing graph:  77%|#######7  | 1579/2042 [00:43<00:29, 15.44it/s]Executing graph:  78%|#######7  | 1583/2042 [00:44<00:31, 14.56it/s]Executing graph:  78%|#######7  | 1586/2042 [00:44<00:30, 14.91it/s]Executing graph:  78%|#######7  | 1592/2042 [00:44<00:24, 18.67it/s]Executing graph:  78%|#######8  | 1595/2042 [00:44<00:24, 18.08it/s]Executing graph:  78%|#######8  | 1598/2042 [00:45<00:25, 17.71it/s]Executing graph:  79%|#######8  | 1604/2042 [00:45<00:20, 21.70it/s]Executing graph:  79%|#######8  | 1607/2042 [00:45<00:21, 20.29it/s]Executing graph:  79%|#######8  | 1610/2042 [00:45<00:21, 19.87it/s]Executing graph:  79%|#######9  | 1622/2042 [00:45<00:17, 23.67it/s]Executing graph:  80%|#######9  | 1625/2042 [00:46<00:26, 15.97it/s]Executing graph:  80%|#######9  | 1627/2042 [00:47<00:38, 10.70it/s]Executing graph:  80%|#######9  | 1629/2042 [00:47<00:48,  8.57it/s]Executing graph:  80%|#######9  | 1631/2042 [00:47<00:56,  7.29it/s]Executing graph:  80%|#######9  | 1632/2042 [00:48<01:03,  6.46it/s]Executing graph:  80%|########  | 1634/2042 [00:48<00:57,  7.03it/s]Executing graph:  80%|########  | 1636/2042 [00:48<01:07,  6.02it/s]Executing graph:  80%|########  | 1638/2042 [00:49<01:01,  6.56it/s]Executing graph:  81%|########1 | 1660/2042 [00:49<00:13, 28.19it/s]Executing graph:  82%|########1 | 1665/2042 [00:49<00:14, 26.53it/s]Executing graph:  82%|########1 | 1669/2042 [00:49<00:15, 23.76it/s]Executing graph:  82%|########2 | 1676/2042 [00:50<00:14, 25.59it/s]Executing graph:  82%|########2 | 1679/2042 [00:50<00:14, 24.28it/s]Executing graph:  82%|########2 | 1682/2042 [00:50<00:14, 25.02it/s]Executing graph:  83%|########2 | 1690/2042 [00:50<00:11, 29.75it/s]Executing graph:  84%|########3 | 1706/2042 [00:50<00:08, 38.40it/s]Executing graph:  84%|########3 | 1710/2042 [00:51<00:18, 18.26it/s]Executing graph:  84%|########3 | 1713/2042 [00:51<00:18, 17.45it/s]Executing graph:  84%|########4 | 1716/2042 [00:52<00:25, 12.92it/s]Executing graph:  84%|########4 | 1718/2042 [00:52<00:30, 10.65it/s]Executing graph:  84%|########4 | 1720/2042 [00:53<00:35,  8.99it/s]Executing graph:  84%|########4 | 1722/2042 [00:53<00:45,  6.98it/s]Executing graph:  85%|########5 | 1744/2042 [00:53<00:11, 24.89it/s]Executing graph:  86%|########5 | 1750/2042 [00:54<00:12, 22.91it/s]Executing graph:  86%|########6 | 1760/2042 [00:54<00:09, 29.74it/s]Executing graph:  86%|########6 | 1765/2042 [00:54<00:09, 29.06it/s]Executing graph:  87%|########6 | 1774/2042 [00:54<00:07, 35.73it/s]Executing graph:  87%|########7 | 1779/2042 [00:54<00:07, 36.82it/s]Executing graph:  88%|########7 | 1790/2042 [00:54<00:05, 44.93it/s]Executing graph:  88%|########7 | 1796/2042 [00:55<00:11, 21.40it/s]Executing graph:  88%|########8 | 1800/2042 [00:56<00:14, 16.72it/s]Executing graph:  88%|########8 | 1804/2042 [00:56<00:15, 15.27it/s]Executing graph:  88%|########8 | 1807/2042 [00:56<00:18, 12.48it/s]Executing graph:  90%|########9 | 1828/2042 [00:57<00:07, 30.35it/s]Executing graph:  90%|########9 | 1834/2042 [00:57<00:07, 29.68it/s]Executing graph:  90%|######### | 1848/2042 [00:57<00:04, 41.92it/s]Executing graph:  92%|#########1| 1874/2042 [00:57<00:02, 70.88it/s]Executing graph:  92%|#########2| 1885/2042 [00:58<00:03, 41.41it/s]Executing graph:  93%|#########2| 1893/2042 [00:58<00:03, 41.08it/s]Executing graph:  94%|#########4| 1920/2042 [00:58<00:01, 66.90it/s]Executing graph:  95%|#########5| 1942/2042 [00:58<00:01, 88.48it/s]Executing graph:  96%|#########5| 1960/2042 [00:58<00:00, 98.28it/s]Executing graph:  97%|#########6| 1974/2042 [00:59<00:01, 60.20it/s]Executing graph:  98%|#########8| 2004/2042 [00:59<00:00, 80.32it/s]Executing graph:  99%|#########9| 2028/2042 [00:59<00:00, 101.03it/s]Executing graph: 100%|##########| 2042/2042 [01:01<00:00, 33.40it/s] 
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|##########| 7/7 [00:00<00:00, 6813.68it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|##########| 7/7 [00:00<00:00, 6998.84it/s]
+[stablelm2_1.6b__zephyr+chat] measuring perplexity...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|#####     | 1/2 [00:00<00:00,  9.93it/s]Loading checkpoint shards: 100%|##########| 2/2 [00:00<00:00, 11.01it/s]
+[stablelm2_1.6b__zephyr+chat] scoring conflict metrics...
+[stablelm2_1.6b__zephyr+chat] done: {'family': 'stablelm2_1.6b', 'pair': 'zephyr+chat', 'model_a': 'stabilityai/stablelm-2-zephyr-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b-chat', 'conflict': 0.33798873449140787, 'conflict_weighted': 0.2315250420242384, 'drift_magnitude': 0.17124839859667199, 'perplexity': 12.639989025433259}
+[stablelm2_1.6b__zephyr+chat] done: {'family': 'stablelm2_1.6b', 'pair': 'zephyr+chat', 'model_a': 'stabilityai/stablelm-2-zephyr-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b-chat', 'conflict': 0.33798873449140787, 'conflict_weighted': 0.2315250420242384, 'drift_magnitude': 0.17124839859667199, 'perplexity': 12.639989025433259}
+[stablelm2_1.6b__zephyr+brief] launching worker (attempt 1)...
+[stablelm2_1.6b__zephyr+brief] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--maxim-saplin--stablelm-2-brief-1_6b. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][A
+Fetching 9 files:  22%|##2       | 2/9 [00:01<00:04,  1.47it/s][A
+Fetching 9 files:  33%|###3      | 3/9 [00:49<02:01, 20.30s/it][AFetching 9 files: 100%|##########| 9/9 [00:49<00:00,  5.46s/it]
+Warmup loader cache:  33%|###3      | 1/3 [00:49<01:39, 49.74s/it]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 7371.36it/s]
+Warmup loader cache:  67%|######6   | 2/3 [00:50<00:20, 20.76s/it]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 6710.89it/s]
+Warmup loader cache: 100%|##########| 3/3 [00:50<00:00, 11.50s/it]Warmup loader cache: 100%|##########| 3/3 [00:50<00:00, 16.90s/it]
+Executing graph:   0%|          | 0/2042 [00:00<?, ?it/s]Executing graph:   0%|          | 3/2042 [00:00<02:08, 15.91it/s]WARNING:root:Using submatrix of maxim-saplin/stablelm-2-brief-1_6b:lm_head.weight
+Executing graph:   0%|          | 5/2042 [00:00<06:43,  5.04it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 125, in execute
+    tvs, base = get_task_vectors(
+                ^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 217, in get_task_vectors
+    delta = x - base
+            ~~^~~~~~
+RuntimeError: The size of tensor a (100289) must match the size of tensor b (100352) at non-singleton dimension 0
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_stablelm\\stablelm2_1.6b__zephyr+brief.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\stablelm2_1.6b__zephyr+brief', '--cuda']' returned non-zero exit status 1.
+[stablelm2_1.6b__zephyr+brief] worker crashed (exit 1)
+[stablelm2_1.6b__zephyr+brief] launching worker (attempt 2)...
+[stablelm2_1.6b__zephyr+brief] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|##########| 9/9 [00:00<?, ?it/s]
+Warmup loader cache:  33%|###3      | 1/3 [00:00<00:00,  2.13it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 7005.52it/s]
+Warmup loader cache:  67%|######6   | 2/3 [00:00<00:00,  2.15it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 7090.11it/s]
+Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.12it/s]Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.12it/s]
+Executing graph:   0%|          | 0/2042 [00:00<?, ?it/s]Executing graph:   0%|          | 3/2042 [00:00<02:02, 16.67it/s]WARNING:root:Using submatrix of maxim-saplin/stablelm-2-brief-1_6b:lm_head.weight
+Executing graph:   0%|          | 5/2042 [00:00<05:39,  5.99it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 125, in execute
+    tvs, base = get_task_vectors(
+                ^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 217, in get_task_vectors
+    delta = x - base
+            ~~^~~~~~
+RuntimeError: The size of tensor a (100289) must match the size of tensor b (100352) at non-singleton dimension 0
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_stablelm\\stablelm2_1.6b__zephyr+brief.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\stablelm2_1.6b__zephyr+brief', '--cuda']' returned non-zero exit status 1.
+[stablelm2_1.6b__zephyr+brief] worker crashed (exit 1)
+[stablelm2_1.6b__zephyr+brief] giving up after 2 attempt(s)
+[stablelm2_1.6b__chat+brief] launching worker (attempt 1)...
+[stablelm2_1.6b__chat+brief] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|##########| 9/9 [00:00<00:00, 8989.93it/s]
+Warmup loader cache:  33%|###3      | 1/3 [00:00<00:01,  1.97it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<00:00, 6998.84it/s]
+Warmup loader cache:  67%|######6   | 2/3 [00:00<00:00,  2.09it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|##########| 9/9 [00:00<00:00, 12177.01it/s]
+Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.11it/s]Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.09it/s]
+Executing graph:   0%|          | 0/2042 [00:00<?, ?it/s]Executing graph:   0%|          | 4/2042 [00:00<01:31, 22.18it/s]WARNING:root:Using submatrix of maxim-saplin/stablelm-2-brief-1_6b:lm_head.weight
+Executing graph:   0%|          | 5/2042 [00:00<06:02,  5.61it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 125, in execute
+    tvs, base = get_task_vectors(
+                ^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 217, in get_task_vectors
+    delta = x - base
+            ~~^~~~~~
+RuntimeError: The size of tensor a (100289) must match the size of tensor b (100352) at non-singleton dimension 0
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_stablelm\\stablelm2_1.6b__chat+brief.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\stablelm2_1.6b__chat+brief', '--cuda']' returned non-zero exit status 1.
+[stablelm2_1.6b__chat+brief] worker crashed (exit 1)
+[stablelm2_1.6b__chat+brief] launching worker (attempt 2)...
+[stablelm2_1.6b__chat+brief] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|##########| 9/9 [00:00<00:00, 9000.65it/s]
+Warmup loader cache:  33%|###3      | 1/3 [00:00<00:00,  2.11it/s]
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s][AFetching 7 files: 100%|##########| 7/7 [00:00<?, ?it/s]
+Warmup loader cache:  67%|######6   | 2/3 [00:00<00:00,  2.12it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|##########| 9/9 [00:00<00:00, 8762.47it/s]
+Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.05it/s]Warmup loader cache: 100%|##########| 3/3 [00:01<00:00,  2.07it/s]
+Executing graph:   0%|          | 0/2042 [00:00<?, ?it/s]Executing graph:   0%|          | 4/2042 [00:00<01:32, 22.06it/s]WARNING:root:Using submatrix of maxim-saplin/stablelm-2-brief-1_6b:lm_head.weight
+Executing graph:   0%|          | 5/2042 [00:00<06:06,  5.56it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 125, in execute
+    tvs, base = get_task_vectors(
+                ^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 217, in get_task_vectors
+    delta = x - base
+            ~~^~~~~~
+RuntimeError: The size of tensor a (100289) must match the size of tensor b (100352) at non-singleton dimension 0
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_stablelm.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_stablelm\\stablelm2_1.6b__chat+brief.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\stablelm2_1.6b__chat+brief', '--cuda']' returned non-zero exit status 1.
+[stablelm2_1.6b__chat+brief] worker crashed (exit 1)
+[stablelm2_1.6b__chat+brief] giving up after 2 attempt(s)
+
+=== ALL RESULTS ===
+{'family': 'stablelm2_1.6b', 'pair': 'base+base2', 'model_a': 'stabilityai/stablelm-2-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b', 'conflict': 0.0, 'conflict_weighted': 0.0, 'drift_magnitude': 0.0, 'perplexity': 9.028852573308493}
+{'family': 'stablelm2_1.6b', 'pair': 'zephyr+chat', 'model_a': 'stabilityai/stablelm-2-zephyr-1_6b', 'model_b': 'stabilityai/stablelm-2-1_6b-chat', 'conflict': 0.33798873449140787, 'conflict_weighted': 0.2315250420242384, 'drift_magnitude': 0.17124839859667199, 'perplexity': 12.639989025433259}
+
+=== CORRELATIONS (n=2) ===
+conflict: pearson r=1.0000 (p=1) | spearman rho=1.0000 (p=nan)
+conflict_weighted: pearson r=1.0000 (p=1) | spearman rho=1.0000 (p=nan)
+drift_magnitude: pearson r=1.0000 (p=1) | spearman rho=1.0000 (p=nan)

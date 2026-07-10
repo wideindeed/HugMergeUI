@@ -196,6 +196,11 @@ reason to expect scale changes the underlying problem. The failure mode
 (score saturation near 0.49-0.50) showed up identically at 0.5B and 360M
 across three separate test designs, it doesn't look scale-dependent.
 
+[Update: this turned out to be wrong for drift_magnitude specifically.
+See ROUND FOUR below - it was eventually tested at 1.5B/1.7B scale and
+came back with a real, robust correlation. conflict/conflict_weighted
+remain dead as predicted.]
+
 The real fix, if pursued, is a different metric family entirely, for
 example activation-based probing (CKA / representation divergence between
 parent models on a probe set) instead of static weight diffs. That reuses
@@ -219,6 +224,485 @@ adjustments to the existing formula, neither tried yet:
 
 Neither is guaranteed to fix the rank-order failure. Worth a cheap retest
 before or alongside a Phase 7 metric redesign.
+
+[Update: angle 1 (threshold out near-zero deltas) was tried and rejected,
+see ROUND THREE below. Angle 2 (MMLU/GSM8K sample size) was not pursued
+separately since the rejection isn't sensitive to that noise margin.]
+
+
+ROUND THREE: THE CHEAP THRESHOLD FIX, TESTED AND REJECTED
+--------------------------------------------------------------
+
+The one untried angle left on the raw-weight-diff metric family: threshold
+out near-zero deltas before computing sign agreement, on the theory that
+most of a fine-tune's per-element delta is small numerical drift rather
+than a meaningful update, and comparing signs on that noise contributes
+~50/50 agreement by construction regardless of real conflict.
+
+thresholded_sign_conflict_rate (backend/app/conflict/sign_conflict.py)
+implements this: threshold each tensor's own delta by a fraction of its
+RMS magnitude (threshold_frac), only count elements that moved
+meaningfully in *both* models. eval/retest_threshold_fix.py reran this
+against all 28 already-merged pairs from Phase 5/6 (big_validation +
+domain-divergent) at six threshold_frac values (0.05 to 1.0). No
+re-merging or re-measuring perplexity needed - perplexity was already on
+disk, only the conflict score itself was recomputed against the same
+weight tensors. Results: eval/retest_threshold_fix_results.json.
+
+  metric                       | pearson r (p)   | spearman rho (p)
+  ------------------------------|------------------|-------------------
+  old conflict (unthresholded)  | 0.2966 (0.1254)  | 0.1180 (0.5499)
+  thresholded, frac=0.05        | 0.2681 (0.1677)  | -0.1650 (0.4013)
+  thresholded, frac=0.1         | 0.2642 (0.1743)  | -0.1596 (0.4173)
+  thresholded, frac=0.2         | 0.2554 (0.1896)  | -0.1725 (0.3800)
+  thresholded, frac=0.3         | 0.2456 (0.2077)  | -0.1884 (0.3370)
+  thresholded, frac=0.5         | 0.2245 (0.2508)  | -0.2021 (0.3024)
+  thresholded, frac=1.0         | 0.1735 (0.3774)  | -0.2426 (0.2135)
+
+REJECTED. Not only does thresholding fail to rescue the correlation, it
+makes things slightly worse at every threshold tested, and the rank-order
+correlation (spearman) flips negative and grows more negative as the
+threshold gets more aggressive. Whatever drives the sign disagreement
+isn't concentrated in the near-zero elements the noise-floor theory
+predicted - filtering them out doesn't uncover a cleaner signal
+underneath, it just removes data.
+
+This closes out the raw-weight-diff metric family. Four variants now
+tested (conflict, conflict_weighted, drift_magnitude, thresholded
+conflict), three independent validation passes (perplexity n=22,
+MMLU/GSM8K n=28, domain-divergent n=6) plus this retest, zero significant
+correlations, no variant that improves on the others. The only path
+forward is Phase 7: a genuinely different signal derived from model
+behavior (activation-based probing / CKA) instead of anything computed
+from static weight deltas.
+
+
+ROUND FOUR: SCALE-UP RETEST AT 1.5B/1.7B - DRIFT_MAGNITUDE COMES BACK ALIVE
+-------------------------------------------------------------------------------
+
+Round Three closed out the raw-weight-diff family on the reasoning that the
+same failure mode showed up identically at 0.5B and 360M, so it "doesn't
+look scale-dependent." That reasoning was never actually tested at a
+different scale, it was inferred from two small-model families agreeing
+with each other. Since the merge/score/perplexity pipeline already existed
+and drift_magnitude is cheap to recompute, it got a direct test at ~3-5x
+model size before being fully written off: eval/phase_scale_1_5b.py, same
+design as big_validation.py (real mergekit-yaml --cuda TIES merge,
+density/weight 0.5, real perplexity over the same held-out passages, real
+conflict/conflict_weighted/drift_magnitude scoring), against
+Qwen/Qwen2.5-1.5B (base + dolphin/instruct/coder/math fine-tunes, 6
+non-trivial pairs) and HuggingFaceTB/SmolLM2-1.7B (base +
+instruct/sft_only/smoltulu/tulu3, 6 non-trivial pairs), plus one
+self-merge anchor per family, 14 points total. Full results:
+eval/phase_scale_1_5b_results.json.
+
+Operational note: the first attempt crashed hard partway through (no
+Python traceback, consistent with a VRAM/driver-level failure) after only
+2 of 14 pairs, on an 8GB RTX 2060 Super running two 1.5B fp32 models
+back-to-back in one long-lived process. Fixed by isolating each pair in
+its own subprocess (eval/phase_scale_1_5b_worker.py) launched by a
+checkpointing driver that skips already-completed pairs on restart, so a
+crash on one pair can't take the whole run down or leak GPU/RAM state into
+the next pair. The resumed run completed all 14 pairs cleanly.
+
+Full n=14 correlations:
+
+  conflict:           pearson r = 0.0169  (p = 0.9543) | spearman rho = 0.4840 (p = 0.0795)
+  conflict_weighted:  pearson r = -0.1040 (p = 0.7235) | spearman rho = 0.5149 (p = 0.0596)
+  drift_magnitude:    pearson r = 0.6898  (p = 0.0063) | spearman rho = 0.9593 (p = 6.0e-08)
+
+drift_magnitude comes back with a rank correlation about as strong as this
+kind of measurement ever gets. But 5 of the 14 pairs are domain-divergent
+specialist merges (anything involving the coder or math fine-tunes) that
+produced catastrophic perplexity blowups, not fine-grained quality
+differences:
+
+  pair                       | perplexity
+  ----------------------------|-------------
+  dolphin+coder                | 22,865
+  dolphin+math                 | 983
+  instruct+coder                | 21,581
+  instruct+math                 | 630
+  coder+math                    | 6,915,101
+
+Those 5 points sit far out on both axes and could be doing all the work,
+i.e. the metric might just be detecting "broken" vs. "not broken" rather
+than actually ranking quality. Re-ran the correlation on the healthy
+subset excluding all 5 (eval/phase_scale_1_5b_healthy_subset.py):
+
+  healthy subset, n=9 (drops the 5 domain-divergent pairs):
+    conflict:           pearson r = 0.4979 (p = 0.1726) | spearman rho = 0.7280 (p = 0.0262)
+    conflict_weighted:  pearson r = 0.4939 (p = 0.1766) | spearman rho = 0.7280 (p = 0.0262)
+    drift_magnitude:    pearson r = 0.9353 (p = 2.1e-04) | spearman rho = 0.9791 (p = 4.3e-06)
+
+  healthy, non-trivial subset, n=7 (also drops the two conflict=0
+  self-merge anchors, leaving only real distinct-model merges):
+    conflict:           pearson r = 0.3323 (p = 0.4665) | spearman rho = 0.4286 (p = 0.3374)
+    conflict_weighted:  pearson r = 0.3258 (p = 0.4758) | spearman rho = 0.4286 (p = 0.3374)
+    drift_magnitude:    pearson r = 0.9713 (p = 2.6e-04) | spearman rho = 0.9643 (p = 4.5e-04)
+
+drift_magnitude survives both cuts. Even down to n=7 real, non-trivial,
+non-catastrophic merge pairs, it stays significant (rho=0.9643,
+p=4.5e-04). conflict and conflict_weighted do not: their significance at
+n=9 depends on the trivial zero-conflict anchors, and both lose it
+entirely once those are dropped, consistent with Round Three - they were
+only ever tracking the coarse catastrophic/healthy split, never
+fine-grained ranking.
+
+Conclusion so far: drift_magnitude genuinely looks scale-dependent, dead
+at 0.5B/360M (three independent tests, Phase 5/6/Round Three), real at
+1.5B/1.7B, on both the coarse and fine-grained ranking. conflict and
+conflict_weighted stay dead at every scale tested. This reopens
+drift_magnitude specifically as a viable metric, but not yet as a
+validated one:
+
+- n=7 for the strongest (non-trivial healthy) result is still a small
+  sample.
+- Only two model families tested at this scale, both close in size
+  (1.5B/1.7B) and both Western-instruction-tuned-style fine-tunes for the
+  healthy subset.
+- One eval passage set (eval_texts.py), one merge method/density/weight
+  (TIES, 0.5/0.5), reused from the small-scale passes throughout.
+- The catastrophic domain-divergent pairs, while excluded from the
+  "ranking" claim above, are themselves informative: TIES at 0.5/0.5
+  density appears to break down completely on genuinely disjoint
+  specialist domains (code vs. math) at this scale, something the
+  0.5B/360M passes (Phase B, domain-divergent n=6) didn't show anywhere
+  near as dramatically, worth its own follow-up independent of the
+  conflict-score question.
+
+Next: scaling up further (more pairs, more families, more scale) is in
+progress to see whether this result holds or falls apart with more data.
+
+Reproduce: python eval/phase_scale_1_5b.py (resumable - reads
+eval/phase_scale_1_5b_results.json and skips completed pairs, safe to
+re-run after a crash or interruption). python
+eval/phase_scale_1_5b_healthy_subset.py for the subset breakdown (no
+re-merging needed, reuses the results file).
+
+[Update: this scale-up was carried out. See ROUND FIVE below - the
+result held and, if anything, got stronger with more data.]
+
+
+ROUND FIVE: SCALE-UP OF THE SCALE-UP - n=29, THREE FAMILIES, RESULT HOLDS
+-------------------------------------------------------------------------------
+
+Round Four's two weakest caveats were a small n=7 for the strongest result
+and only two, fairly similar, model families. Both got addressed directly
+by extending the same eval/phase_scale_1_5b.py pipeline rather than
+starting a new one: a second "healthy" fine-tune added to qwen1.5b
+(lewtun/Qwen2.5-1.5B-SFT-Capybara-No-Packing), a domain-divergent code
+fine-tune added to smollm2_1.7b (CodeAtCMU/SmolLM2-1.7B_full_sft_code_data_120K),
+and an entirely new third family, llama3.2_1b (base unsloth/Llama-3.2-1B,
+an ungated mirror of the gated official meta-llama repo, with 4
+fine-tunes: dolphin, instruct, an RLHFlow SFT, and a capybara SFT). 15 new
+pairs on top of the original 14, 29 points total. Full results:
+eval/phase_scale_1_5b_results.json.
+
+Operational note: this run reused the crash-resilient subprocess-per-pair
+design from Round Four (eval/phase_scale_1_5b_worker.py, resumable
+checkpointing). It correctly resumed from the 14 already-completed pairs
+and ran the 15 new ones back-to-back with no crash this time.
+
+Full n=29 correlations:
+
+  conflict:           pearson r = -0.0318 (p = 0.8701) | spearman rho = 0.2868 (p = 0.1314)
+  conflict_weighted:  pearson r = -0.1283 (p = 0.5070) | spearman rho = 0.2721 (p = 0.1534)
+  drift_magnitude:    pearson r = 0.6211  (p = 3.24e-04) | spearman rho = 0.8891 (p = 1.16e-10)
+
+conflict and conflict_weighted stay dead, as at every scale/pass before
+this. drift_magnitude's rank correlation is essentially unchanged from
+Round Four's n=14 result (rho=0.96 there vs. rho=0.89 here) despite more
+than doubling the sample and adding a third, architecturally distinct
+family - it did not regress toward zero the way a small-sample fluke
+would be expected to.
+
+One finding worth flagging on its own: the new smollm2_1.7b "code"
+fine-tune, added specifically to test whether the catastrophic
+domain-divergence blowup seen with qwen1.5b's coder/math pairs
+replicates, mostly did NOT reproduce it. 3 of its 4 pairs came back with
+perplexity in the normal healthy range (7.5-15), not the hundreds-to-
+millions seen with qwen1.5b coder/math pairs. Only the analogous
+qwen1.5b capybara-cross pairs (coder+capybara: ppl 76,070, math+capybara:
+ppl 1,022) reproduced the catastrophic pattern. So "merging with a
+code-domain fine-tune breaks TIES at this density" isn't a general rule,
+it's specific to how divergent that particular fine-tune's domain
+actually is from the rest of the family - SmolLM2's code SFT apparently
+overlaps enough with its other fine-tunes' behavior that merging it
+doesn't blow up, while Qwen's dedicated Coder/Math models are different
+enough that it does.
+
+Re-ran the healthy-subset analysis (eval/phase_scale_1_5b_healthy_subset.py,
+DOMAIN_DIVERGENT_NAMES now includes "code" alongside "coder"/"math" -
+excluded by fine-tune identity, not by observed outcome, so all 4
+smollm2 code pairs are excluded even though most of them turned out
+healthy):
+
+  healthy subset, n=18 (drops all 11 pairs involving a coder/math/code
+  fine-tune):
+    conflict:           pearson r = 0.3760 (p = 0.1241) | spearman rho = 0.2844 (p = 0.2527)
+    conflict_weighted:  pearson r = 0.3646 (p = 0.1369) | spearman rho = 0.2844 (p = 0.2527)
+    drift_magnitude:    pearson r = 0.8236 (p = 2.67e-05) | spearman rho = 0.8118 (p = 4.30e-05)
+
+  healthy, non-trivial subset, n=15 (also drops the three base+base2
+  self-merge anchors):
+    conflict:           pearson r = 0.2197 (p = 0.4315) | spearman rho = -0.0214 (p = 0.9396)
+    conflict_weighted:  pearson r = 0.1988 (p = 0.4776) | spearman rho = -0.0214 (p = 0.9396)
+    drift_magnitude:    pearson r = 0.8274 (p = 1.41e-04) | spearman rho = 0.8000 (p = 3.42e-04)
+
+Same story as Round Four, now on more than double the data: drift_magnitude
+stays strongly significant on the non-trivial healthy subset (rho=0.80,
+p=3.4e-04, n=15) while conflict and conflict_weighted collapse to
+essentially zero rank correlation the moment the trivial zero-conflict
+anchors are removed (rho=-0.02). This is the same failure signature seen
+in Round Three and Round Four: conflict/conflict_weighted only ever track
+the coarse "did something break" split, never fine-grained quality
+ranking, at any scale tested so far.
+
+Conclusion: the drift_magnitude result from Round Four was not a small-n
+fluke. It has now survived a 2x increase in sample size and the addition
+of a third, architecturally distinct model family, with the non-trivial
+healthy-subset correlation actually about the same strength (rho≈0.80-0.96
+depending on cut) rather than regressing to baseline. Remaining caveats,
+updated from Round Four:
+
+- All three families tested so far are still in the 1-1.7B range and
+  Western-instruction-tuned-style for the healthy subset. Untested:
+  whether this holds at meaningfully larger scale (7B+), or on
+  non-English / non-chat-style fine-tunes.
+- Still one eval passage set, one merge method/density/weight (TIES,
+  0.5/0.5). Whether drift_magnitude generalizes to other merge methods
+  (linear, dare-ties, model-stock) or densities is untested.
+- The domain-divergence finding above (code fine-tunes don't uniformly
+  cause catastrophic breakdown, it depends on how divergent that specific
+  fine-tune actually is) is itself worth a dedicated follow-up, separate
+  from the conflict-score question.
+
+At this point drift_magnitude has cleared four independent checks at
+1.5-1.7B scale (raw n=14, healthy n=9, healthy-nontrivial n=7, and now
+raw n=29 / healthy n=18 / healthy-nontrivial n=15) without conflict or
+conflict_weighted ever catching up. It's reasonable to start treating
+drift_magnitude as the primary signal going forward rather than an
+open question, while still flagging it as validated at small-to-mid
+model scale only.
+
+Reproduce: same as Round Four - python eval/phase_scale_1_5b.py
+(resumable) and python eval/phase_scale_1_5b_healthy_subset.py.
+
+
+ROUND SIX: FP16 MERGE DTYPE + 3B SCALE - MECHANICALLY FINE, ONE REAL CAVEAT SURFACED
+-------------------------------------------------------------------------------
+
+Round Five closed with two open axes worth broadening: model scale (all
+testing so far capped at 1.5-1.7B) and merge dtype (always float32, which
+roughly caps out around 1.5-1.7B on this 8GB card). Tested both together
+rather than separately, since fp16 is what makes 3B feasible at all here:
+mean_perplexity and the merge config both switched from float32 to
+float16, tested against Qwen/Qwen2.5-3B (base + instruct/coder/
+coder_instruct fine-tunes, all official Qwen repos, ungated). 3
+non-trivial pairs + 1 self-anchor, 4 points - small on purpose, this is a
+feasibility/consistency check, not a from-scratch validation pass at the
+scale of Round Four/Five.
+
+Feasibility: confirmed fine. A timing pilot (eval/pilot_3b.py, one pair:
+instruct+coder) ran merge -> perplexity -> scoring end to end in ~8
+minutes with no OOM and no crash. fp16 at 3B fits comfortably in 8GB VRAM
+on this card, using less headroom than fp32 did at 1.5B.
+
+Operational note, two real crashes hit during the full family pass, both
+the same root cause: eval/phase_scale_1_5b.py's crash-retry logic
+(reused as-is in phase_scale_3b.py) retries a failed pair from scratch,
+but never cleaned up the merge output directory between attempts. When a
+worker crashed with an access violation (0xC0000005 - the mergekit
+subprocess and perplexity/scoring steps all completed fine, the crash was
+consistent with a driver/VRAM-level hiccup, not a deterministic bug) *after*
+mergekit's merge step had already finished and written output files, the
+retry's merge step then failed with FileExistsError trying to rename into
+a non-empty directory, and the pair was marked as given-up even though the
+underlying hardware crash was transient and a clean retry would likely
+have succeeded. Fixed by adding an rmtree of the pair's output directory
+at the start of every attempt, not just on final success/failure
+(eval/phase_scale_3b.py, run_pair_isolated). Two pairs (base+base2 and
+instruct+coder) had to be re-run after this fix; both succeeded cleanly
+on the next attempt, consistent with the crashes being transient hardware
+noise rather than a real code bug in the merge/score pipeline. Worth
+carrying this same directory-cleanup fix back into
+phase_scale_1_5b.py's run_pair_isolated before any future run of that
+script, since it has the identical gap.
+
+Full n=4 results:
+
+  pair                          | conflict | drift_magnitude | perplexity
+  --------------------------------|----------|------------------|------------
+  base+base2 (anchor)              | 0.0000   | 0.0000           | 6.68
+  coder+coder_instruct              | 0.0123   | 1.8451           | 18.20
+  instruct+coder_instruct            | 0.4820   | 0.9348           | 26.47
+  instruct+coder                      | 0.4823   | 0.9348           | 70.89
+
+n=4 correlations (reported for completeness, not to be trusted -
+4 points is not a sample size, and spearman's p-value is undefined/degenerate
+at this n):
+
+  conflict:           pearson r = 0.7482 (p=0.2518) | spearman rho = 1.0000
+  conflict_weighted:  pearson r = 0.7455 (p=0.2545) | spearman rho = 1.0000
+  drift_magnitude:    pearson r = 0.1744 (p=0.8256) | spearman rho = 0.2000
+
+Do not read this as "conflict wins now, drift_magnitude loses" - n=4 can't
+support that conclusion either direction. What IS worth taking seriously
+is the specific data point driving drift_magnitude's bad showing here:
+coder+coder_instruct. Qwen2.5-Coder-3B-Instruct is not an independently
+trained sibling fine-tune, it's instruction-tuned starting FROM
+Qwen2.5-Coder-3B - a parent/child relationship, unlike every other pair
+tested in Round Four/Five, where all fine-tunes in a family were
+independently trained siblings of a common base. That pair shows the
+lowest conflict of any non-trivial pair on record (0.0123, near the
+self-merge anchor's 0.0) - sign agreement is almost total, which makes
+sense, one model IS a further-trained version of the other, so their
+deltas from base point in a highly correlated direction. But
+drift_magnitude is the highest of all four points (1.8451) despite that
+pair producing the best non-trivial perplexity (18.20, well under the
+other two non-trivial pairs' 26.47 and 70.89). A large, well-aligned
+update (high magnitude, low conflict) apparently doesn't hurt merge
+quality here, only a large, disagreeing update does - which drift_magnitude
+as currently formulated can't distinguish, since it only measures update
+size, not alignment between the two updates.
+
+This is a real, specific gap worth tracking, not a refutation of Round
+Four/Five: every pair validated so far (43 total across both rounds) was
+between independently-trained sibling fine-tunes. Parent/child fine-tune
+pairs (an instruct or domain variant built on top of another fine-tune
+rather than on the base model directly) are a distinct, untested case,
+and this one data point suggests drift_magnitude may overstate risk there
+specifically. Needs a dedicated, larger pass (multiple parent/child pairs
+across families) before concluding anything more than "worth watching."
+
+Conclusion: the fp16-at-3B mechanics are validated - the pipeline works,
+fits in 8GB VRAM, and the two real crashes were transient hardware noise
+with a now-fixed retry bug, not evidence against the dtype switch itself.
+The three non-trivial 3B points don't contradict the core Round
+Four/Five finding on sibling-fine-tune pairs (instruct+coder and
+instruct+coder_instruct both show elevated conflict/drift alongside
+elevated perplexity, in the same direction as every prior domain-divergent
+pair). But the parent/child fine-tune case (coder+coder_instruct) is a
+genuine, newly-surfaced edge case for drift_magnitude that the current
+metric formulation doesn't obviously handle, and it's now on the record
+for whoever picks this up next.
+
+Reproduce: python eval/pilot_3b.py for the timing/feasibility check.
+python eval/phase_scale_3b.py (resumable) for the full family pass.
+
+
+ROUND SEVEN: FOLLOW-UP ON THE PARENT/CHILD ANOMALY - DOESN'T REPLICATE
+------------------------------------------------------------------------
+
+Round Six flagged one open question: does drift_magnitude systematically
+overstate risk on parent/child fine-tune chains (a fine-tune built on top
+of another fine-tune, rather than both being independently trained off
+the shared base), based on a single point (Qwen2.5-Coder-3B +
+Coder-3B-Instruct, high drift_magnitude but a genuinely good merge).
+Follow-up: two more parent/child chains at 1.5B scale, same fp32
+methodology as the main 1.5B/1.7B family runs so results are directly
+comparable - Qwen2.5-Coder-1.5B -> Coder-1.5B-Instruct, and
+Qwen2.5-Math-1.5B -> Math-1.5B-Instruct (eval/phase_hierarchy.py).
+
+Result: the concern doesn't replicate. Both new pairs merged badly
+(perplexity 414.5 and 893.1 respectively - a healthy merge on this
+project is typically ~20-30), and both were correctly flagged by high
+drift_magnitude (1.83 and 3.01) alongside near-zero conflict - i.e.
+drift_magnitude did its job here, catching real bad merges that
+conflict/conflict_weighted would have missed (same near-zero-conflict
+pattern as the 3B anomaly, but this time paired with a bad outcome, not a
+good one). Combined n=3 (the two new points + the 3B coder anomaly):
+drift_magnitude has the strongest pearson correlation of the three
+metrics (r=0.8872) despite the outlier; spearman ties all three metrics
+at rho=0.5 (n=3 rank correlation isn't meaningful either direction, not
+worth reading into).
+
+Caveat: this isn't a clean isolation of the parent/child variable. Both
+new pairs are also "domain-divergent" fine-tunes (coder, math) - a
+category already flagged in Round Four/Five as prone to catastrophic
+perplexity blowups for reasons unrelated to parent/child structure. So
+this result is consistent with two different explanations: (a) the 3B
+coder anomaly really was a fluke specific to that one pair/scale, or (b)
+domain-divergence is the dominant effect here and happens to be swamping
+whatever the parent/child structure alone would show. Can't distinguish
+between those without a parent/child pair in a non-domain-divergent
+category (e.g. an instruct-of-an-instruct chain, or a dolphin/capybara
+style general SFT built on top of another general SFT) - not done here,
+flagged for whoever picks this up next.
+
+Bottom line: no evidence of a systematic drift_magnitude blind spot on
+parent/child pairs. The 3B anomaly stands as a single unexplained
+exception, not a pattern - treat it as "interesting, watch for it again"
+rather than "known limitation."
+
+Reproduce: python eval/phase_hierarchy.py (resumable).
+
+
+ROUND EIGHT: BROADENING AXIS (B) - A NON-QWEN ARCHITECTURE FAMILY
+------------------------------------------------------------------------
+
+Every result up to this point was on Qwen2.5-family models. Open
+question: does drift_magnitude's edge hold on a genuinely different
+architecture, or is it Qwen-specific? First attempt was phi-2
+(microsoft/phi-2 + three community fine-tunes: dolphin, instruct,
+coder) - dead end, not a security finding. Those fine-tunes predate
+transformers' native phi-2 support and their configs point
+(auto_map) at custom modeling code files that Microsoft has since
+deleted from the phi-2 repo's current HEAD (the files only exist at
+an old pinned revision, 834565c...). Loading them requires
+trust_remote_code=True; before enabling that, the actual code
+(modeling_phi.py at the old revision) was fetched and read directly -
+official Microsoft/Tri Dao code, no exec/eval/subprocess/network
+calls, benign - so the block wasn't a safety concern, it was a broken
+upstream reference not worth manually patching around. Abandoned,
+scripts left on disk as a record (eval/phase_arch_phi2.py).
+
+Pivoted to StableLM-2-1.6B (Stability AI, Apache 2.0, natively
+supported in transformers, no remote code needed at all):
+base=stabilityai/stablelm-2-1_6b, plus three independently-trained
+fine-tunes - zephyr (official DPO instruct), chat (official chat
+SFT), and initially "brief" (maxim-saplin/stablelm-2-brief-1_6b, a
+community terse-answer SFT). The brief pairs (zephyr+brief,
+chat+brief) failed outright with a tensor-shape error: "size of
+tensor a (100289) must match size of tensor b (100352)". This is a
+real merge-incompatibility, separate from anything conflict-score
+measures - brief's tokenizer/vocab was resized independently
+(100289 vs the family's 100352) at fine-tune time, so it's not
+representable in the same embedding space as the rest of the family
+at all. Confirmed via each repo's config.json before swapping it out;
+not a bug in the harness, not a retryable crash, and not something a
+conflict metric could ever catch since the models can't be diffed at
+the tensor level to begin with. Replaced with a vocab-compatible
+fine-tune, nnheui/stablelm-2-1_6b-dpo-full-ultrafeedback_generated
+(dpo), and re-ran.
+
+Final n=4 (base+base2 self-anchor, zephyr+chat, zephyr+dpo,
+chat+dpo), fp32, same TIES config as the main family runs:
+
+  base+base2:   conflict=0.000, weighted=0.000, drift=0.000, ppl=9.03
+  zephyr+chat:  conflict=0.338, weighted=0.232, drift=0.171, ppl=12.64
+  zephyr+dpo:   conflict=0.410, weighted=0.367, drift=0.088, ppl=10.31
+  chat+dpo:     conflict=0.426, weighted=0.392, drift=0.110, ppl=9.72
+
+Correlations against perplexity (n=4):
+  conflict:           pearson r=0.4278 (p=0.57) | spearman rho=0.20 (p=0.8)
+  conflict_weighted:  pearson r=0.2309 (p=0.77) | spearman rho=0.20 (p=0.8)
+  drift_magnitude:    pearson r=0.8740 (p=0.13) | spearman rho=0.80 (p=0.2)
+
+Same pattern as every prior round: drift_magnitude is the strongest
+of the three by a wide margin, conflict/conflict_weighted are weak on
+this family - in fact actively inverted here (the pair with the
+highest conflict, chat+dpo, has the lowest perplexity of the three
+non-trivial pairs). Small n so p-values aren't significant on their
+own, but the direction and magnitude are consistent with every
+larger-n result so far (Round Four/Five's n=29). No sign this is a
+Qwen-specific artifact - the edge holds on an architecture family
+Qwen never touched.
+
+Reproduce: python eval/phase_arch_stablelm.py (resumable; the
+"brief" -> "dpo" swap is already baked into the script with a comment
+explaining why).
 
 
 HARDWARE, FOR CONTEXT

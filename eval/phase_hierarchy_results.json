@@ -1,0 +1,22 @@
+[
+  {
+    "family": "qwen_coder_1.5b",
+    "pair": "coder+coder_instruct",
+    "model_a": "Qwen/Qwen2.5-Coder-1.5B",
+    "model_b": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "conflict": 0.0028625681617638326,
+    "conflict_weighted": 1.862831681176368e-05,
+    "drift_magnitude": 1.8313346511686215,
+    "perplexity": 414.50400383931856
+  },
+  {
+    "family": "qwen_math_1.5b",
+    "pair": "math+math_instruct",
+    "model_a": "Qwen/Qwen2.5-Math-1.5B",
+    "model_b": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "conflict": 0.035803803216236635,
+    "conflict_weighted": 0.001757717137275001,
+    "drift_magnitude": 3.012867138959975,
+    "perplexity": 893.1250975143398
+  }
+]

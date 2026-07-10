@@ -1,0 +1,14 @@
+{
+  "base": "Qwen/Qwen2.5-3B",
+  "model_a": "Qwen/Qwen2.5-3B-Instruct",
+  "model_b": "Qwen/Qwen2.5-Coder-3B",
+  "perplexity": 70.89162590013709,
+  "conflict": 0.4823203385110246,
+  "drift_magnitude": 0.9347911970703671,
+  "timings": {
+    "merge_seconds": 134.7470200061798,
+    "perplexity_seconds": 5.300683259963989,
+    "conflict_score_seconds": 342.68348717689514,
+    "total_seconds": 482.74216651916504
+  }
+}

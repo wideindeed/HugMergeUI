@@ -1,0 +1,54 @@
+
+=== family: qwen (14 pairs) ===
+  [base+base2] {'family': 'qwen', 'pair': 'base+base2', 'perplexity': 10.709006275334913, 'old_conflict': 0.0, 'cka_div_a': 0.0, 'cka_div_b': 0.0, 'cka_combined': 0.0, 'cka_product': 0.0, 'cka_combined_excl_last': 0.0}
+  [dphn/Dolphin3.0-Qwen2.5-0.5B] computing hidden states...
+  [wulli/Qwen2.5-0.5B-sft-capybara] computing hidden states...
+  [dolphin+capybara] {'family': 'qwen', 'pair': 'dolphin+capybara', 'perplexity': 12.348541749341774, 'old_conflict': 0.4819034700095539, 'cka_div_a': 0.008007497787475585, 'cka_div_b': 0.0036145830154418945, 'cka_combined': 0.011622080802917479, 'cka_product': 2.89437654987978e-05, 'cka_combined_excl_last': 0.007673914233843486}
+  [Qwen/Qwen2.5-0.5B-Instruct] computing hidden states...
+  [dolphin+instruct] {'family': 'qwen', 'pair': 'dolphin+instruct', 'perplexity': 13.037351150631768, 'old_conflict': 0.4680710360697468, 'cka_div_a': 0.008007497787475585, 'cka_div_b': 0.0015071249008178711, 'cka_combined': 0.009514622688293457, 'cka_product': 1.2068299308748464e-05, 'cka_combined_excl_last': 0.00707424928744634}
+  [JayHyeon/Qwen2.5-0.5B-SFT] computing hidden states...
+  [dolphin+jayhyeon] {'family': 'qwen', 'pair': 'dolphin+jayhyeon', 'perplexity': 11.937954590360748, 'old_conflict': 0.4917157965876414, 'cka_div_a': 0.008007497787475585, 'cka_div_b': 0.0024909687042236326, 'cka_combined': 0.010498466491699218, 'cka_product': 1.9946426387741665e-05, 'cka_combined_excl_last': 0.007066701849301656}
+  [qgallouedec/Qwen2.5-0.5B-SFT] computing hidden states...
+  [dolphin+qgallouedec] {'family': 'qwen', 'pair': 'dolphin+qgallouedec', 'perplexity': 11.725578830053808, 'old_conflict': 0.4972653851870217, 'cka_div_a': 0.008007497787475585, 'cka_div_b': 0.003396012783050537, 'cka_combined': 0.011403510570526122, 'cka_product': 2.719356484651598e-05, 'cka_combined_excl_last': 0.007425636053085327}
+  [capybara+instruct] {'family': 'qwen', 'pair': 'capybara+instruct', 'perplexity': 11.054336083808465, 'old_conflict': 0.49482520070989533, 'cka_div_a': 0.0036145830154418945, 'cka_div_b': 0.0015071249008178711, 'cka_combined': 0.005121707916259766, 'cka_product': 5.447628068645827e-06, 'cka_combined_excl_last': 0.002354167401790619}
+  [capybara+jayhyeon] {'family': 'qwen', 'pair': 'capybara+jayhyeon', 'perplexity': 11.34642451645453, 'old_conflict': 0.4779832536761146, 'cka_div_a': 0.0036145830154418945, 'cka_div_b': 0.0024909687042236326, 'cka_combined': 0.0061055517196655276, 'cka_product': 9.003813170284047e-06, 'cka_combined_excl_last': 0.002346619963645935}
+  [capybara+qgallouedec] {'family': 'qwen', 'pair': 'capybara+qgallouedec', 'perplexity': 11.53352813551052, 'old_conflict': 0.4547551641846531, 'cka_div_a': 0.0036145830154418945, 'cka_div_b': 0.003396012783050537, 'cka_combined': 0.007010595798492432, 'cka_product': 1.227517012583803e-05, 'cka_combined_excl_last': 0.0027055541674296064}
+  [instruct+jayhyeon] {'family': 'qwen', 'pair': 'instruct+jayhyeon', 'perplexity': 10.867297673991272, 'old_conflict': 0.496015079263692, 'cka_div_a': 0.0015071249008178711, 'cka_div_b': 0.0024909687042236326, 'cka_combined': 0.003998093605041504, 'cka_product': 3.7542009612934634e-06, 'cka_combined_excl_last': 0.0017469550172487895}
+  [instruct+qgallouedec] {'family': 'qwen', 'pair': 'instruct+qgallouedec', 'perplexity': 10.962627437191076, 'old_conflict': 0.4982906403368072, 'cka_div_a': 0.0015071249008178711, 'cka_div_b': 0.003396012783050537, 'cka_combined': 0.004903137683868408, 'cka_product': 5.118215428831263e-06, 'cka_combined_excl_last': 0.0021058892210324607}
+  [jayhyeon+qgallouedec] {'family': 'qwen', 'pair': 'jayhyeon+qgallouedec', 'perplexity': 11.157292339284247, 'old_conflict': 0.46303501244912343, 'cka_div_a': 0.0024909687042236326, 'cka_div_b': 0.003396012783050537, 'cka_combined': 0.00588698148727417, 'cka_product': 8.459361561722288e-06, 'cka_combined_excl_last': 0.002098341782887777}
+  [pngwn/qwen2.5-0.5b-gsm8k-sft] computing hidden states...
+  [qgallouedec/Qwen2.5-0.5B-codeforces-SFT] computing hidden states...
+  [math+code] {'family': 'qwen', 'pair': 'math+code', 'perplexity': 10.832357789680076, 'old_conflict': 0.4989208818636425, 'cka_div_a': 0.0027844858169555663, 'cka_div_b': 0.0003467726707458496, 'cka_combined': 0.0031312584877014158, 'cka_product': 9.655835833996206e-07, 'cka_combined_excl_last': 0.0017823676268259685}
+  [math+chat] {'family': 'qwen', 'pair': 'math+chat', 'perplexity': 11.510513242637415, 'old_conflict': 0.4991072695137651, 'cka_div_a': 0.0027844858169555663, 'cka_div_b': 0.0015071249008178711, 'cka_combined': 0.004291610717773437, 'cka_product': 4.196567910707927e-06, 'cka_combined_excl_last': 0.0025515382488568625}
+  [code+chat] {'family': 'qwen', 'pair': 'code+chat', 'perplexity': 11.39642145223284, 'old_conflict': 0.49944054681730893, 'cka_div_a': 0.0003467726707458496, 'cka_div_b': 0.0015071249008178711, 'cka_combined': 0.0018538975715637208, 'cka_product': 5.226297270041869e-07, 'cka_combined_excl_last': 0.0009853318333625793}
+
+=== family: smollm2 (14 pairs) ===
+  [base+base2] {'family': 'smollm2', 'pair': 'base+base2', 'perplexity': 9.562887296582769, 'old_conflict': 0.0, 'cka_div_a': 0.0, 'cka_div_b': 0.0, 'cka_combined': 0.0, 'cka_product': 0.0, 'cka_combined_excl_last': 0.0}
+  [HuggingFaceTB/SmolLM2-360M-Instruct] computing hidden states...
+  [Michaelj1/finetune-smolLM2-360M] computing hidden states...
+  [instruct+michaelj1] {'family': 'smollm2', 'pair': 'instruct+michaelj1', 'perplexity': 10.08134665602452, 'old_conflict': 0.4994003177630975, 'cka_div_a': 0.00683037078741825, 'cka_div_b': 0.0007217905738136985, 'cka_combined': 0.007552161361231949, 'cka_product': 4.930097250010942e-06, 'cka_combined_excl_last': 0.004202837124466896}
+  [prithivMLmods/SmolLM2-CoT-360M] computing hidden states...
+  [instruct+cot] {'family': 'smollm2', 'pair': 'instruct+cot', 'perplexity': 10.949204149649733, 'old_conflict': 0.49454744598166595, 'cka_div_a': 0.00683037078741825, 'cka_div_b': 0.0035995299165899105, 'cka_combined': 0.01042990070400816, 'cka_product': 2.4586123990713775e-05, 'cka_combined_excl_last': 0.004515454173088074}
+  [Masorian06/SmolLM2-360M-Rickified] computing hidden states...
+  [instruct+rickified] {'family': 'smollm2', 'pair': 'instruct+rickified', 'perplexity': 9.887385391580377, 'old_conflict': 0.4932852118802593, 'cka_div_a': 0.00683037078741825, 'cka_div_b': 0.00046187639236450195, 'cka_combined': 0.007292247179782752, 'cka_product': 3.1547870178046238e-06, 'cka_combined_excl_last': 0.004120230674743652}
+  [Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1] computing hidden states...
+  [instruct+michaelj1_wikitext] {'family': 'smollm2', 'pair': 'instruct+michaelj1_wikitext', 'perplexity': 9.8672890410236, 'old_conflict': 0.002638347348243534, 'cka_div_a': 0.00683037078741825, 'cka_div_b': 0.0052443237015695286, 'cka_combined': 0.012074694488987778, 'cka_product': 3.5820675410965653e-05, 'cka_combined_excl_last': 0.007147017866373062}
+  [michaelj1+cot] {'family': 'smollm2', 'pair': 'michaelj1+cot', 'perplexity': 14.985430201943585, 'old_conflict': 0.49997699331789064, 'cka_div_a': 0.0007217905738136985, 'cka_div_b': 0.0035995299165899105, 'cka_combined': 0.004321320490403609, 'cka_product': 2.5981067639550057e-06, 'cka_combined_excl_last': 0.000708920881152153}
+  [michaelj1+rickified] {'family': 'smollm2', 'pair': 'michaelj1+rickified', 'perplexity': 11.505674376893808, 'old_conflict': 0.4995912269885328, 'cka_div_a': 0.0007217905738136985, 'cka_div_b': 0.00046187639236450195, 'cka_combined': 0.0011836669661782005, 'cka_product': 3.3337802627577484e-07, 'cka_combined_excl_last': 0.00031369738280773163}
+  [michaelj1+michaelj1_wikitext] {'family': 'smollm2', 'pair': 'michaelj1+michaelj1_wikitext', 'perplexity': 10.526074523407672, 'old_conflict': 0.4913785405029698, 'cka_div_a': 0.0007217905738136985, 'cka_div_b': 0.0052443237015695286, 'cka_combined': 0.005966114275383227, 'cka_product': 3.7853034138206496e-06, 'cka_combined_excl_last': 0.0033404845744371414}
+  [cot+rickified] {'family': 'smollm2', 'pair': 'cot+rickified', 'perplexity': 13.77589429783423, 'old_conflict': 0.4873507728746461, 'cka_div_a': 0.0035995299165899105, 'cka_div_b': 0.00046187639236450195, 'cka_combined': 0.0040614063089544124, 'cka_product': 1.6625378920826446e-06, 'cka_combined_excl_last': 0.0006263144314289093}
+  [cot+michaelj1_wikitext] {'family': 'smollm2', 'pair': 'cot+michaelj1_wikitext', 'perplexity': 11.040950546733514, 'old_conflict': 0.49475804994665346, 'cka_div_a': 0.0035995299165899105, 'cka_div_b': 0.0052443237015695286, 'cka_combined': 0.008843853618159439, 'cka_product': 1.8877100056081055e-05, 'cka_combined_excl_last': 0.003653101623058319}
+  [rickified+michaelj1_wikitext] {'family': 'smollm2', 'pair': 'rickified+michaelj1_wikitext', 'perplexity': 10.028362685807945, 'old_conflict': 0.49353032321518125, 'cka_div_a': 0.00046187639236450195, 'cka_div_b': 0.0052443237015695286, 'cka_combined': 0.0057062000939340305, 'cka_product': 2.422229311672585e-06, 'cka_combined_excl_last': 0.0032578781247138977}
+  [qiuyu8290/SmolLM2-360M-sft-math-gsm8k] computing hidden states...
+  [CodeAtCMU/SmolLM2-360M_full_sft_code_data_120K] computing hidden states...
+  [math+code] {'family': 'smollm2', 'pair': 'math+code', 'perplexity': 9.596865721004141, 'old_conflict': 0.4994755727069683, 'cka_div_a': 0.0006370761177756569, 'cka_div_b': 0.0005768627831430147, 'cka_combined': 0.0012139389009186716, 'cka_product': 3.6750550237401246e-07, 'cka_combined_excl_last': 0.0003205481916666031}
+  [math+chat] {'family': 'smollm2', 'pair': 'math+chat', 'perplexity': 10.034424853217311, 'old_conflict': 0.494121475897643, 'cka_div_a': 0.0006370761177756569, 'cka_div_b': 0.00683037078741825, 'cka_combined': 0.007467446905193907, 'cka_product': 4.351466104216676e-06, 'cka_combined_excl_last': 0.004156637936830521}
+  [code+chat] {'family': 'smollm2', 'pair': 'code+chat', 'perplexity': 9.897241373639602, 'old_conflict': 0.48954333989832843, 'cka_div_a': 0.0005768627831430147, 'cka_div_b': 0.00683037078741825, 'cka_combined': 0.007407233570561265, 'cka_product': 3.940186702328836e-06, 'cka_combined_excl_last': 0.004173280671238899}
+
+=== CORRELATIONS (n=28) ===
+old_conflict: pearson r=0.2966 (p=0.1254) | spearman rho=0.1180 (p=0.5499)
+cka_div_a: pearson r=0.2009 (p=0.3054) | spearman rho=0.4261 (p=0.02376)
+cka_div_b: pearson r=-0.1164 (p=0.5553) | spearman rho=-0.0157 (p=0.9368)
+cka_combined: pearson r=0.0987 (p=0.6174) | spearman rho=0.1415 (p=0.4726)
+cka_product: pearson r=0.0925 (p=0.6398) | spearman rho=0.3074 (p=0.1116)
+cka_combined_excl_last: pearson r=0.0215 (p=0.9135) | spearman rho=0.0769 (p=0.6973)

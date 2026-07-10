@@ -1,0 +1,13 @@
+{
+  "base": "Qwen/Qwen2.5-1.5B",
+  "model_a": "dphn/Dolphin3.0-Qwen2.5-1.5B",
+  "model_b": "Qwen/Qwen2.5-1.5B-Instruct",
+  "perplexity": 7.227120500704017,
+  "conflict": 0.4618764671098648,
+  "timings": {
+    "merge_seconds": 222.8826289176941,
+    "perplexity_seconds": 18.339521408081055,
+    "conflict_score_seconds": 176.48571872711182,
+    "total_seconds": 418.25484251976013
+  }
+}

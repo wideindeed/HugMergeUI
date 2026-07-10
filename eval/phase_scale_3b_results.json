@@ -1,0 +1,42 @@
+[
+  {
+    "family": "qwen3b",
+    "pair": "instruct+coder_instruct",
+    "model_a": "Qwen/Qwen2.5-3B-Instruct",
+    "model_b": "Qwen/Qwen2.5-Coder-3B-Instruct",
+    "conflict": 0.4820194285757307,
+    "conflict_weighted": 0.47250963660101275,
+    "drift_magnitude": 0.9348129701017872,
+    "perplexity": 26.469825163820257
+  },
+  {
+    "family": "qwen3b",
+    "pair": "coder+coder_instruct",
+    "model_a": "Qwen/Qwen2.5-Coder-3B",
+    "model_b": "Qwen/Qwen2.5-Coder-3B-Instruct",
+    "conflict": 0.012302013868431484,
+    "conflict_weighted": 0.0003754249445642501,
+    "drift_magnitude": 1.8451062321038225,
+    "perplexity": 18.199780446659844
+  },
+  {
+    "family": "qwen3b",
+    "pair": "base+base2",
+    "model_a": "Qwen/Qwen2.5-3B",
+    "model_b": "Qwen/Qwen2.5-3B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 6.680976561730046
+  },
+  {
+    "family": "qwen3b",
+    "pair": "instruct+coder",
+    "model_a": "Qwen/Qwen2.5-3B-Instruct",
+    "model_b": "Qwen/Qwen2.5-Coder-3B",
+    "conflict": 0.4823203385110246,
+    "conflict_weighted": 0.47292253405109674,
+    "drift_magnitude": 0.9347911970703671,
+    "perplexity": 70.89162590013709
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "family": "stablelm2_1.6b",
+    "pair": "base+base2",
+    "model_a": "stabilityai/stablelm-2-1_6b",
+    "model_b": "stabilityai/stablelm-2-1_6b",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 9.028852573308493
+  },
+  {
+    "family": "stablelm2_1.6b",
+    "pair": "zephyr+chat",
+    "model_a": "stabilityai/stablelm-2-zephyr-1_6b",
+    "model_b": "stabilityai/stablelm-2-1_6b-chat",
+    "conflict": 0.33798873449140787,
+    "conflict_weighted": 0.2315250420242384,
+    "drift_magnitude": 0.17124839859667199,
+    "perplexity": 12.639989025433259
+  },
+  {
+    "family": "stablelm2_1.6b",
+    "pair": "zephyr+dpo",
+    "model_a": "stabilityai/stablelm-2-zephyr-1_6b",
+    "model_b": "nnheui/stablelm-2-1_6b-dpo-full-ultrafeedback_generated",
+    "conflict": 0.40959302155601857,
+    "conflict_weighted": 0.3665765612488944,
+    "drift_magnitude": 0.08784025379878833,
+    "perplexity": 10.312507482003108
+  },
+  {
+    "family": "stablelm2_1.6b",
+    "pair": "chat+dpo",
+    "model_a": "stabilityai/stablelm-2-1_6b-chat",
+    "model_b": "nnheui/stablelm-2-1_6b-dpo-full-ultrafeedback_generated",
+    "conflict": 0.42644827801430774,
+    "conflict_weighted": 0.3915911054855218,
+    "drift_magnitude": 0.11025926989146495,
+    "perplexity": 9.716728720793435
+  }
+]

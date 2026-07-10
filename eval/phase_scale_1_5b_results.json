@@ -1,0 +1,292 @@
+[
+  {
+    "family": "qwen1.5b",
+    "pair": "base+base2",
+    "model_a": "Qwen/Qwen2.5-1.5B",
+    "model_b": "Qwen/Qwen2.5-1.5B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 7.117410662111993
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "dolphin+instruct",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-1.5B",
+    "model_b": "Qwen/Qwen2.5-1.5B-Instruct",
+    "conflict": 0.4618764671098648,
+    "conflict_weighted": 0.4413594998952008,
+    "drift_magnitude": 0.05109060513873086,
+    "perplexity": 7.227120500704017
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "dolphin+coder",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-1.5B",
+    "model_b": "Qwen/Qwen2.5-Coder-1.5B",
+    "conflict": 0.4645584642921075,
+    "conflict_weighted": 0.44845251551581633,
+    "drift_magnitude": 0.9543788537960396,
+    "perplexity": 22865.070574396952
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "dolphin+math",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-1.5B",
+    "model_b": "Qwen/Qwen2.5-Math-1.5B",
+    "conflict": 0.4769059532266986,
+    "conflict_weighted": 0.46655414889760505,
+    "drift_magnitude": 1.5974722830057726,
+    "perplexity": 982.5333028473319
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "instruct+coder",
+    "model_a": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_b": "Qwen/Qwen2.5-Coder-1.5B",
+    "conflict": 0.47585369060259164,
+    "conflict_weighted": 0.4647211616475796,
+    "drift_magnitude": 0.9282724486158971,
+    "perplexity": 21580.755081791336
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "instruct+math",
+    "model_a": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_b": "Qwen/Qwen2.5-Math-1.5B",
+    "conflict": 0.48426475864592994,
+    "conflict_weighted": 0.4768725881453713,
+    "drift_magnitude": 1.5713658778256299,
+    "perplexity": 629.5384998055152
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "coder+math",
+    "model_a": "Qwen/Qwen2.5-Coder-1.5B",
+    "model_b": "Qwen/Qwen2.5-Math-1.5B",
+    "conflict": 0.372730413970565,
+    "conflict_weighted": 0.2736587923219095,
+    "drift_magnitude": 2.4746541264829385,
+    "perplexity": 6915101.33809271
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "base+base2",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B",
+    "model_b": "HuggingFaceTB/SmolLM2-1.7B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 7.223682912767181
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "instruct+sft_only",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "model_b": "HuggingFaceTB/SmolLM2-1.7B-sft-only",
+    "conflict": 5.962020157012746e-05,
+    "conflict_weighted": 2.5924135834472143e-07,
+    "drift_magnitude": 0.1257687675633941,
+    "perplexity": 7.614856610044225
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "instruct+smoltulu",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "model_b": "SultanR/SmolTulu-1.7b-Instruct",
+    "conflict": 0.47618596064268304,
+    "conflict_weighted": 0.45988998062301784,
+    "drift_magnitude": 0.25391587419809053,
+    "perplexity": 17.360294555564757
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "instruct+tulu3",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "model_b": "ali-elganzory/SmolLM2-1.7B-SFT-Tulu3-decontaminated",
+    "conflict": 0.4702737006367496,
+    "conflict_weighted": 0.45700769390077944,
+    "drift_magnitude": 0.07232508418480334,
+    "perplexity": 7.441093420682203
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "sft_only+smoltulu",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-sft-only",
+    "model_b": "SultanR/SmolTulu-1.7b-Instruct",
+    "conflict": 0.47618677010785326,
+    "conflict_weighted": 0.4598909703059209,
+    "drift_magnitude": 0.2539157312038955,
+    "perplexity": 17.356864477378615
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "sft_only+tulu3",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-sft-only",
+    "model_b": "ali-elganzory/SmolLM2-1.7B-SFT-Tulu3-decontaminated",
+    "conflict": 0.47027492434763724,
+    "conflict_weighted": 0.4570095175404245,
+    "drift_magnitude": 0.0723249411906083,
+    "perplexity": 7.4491020888213795
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "smoltulu+tulu3",
+    "model_a": "SultanR/SmolTulu-1.7b-Instruct",
+    "model_b": "ali-elganzory/SmolLM2-1.7B-SFT-Tulu3-decontaminated",
+    "conflict": 0.4366761637245458,
+    "conflict_weighted": 0.4125265454011942,
+    "drift_magnitude": 0.2004720478253047,
+    "perplexity": 14.760222196635572
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "dolphin+capybara",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-1.5B",
+    "model_b": "lewtun/Qwen2.5-1.5B-SFT-Capybara-No-Packing",
+    "conflict": 0.4851207113575969,
+    "conflict_weighted": 0.4788057031236929,
+    "drift_magnitude": 0.04725470051914341,
+    "perplexity": 7.512445395443651
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "instruct+capybara",
+    "model_a": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_b": "lewtun/Qwen2.5-1.5B-SFT-Capybara-No-Packing",
+    "conflict": 0.48094625414164405,
+    "conflict_weighted": 0.4718234394805057,
+    "drift_magnitude": 0.021148295339000873,
+    "perplexity": 7.497284489243874
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "coder+capybara",
+    "model_a": "Qwen/Qwen2.5-Coder-1.5B",
+    "model_b": "lewtun/Qwen2.5-1.5B-SFT-Capybara-No-Packing",
+    "conflict": 0.4995492136527109,
+    "conflict_weighted": 0.49958985422160074,
+    "drift_magnitude": 0.9244365439963096,
+    "perplexity": 76070.5084315427
+  },
+  {
+    "family": "qwen1.5b",
+    "pair": "math+capybara",
+    "model_a": "Qwen/Qwen2.5-Math-1.5B",
+    "model_b": "lewtun/Qwen2.5-1.5B-SFT-Capybara-No-Packing",
+    "conflict": 0.4996486256103673,
+    "conflict_weighted": 0.49964024622494096,
+    "drift_magnitude": 1.5675299732060424,
+    "perplexity": 1022.4149194431852
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "instruct+code",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "model_b": "CodeAtCMU/SmolLM2-1.7B_full_sft_code_data_120K",
+    "conflict": 0.4896330509916875,
+    "conflict_weighted": 0.48604354792947296,
+    "drift_magnitude": 0.06854956335667615,
+    "perplexity": 7.519146762896921
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "sft_only+code",
+    "model_a": "HuggingFaceTB/SmolLM2-1.7B-sft-only",
+    "model_b": "CodeAtCMU/SmolLM2-1.7B_full_sft_code_data_120K",
+    "conflict": 0.4896345965989157,
+    "conflict_weighted": 0.4860444791796489,
+    "drift_magnitude": 0.06854942036248113,
+    "perplexity": 7.522300073674975
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "smoltulu+code",
+    "model_a": "SultanR/SmolTulu-1.7b-Instruct",
+    "model_b": "CodeAtCMU/SmolLM2-1.7B_full_sft_code_data_120K",
+    "conflict": 0.49245991004556827,
+    "conflict_weighted": 0.48993576258454336,
+    "drift_magnitude": 0.19669652699717752,
+    "perplexity": 15.018546626963683
+  },
+  {
+    "family": "smollm2_1.7b",
+    "pair": "tulu3+code",
+    "model_a": "ali-elganzory/SmolLM2-1.7B-SFT-Tulu3-decontaminated",
+    "model_b": "CodeAtCMU/SmolLM2-1.7B_full_sft_code_data_120K",
+    "conflict": 0.4756033419359263,
+    "conflict_weighted": 0.46510132129427667,
+    "drift_magnitude": 0.015105736983890339,
+    "perplexity": 7.530868703076382
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "base+base2",
+    "model_a": "unsloth/Llama-3.2-1B",
+    "model_b": "unsloth/Llama-3.2-1B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 9.13694294010054
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "dolphin+instruct",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-1B",
+    "model_b": "unsloth/Llama-3.2-1B-Instruct",
+    "conflict": 0.4141486881943435,
+    "conflict_weighted": 0.3519423564984398,
+    "drift_magnitude": 0.24388584839196037,
+    "perplexity": 11.068933796962487
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "dolphin+sft",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-1B",
+    "model_b": "RLHFlow/LLaMA3.2-1B-SFT",
+    "conflict": 0.39632041994576156,
+    "conflict_weighted": 0.33478502292463996,
+    "drift_magnitude": 0.10629152423289992,
+    "perplexity": 9.975706888790459
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "dolphin+capybara",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-1B",
+    "model_b": "lewtun/Llama-3.2-1B-SFT-Capybara-No-Packing-Llama",
+    "conflict": 0.47637326054260853,
+    "conflict_weighted": 0.46549607203936105,
+    "drift_magnitude": 0.09246187497500485,
+    "perplexity": 10.21299468528544
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "instruct+sft",
+    "model_a": "unsloth/Llama-3.2-1B-Instruct",
+    "model_b": "RLHFlow/LLaMA3.2-1B-SFT",
+    "conflict": 0.4464825944992756,
+    "conflict_weighted": 0.41632173426003505,
+    "drift_magnitude": 0.18976867029279254,
+    "perplexity": 10.83582992447003
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "instruct+capybara",
+    "model_a": "unsloth/Llama-3.2-1B-Instruct",
+    "model_b": "lewtun/Llama-3.2-1B-SFT-Capybara-No-Packing-Llama",
+    "conflict": 0.481945669654316,
+    "conflict_weighted": 0.47415143658937553,
+    "drift_magnitude": 0.1759390210348975,
+    "perplexity": 11.658137439772023
+  },
+  {
+    "family": "llama3.2_1b",
+    "pair": "sft+capybara",
+    "model_a": "RLHFlow/LLaMA3.2-1B-SFT",
+    "model_b": "lewtun/Llama-3.2-1B-SFT-Capybara-No-Packing-Llama",
+    "conflict": 0.45495622770719635,
+    "conflict_weighted": 0.43134549104667536,
+    "drift_magnitude": 0.038344696875837005,
+    "perplexity": 10.625656727229796
+  }
+]
