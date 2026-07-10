@@ -62,17 +62,23 @@ function chunk<T>(arr: T[], parts: number): T[][] {
   return out
 }
 
-function shapedConflict(conflict: number): number {
-  return Math.pow(Math.min(Math.max(conflict, 0), 1), 0.55)
+// drift_magnitude is validated (VALIDATION.txt Rounds 4-8) as the metric
+// that actually tracks merge quality; conflict/conflict_weighted don't.
+// 0.9 is where the observed data jumps from healthy (<0.3) to badly
+// degraded merges (924.5+ perplexity blowups), so risk saturates there.
+const DRIFT_RISK_CEILING = 0.9
+
+function shapedDrift(drift: number): number {
+  return Math.pow(Math.min(Math.max(drift, 0), DRIFT_RISK_CEILING) / DRIFT_RISK_CEILING, 0.6)
 }
 
-function hslColor(conflict: number): THREE.Color {
-  const hue = (120 * (1 - shapedConflict(conflict))) / 360
+function hslColor(drift: number): THREE.Color {
+  const hue = (120 * (1 - shapedDrift(drift))) / 360
   return new THREE.Color().setHSL(hue, 0.85, 0.55)
 }
 
-export function hslCss(conflict: number): string {
-  const hue = 120 * (1 - shapedConflict(conflict))
+export function hslCss(drift: number): string {
+  const hue = 120 * (1 - shapedDrift(drift))
   return `hsl(${hue.toFixed(0)}deg 80% 55%)`
 }
 
@@ -137,10 +143,11 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
     scene.add(stars)
 
     const bins = chunk(layers, MAX_RINGS)
+    const coreDrift = other ? other.drift_magnitude : 0
     const coreConflict = other ? other.conflict : 0
 
     const coreGeo = new THREE.SphereGeometry(0.9, 32, 32)
-    const coreMat = new THREE.MeshBasicMaterial({ color: hslColor(coreConflict) })
+    const coreMat = new THREE.MeshBasicMaterial({ color: hslColor(coreDrift) })
     const core = new THREE.Mesh(coreGeo, coreMat)
     scene.add(core)
 
@@ -168,7 +175,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
       const points = curve.getPoints(96).map((p) => new THREE.Vector3(p.x, 0, p.y))
       const ringGeo = new THREE.BufferGeometry().setFromPoints(points)
       const ringMat = new THREE.LineBasicMaterial({
-        color: hslColor(avgConflict),
+        color: hslColor(avgDrift),
         transparent: true,
         opacity: 0.28,
       })
@@ -396,12 +403,12 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
 
         const close = normAngleDiff(angleA, angleB) < CONJUNCTION_WINDOW
         if (close && !ring.wasClose) {
-          const color = ring.conflict > 0.5 ? 0xff5c5c : 0x5cff8f
+          const color = ring.drift > DRIFT_RISK_CEILING * 0.5 ? 0xff5c5c : 0x5cff8f
           ring.flashStart = t
           ring.flashColor = new THREE.Color(color)
 
           const mid = ring.meshA.position.clone().add(ring.meshB.position).multiplyScalar(0.5)
-          const count = 6 + Math.round(ring.conflict * 8)
+          const count = 6 + Math.round(shapedDrift(ring.drift) * 8)
           for (let i = 0; i < count; i++) {
             const mesh = new THREE.Mesh(sparkGeo, new THREE.MeshBasicMaterial({ color, transparent: true }))
             mesh.position.copy(mid)
@@ -491,13 +498,16 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             <h3>{selected.label}</h3>
             <div className="inspect-row">
               <div className="inspect-row-label">
-                <span>Conflict</span>
-                <span>{Math.round(selected.conflict * 100)}%</span>
+                <span>Drift risk</span>
+                <span>{selected.drift.toFixed(3)}</span>
               </div>
               <div className="inspect-bar">
                 <div
                   className="inspect-bar-fill"
-                  style={{ width: `${Math.round(selected.conflict * 100)}%`, background: hslCss(selected.conflict) }}
+                  style={{
+                    width: `${Math.round(shapedDrift(selected.drift) * 100)}%`,
+                    background: hslCss(selected.drift),
+                  }}
                 />
               </div>
             </div>
@@ -526,7 +536,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
               </div>
             </div>
             <p className="inspect-meta">
-              Drift magnitude {selected.drift.toFixed(3)}
+              Sign conflict {(selected.conflict * 100).toFixed(1)}%
               {!selected.isCore && ` · ${selected.layerCount} layer${selected.layerCount === 1 ? '' : 's'}`}
               {' · '}
               {selected.tensorCount} tensor{selected.tensorCount === 1 ? '' : 's'}
@@ -557,7 +567,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
           </div>
           <div>
             <dt>Flashes</dt>
-            <dd>Green = sign agreement, red = conflict, right on the orbiting pair. Size and color track that layer's real conflict score.</dd>
+            <dd>Green = low drift risk, red = high, right on the orbiting pair. Size and color track that layer's real drift magnitude — the metric validated to actually predict merge quality.</dd>
           </div>
         </dl>
       </div>

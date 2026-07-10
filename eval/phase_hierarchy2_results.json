@@ -1,0 +1,12 @@
+[
+  {
+    "family": "qwen_instruct_1.5b",
+    "pair": "instruct+abliterated",
+    "model_a": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_b": "huihui-ai/Qwen2.5-1.5B-Instruct-abliterated",
+    "conflict": 0.08545602983089993,
+    "conflict_weighted": 0.06255580874152822,
+    "drift_magnitude": 0.033979753685705216,
+    "perplexity": 8.252005814136744
+  }
+]

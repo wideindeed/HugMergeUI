@@ -705,6 +705,135 @@ Reproduce: python eval/phase_arch_stablelm.py (resumable; the
 explaining why).
 
 
+ROUND NINE: CLOSING THE ROUND SEVEN CONFOUND - PARENT/CHILD, NOT DOMAIN-DIVERGENT
+------------------------------------------------------------------------
+
+Round Seven left one gap open: its two parent/child follow-up pairs
+(coder, math) were also domain-divergent, so a high drift_magnitude
+result couldn't be attributed to parent/child structure specifically
+versus domain shift. Closed it with a pair that's parent/child but
+NOT domain-divergent: Qwen2.5-1.5B-Instruct plus
+huihui-ai/Qwen2.5-1.5B-Instruct-abliterated, i.e. an abliteration
+(refusal-direction ablation) fine-tune built directly on top of the
+instruct checkpoint - still general instruction-following, no
+coder/math domain shift (eval/phase_hierarchy2.py).
+
+Result: conflict=0.0855, conflict_weighted=0.0626, drift=0.0340,
+perplexity=8.25 - low drift, healthy perplexity, no anomaly. This
+supports the Round Seven conclusion from the other direction: domain
+divergence (not parent/child structure) is the real driver of the
+original 3B coder anomaly. A parent/child pair with no domain shift
+merges cleanly and scores low-risk across all three metrics, same as
+any other healthy pair in this project.
+
+Reproduce: python eval/phase_hierarchy2.py.
+
+
+ROUND TEN: THIRD ARCHITECTURE FAMILY - PYTHIA, BLOCKED BEFORE A RESULT
+------------------------------------------------------------------------
+
+Round Eight established the drift_magnitude edge isn't Qwen-specific
+on one non-Qwen family (StableLM-2). This round attempted a second
+independent replication, both to strengthen that claim and because
+StableLM-2 and Qwen2 share a broadly similar transformer-decoder
+shape - a genuinely different architecture class is a stronger test.
+
+First choice was OLMo-2-1B (allenai/OLMo-2-0425-1B + instruct/sft/dpo
+fine-tunes) - dead end, not a security finding. model_type "olmo2"
+needs transformers>=4.47; this project pins 4.46.3. Upgrading was
+rejected to avoid touching a shared production dependency for one eval
+script. Abandoned, script left on disk as a record
+(eval/phase_arch_olmo.py).
+
+Pivoted to Pythia-1.4B (EleutherAI/pythia-1.4b-deduped, GPT-NeoX
+architecture - non-tied embeddings, no rotary-position sharing with
+Qwen2/StableLM2's design, and old enough to be natively supported by
+every transformers version this project has ever pinned). Fine-tunes:
+Leogrin/eleuther-pythia1.4b-hh-sft, Leogrin/eleuther-pythia1.4b-hh-dpo,
+AlekseyKorshuk/pythia-1.4b-deduped-jokes.
+
+Hit and fixed two distinct mergekit bugs before this stalled out for
+good on a third, this time in production code:
+
+1. TIES merge failed on every pair, including a base+base self-merge,
+   with "Tensor gpt_neox.layers.N.attention.bias required but not
+   present". Root cause: attention.bias/masked_bias/rotary_emb.inv_freq
+   are non-persistent PyTorch buffers (persistent=False in the
+   original GPT-NeoX code) that HF's safetensors conversion correctly
+   drops but that mergekit's gpt_neox architecture definition still
+   lists as required. The legacy pytorch_model.bin format still has
+   them. Fix: mergekit's ModelReference.local_path() uses an existing
+   local directory as-is, with no safetensors-preference logic, if
+   given one instead of a repo id - so eval/phase_arch_pythia.py now
+   builds a local directory per repo containing only pytorch_model.bin
+   (+ config/tokenizer, no .safetensors) and points mergekit's
+   base_model/models config fields at those instead of raw repo ids.
+   Confirmed working: the base+base2 self-anchor pair merged and
+   scored cleanly (conflict=0.000, drift=0.000, ppl=10.59, as expected
+   for two copies of the same model).
+
+2. With bug 1 fixed, every non-trivial pair then crashed inside
+   mergekit's TIES sparsify step: "not gonna zero out the whole tensor
+   buddy". Root cause: mergekit's magnitude-pruning does
+   `k = int(density * tensor.numel())` with no floor, so a 1-element
+   tensor (attention.masked_bias, a scalar constant) rounds to k=0 at
+   density=0.5 - and masked_bias is a required, non-optional tensor
+   in mergekit's own gpt_neox definition, so it can't just be dropped.
+   Fix: eval/mergekit_patched_runner.py monkeypatches
+   mergekit.sparsify.magnitude to floor k at 1 before invoking
+   mergekit's own merge entry point in-process (mergekit-yaml runs as
+   its own subprocess, so the patch has to live there, not in the
+   calling script). Verified in isolation on both a scalar tensor and
+   a normal-sized one before wiring it in.
+
+Blocked on a third, different issue that wasn't chased further tonight:
+score_model_pair() in backend/app/conflict/engine.py - the actual
+production scoring path, not just this eval script - only knows how to
+fetch model.safetensors / model.safetensors.index.json from a repo; it
+has no pytorch_model.bin fallback. Two of the three Pythia fine-tunes
+(dpo, jokes) publish ONLY pytorch_model.bin, no safetensors at all, so
+every pair involving either of them 404s at the scoring step with
+ModelWeightsFetchError, regardless of the mergekit-side fixes above.
+This is a real gap in engine.py (any .bin-only repo hits it, not
+specific to this eval), not a Windows/infra quirk - fixing it properly
+means adding a .bin-format code path to _resolve_tensor_files(), a
+production-code change that deserves its own deliberate pass rather
+than a same-night patch on top of two other patches.
+
+Net result: only the base+base2 self-anchor point exists for this
+family (n=1, not enough for a correlation). No evidence either for or
+against the drift_magnitude edge holding on Pythia - genuinely
+unresolved, not a negative result. Whoever picks this up next should
+extend _resolve_tensor_files() with a pytorch_model.bin/index fallback
+first, then eval/phase_arch_pythia.py's three remaining pairs
+(sft+dpo, sft+jokes, dpo+jokes) should complete without further
+mergekit-side changes.
+
+Reproduce: python eval/phase_arch_pythia.py (resumable; the
+base+base2 point is already saved in
+eval/phase_arch_pythia_results.json).
+
+
+INFRASTRUCTURE FOOTNOTE (ROUNDS EIGHT THROUGH TEN, THIS MACHINE ONLY)
+------------------------------------------------------------------------
+
+Not methodology findings, recorded so the same evening isn't lost if
+this stalls again: HF downloads on this machine repeatedly stalled
+silently mid-transfer (connection sits in CLOSE_WAIT, no error, no
+retry) - first traced to IPv6 routing to the CDN, then recurred on a
+plain IPv4 CloudFront IP too (huggingface_hub's downloader has no read
+timeout by default). Worked around with a forced-IPv4 resolver plus
+HF_HUB_DOWNLOAD_TIMEOUT, and when a stall didn't resolve after both,
+a manual `curl -4 -L -C -` resume of the exact cache blob path.
+Separately, huggingface_hub's symlink support probe
+(are_symlinks_supported()) intermittently reports success on this
+Windows machine even though real symlink creation then fails with
+WinError 1314 (privilege not held); forcing that probe to always
+report unsupported avoids it. Both workarounds live in
+eval/phase_arch_pythia.py, scoped to this eval process only - neither
+touches shared/production code.
+
+
 HARDWARE, FOR CONTEXT
 ------------------------
 

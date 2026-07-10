@@ -1,0 +1,185 @@
+[prefetch] Leogrin/eleuther-pythia1.4b-hh-sft...
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Fetching 7 files: 100%|##########| 7/7 [00:00<?, ?it/s]
+[prefetch] AlekseyKorshuk/pythia-1.4b-deduped-jokes...
+Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Fetching 12 files: 100%|##########| 12/12 [00:00<00:00, 11983.73it/s]
+[prefetch] Leogrin/eleuther-pythia1.4b-hh-dpo...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|##########| 6/6 [00:00<?, ?it/s]
+[prefetch] EleutherAI/pythia-1.4b-deduped...
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|##########| 9/9 [00:00<00:00, 9009.24it/s]
+[pythia_1.4b__base+base2] launching worker (attempt 1)...
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|##########| 6/6 [00:00<?, ?it/s]
+[pythia_1.4b__base+base2] merging...
+Warmup loader cache:   0%|          | 0/1 [00:00<?, ?it/s]Warmup loader cache: 100%|##########| 1/1 [00:00<00:00,  7.97it/s]Warmup loader cache: 100%|##########| 1/1 [00:00<00:00,  7.97it/s]
+Executing graph:   0%|          | 0/1458 [00:00<?, ?it/s]Executing graph:   0%|          | 2/1458 [00:02<27:33,  1.14s/it]Executing graph:   0%|          | 4/1458 [00:02<15:28,  1.57it/s]Executing graph:   1%|          | 8/1458 [00:03<06:47,  3.56it/s]Executing graph:   5%|4         | 66/1458 [00:03<00:30, 45.90it/s]Executing graph:   8%|8         | 120/1458 [00:03<00:14, 92.42it/s]Executing graph:  12%|#2        | 178/1458 [00:03<00:08, 150.43it/s]Executing graph:  15%|#5        | 220/1458 [00:03<00:06, 181.76it/s]Executing graph:  19%|#9        | 278/1458 [00:03<00:04, 244.61it/s]Executing graph:  22%|##2       | 322/1458 [00:03<00:04, 272.09it/s]Executing graph:  25%|##5       | 368/1458 [00:03<00:03, 295.15it/s]Executing graph:  29%|##9       | 426/1458 [00:04<00:02, 356.00it/s]Executing graph:  33%|###2      | 478/1458 [00:04<00:02, 389.87it/s]Executing graph:  36%|###6      | 525/1458 [00:04<00:02, 363.84it/s]Executing graph:  39%|###8      | 568/1458 [00:04<00:02, 375.28it/s]Executing graph:  42%|####1     | 610/1458 [00:04<00:02, 368.84it/s]Executing graph:  46%|####5     | 666/1458 [00:04<00:01, 416.05it/s]Executing graph:  49%|####9     | 720/1458 [00:04<00:01, 416.77it/s]Executing graph:  53%|#####3    | 778/1458 [00:04<00:01, 457.05it/s]Executing graph:  57%|#####6    | 826/1458 [00:04<00:01, 414.24it/s]Executing graph:  60%|#####9    | 870/1458 [00:05<00:01, 416.58it/s]Executing graph:  63%|######2   | 913/1458 [00:05<00:01, 396.36it/s]Executing graph:  66%|######5   | 960/1458 [00:05<00:01, 409.86it/s]Executing graph:  69%|######8   | 1002/1458 [00:05<00:01, 398.91it/s]Executing graph:  72%|#######1  | 1043/1458 [00:05<00:01, 398.67it/s]Executing graph:  74%|#######4  | 1084/1458 [00:05<00:00, 401.26it/s]Executing graph:  77%|#######7  | 1125/1458 [00:05<00:00, 393.55it/s]Executing graph:  80%|########  | 1168/1458 [00:05<00:00, 398.19it/s]Executing graph:  83%|########2 | 1208/1458 [00:11<00:10, 23.61it/s] Executing graph:  85%|########4 | 1237/1458 [00:11<00:07, 29.22it/s]Executing graph:  87%|########6 | 1268/1458 [00:11<00:05, 37.90it/s]Executing graph:  91%|######### | 1326/1458 [00:11<00:02, 61.16it/s]Executing graph:  95%|#########4| 1380/1458 [00:12<00:00, 87.37it/s]Executing graph:  99%|#########8| 1438/1458 [00:12<00:00, 124.22it/s]Executing graph: 100%|##########| 1458/1458 [00:13<00:00, 108.35it/s]
+[pythia_1.4b__base+base2] measuring perplexity...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|#####     | 1/2 [00:00<00:00,  9.08it/s]Loading checkpoint shards: 100%|##########| 2/2 [00:00<00:00,  9.28it/s]Loading checkpoint shards: 100%|##########| 2/2 [00:00<00:00,  9.21it/s]
+[pythia_1.4b__base+base2] scoring conflict metrics...
+[pythia_1.4b__base+base2] done: {'family': 'pythia_1.4b', 'pair': 'base+base2', 'model_a': 'EleutherAI/pythia-1.4b-deduped', 'model_b': 'EleutherAI/pythia-1.4b-deduped', 'conflict': 0.0, 'conflict_weighted': 0.0, 'drift_magnitude': 0.0, 'perplexity': 10.58926675233036}
+[pythia_1.4b__base+base2] done: {'family': 'pythia_1.4b', 'pair': 'base+base2', 'model_a': 'EleutherAI/pythia-1.4b-deduped', 'model_b': 'EleutherAI/pythia-1.4b-deduped', 'conflict': 0.0, 'conflict_weighted': 0.0, 'drift_magnitude': 0.0, 'perplexity': 10.58926675233036}
+[pythia_1.4b__sft+dpo] launching worker (attempt 1)...
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|##########| 5/5 [00:00<?, ?it/s]
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|##########| 5/5 [00:00<?, ?it/s]
+[pythia_1.4b__sft+dpo] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]Warmup loader cache:  33%|###3      | 1/3 [00:00<00:00,  4.71it/s]Warmup loader cache: 100%|##########| 3/3 [00:00<00:00, 10.51it/s]
+Executing graph:   0%|          | 0/2186 [00:00<?, ?it/s]Executing graph:   0%|          | 2/2186 [00:04<1:28:10,  2.42s/it]Executing graph:   0%|          | 3/2186 [00:09<2:06:49,  3.49s/it]Executing graph:   0%|          | 4/2186 [00:13<2:12:05,  3.63s/it]Executing graph:   0%|          | 6/2186 [00:16<1:30:12,  2.48s/it]Executing graph:   1%|          | 12/2186 [00:17<30:55,  1.17it/s] Executing graph:   1%|1         | 30/2186 [00:17<07:55,  4.53it/s]Executing graph:   2%|2         | 47/2186 [00:17<13:09,  2.71it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 144, in execute
+    tv_info["delta"] = sparsify(
+                       ^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 187, in sparsify
+    return magnitude(tensor, density=density, rescale_norm=rescale_norm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 65, in magnitude
+    assert k > 0, "not gonna zero out the whole tensor buddy"
+AssertionError: not gonna zero out the whole tensor buddy
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia.py", line 194, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_pythia\\pythia_1.4b__sft+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\pythia_1.4b__sft+dpo', '--cuda']' returned non-zero exit status 1.
+[pythia_1.4b__sft+dpo] worker crashed (exit 1)
+[pythia_1.4b__sft+dpo] launching worker (attempt 2)...
+[pythia_1.4b__sft+dpo] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]Warmup loader cache:  33%|###3      | 1/3 [00:00<00:00,  7.54it/s]Warmup loader cache:  67%|######6   | 2/3 [00:00<00:00,  4.57it/s]Warmup loader cache: 100%|##########| 3/3 [00:00<00:00,  6.76it/s]
+Executing graph:   0%|          | 0/2186 [00:00<?, ?it/s]Executing graph:   0%|          | 2/2186 [00:05<1:45:36,  2.90s/it]Executing graph:   0%|          | 3/2186 [00:10<2:16:08,  3.74s/it]Executing graph:   0%|          | 4/2186 [00:14<2:18:38,  3.81s/it]Executing graph:   0%|          | 6/2186 [00:17<1:33:45,  2.58s/it]Executing graph:   1%|          | 12/2186 [00:18<31:55,  1.14it/s] Executing graph:   1%|1         | 30/2186 [00:18<08:10,  4.39it/s]Executing graph:   2%|2         | 47/2186 [00:18<13:53,  2.57it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 144, in execute
+    tv_info["delta"] = sparsify(
+                       ^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 187, in sparsify
+    return magnitude(tensor, density=density, rescale_norm=rescale_norm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 65, in magnitude
+    assert k > 0, "not gonna zero out the whole tensor buddy"
+AssertionError: not gonna zero out the whole tensor buddy
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia.py", line 194, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_pythia\\pythia_1.4b__sft+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\pythia_1.4b__sft+dpo', '--cuda']' returned non-zero exit status 1.
+[pythia_1.4b__sft+dpo] worker crashed (exit 1)
+[pythia_1.4b__sft+dpo] giving up after 2 attempt(s)
+[pythia_1.4b__sft+jokes] launching worker (attempt 1)...
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files: 100%|##########| 11/11 [00:00<?, ?it/s]
+[pythia_1.4b__sft+jokes] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]Warmup loader cache:  33%|###3      | 1/3 [00:00<00:00,  9.45it/s]Warmup loader cache: 100%|##########| 3/3 [00:00<00:00, 17.36it/s]
+Executing graph:   0%|          | 0/2186 [00:00<?, ?it/s]Executing graph:   0%|          | 2/2186 [00:06<1:53:16,  3.11s/it]Executing graph:   0%|          | 3/2186 [00:08<1:34:39,  2.60s/it]Executing graph:   0%|          | 4/2186 [00:10<1:32:54,  2.55s/it]Executing graph:   0%|          | 6/2186 [00:12<1:02:07,  1.71s/it]Executing graph:   1%|          | 12/2186 [00:13<22:30,  1.61it/s] Executing graph:   1%|1         | 30/2186 [00:13<05:50,  6.15it/s]Executing graph:   2%|2         | 47/2186 [00:13<10:07,  3.52it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 85, in run_merge
+    for _task, value in exec.run(quiet=options.quiet):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 518, in run
+    for handle, value in self._run(quiet=quiet, desc=desc):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\graph.py", line 484, in _run
+    res = task.execute(**arguments)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge_methods\generalized_task_arithmetic.py", line 144, in execute
+    tv_info["delta"] = sparsify(
+                       ^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 187, in sparsify
+    return magnitude(tensor, density=density, rescale_norm=rescale_norm)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\sparsify.py", line 65, in magnitude
+    assert k > 0, "not gonna zero out the whole tensor buddy"
+AssertionError: not gonna zero out the whole tensor buddy
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_pythia.py", line 194, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_pythia\\pythia_1.4b__sft+jokes.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\pythia_1.4b__sft+jokes', '--cuda']' returned non-zero exit status 1.
+[pythia_1.4b__sft+jokes] worker crashed (exit 1)
+[pythia_1.4b__sft+jokes] launching worker (attempt 2)...
+[pythia_1.4b__sft+jokes] merging...
+Warmup loader cache:   0%|          | 0/3 [00:00<?, ?it/s]Warmup loader cache: 100%|##########| 3/3 [00:00<00:00, 15.19it/s]Warmup loader cache: 100%|##########| 3/3 [00:00<00:00, 15.19it/s]
+Executing graph:   0%|          | 0/2186 [00:00<?, ?it/s]

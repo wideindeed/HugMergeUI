@@ -1,0 +1,12 @@
+[
+  {
+    "family": "pythia_1.4b",
+    "pair": "base+base2",
+    "model_a": "EleutherAI/pythia-1.4b-deduped",
+    "model_b": "EleutherAI/pythia-1.4b-deduped",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 10.58926675233036
+  }
+]

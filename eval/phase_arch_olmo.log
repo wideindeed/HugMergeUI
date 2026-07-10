@@ -1,0 +1,482 @@
+[olmo2_1b__base+base2] launching worker (attempt 1)...
+[olmo2_1b__base+base2] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--allenai--OLMo-2-0425-1B. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__base+base2.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__base+base2', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__base+base2] worker crashed (exit 1)
+[olmo2_1b__base+base2] launching worker (attempt 2)...
+[olmo2_1b__base+base2] merging...
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__base+base2.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__base+base2', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__base+base2] worker crashed (exit 1)
+[olmo2_1b__base+base2] giving up after 2 attempt(s)
+[olmo2_1b__instruct+sft] launching worker (attempt 1)...
+[olmo2_1b__instruct+sft] merging...
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__instruct+sft.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__instruct+sft', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__instruct+sft] worker crashed (exit 1)
+[olmo2_1b__instruct+sft] launching worker (attempt 2)...
+[olmo2_1b__instruct+sft] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--allenai--OLMo-2-0425-1B-Instruct. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__instruct+sft.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__instruct+sft', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__instruct+sft] worker crashed (exit 1)
+[olmo2_1b__instruct+sft] giving up after 2 attempt(s)
+[olmo2_1b__instruct+dpo] launching worker (attempt 1)...
+[olmo2_1b__instruct+dpo] merging...
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__instruct+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__instruct+dpo', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__instruct+dpo] worker crashed (exit 1)
+[olmo2_1b__instruct+dpo] launching worker (attempt 2)...
+[olmo2_1b__instruct+dpo] merging...
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__instruct+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__instruct+dpo', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__instruct+dpo] worker crashed (exit 1)
+[olmo2_1b__instruct+dpo] giving up after 2 attempt(s)
+[olmo2_1b__sft+dpo] launching worker (attempt 1)...
+[olmo2_1b__sft+dpo] merging...
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__sft+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__sft+dpo', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__sft+dpo] worker crashed (exit 1)
+[olmo2_1b__sft+dpo] launching worker (attempt 2)...
+[olmo2_1b__sft+dpo] merging...
+E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Mahmood\.cache\huggingface\hub\models--allenai--OLMo-2-0425-1B-SFT. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Traceback (most recent call last):
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1034, in from_pretrained
+    config_class = CONFIG_MAPPING[config_dict["model_type"]]
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 736, in __getitem__
+    raise KeyError(key)
+KeyError: 'olmo2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "E:\PythonProject\HugMergeUI\.venv\Scripts\mergekit-yaml.exe\__main__.py", line 7, in <module>
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\click\core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\options.py", line 166, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\scripts\run_yaml.py", line 30, in main
+    run_merge(
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\merge.py", line 42, in run_merge
+    arch_info = get_architecture_info(merge_config, options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\architecture\__init__.py", line 79, in get_architecture_info
+    arch_info_for_config(m.config(trust_remote_code=options.trust_remote_code))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\mergekit\common.py", line 143, in config
+    res = AutoConfig.from_pretrained(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1036, in from_pretrained
+    raise ValueError(
+ValueError: The checkpoint you are trying to load has model type `olmo2` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date.
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 26, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo_worker.py", line 13, in main
+    result = run_pair(
+             ^^^^^^^^^
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 95, in run_pair
+    subprocess.run(["mergekit-yaml", str(config_path), str(out_path), "--cuda"], check=True)
+  File "C:\Users\Mahmood\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['mergekit-yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\configs\\arch_olmo\\olmo2_1b__sft+dpo.yaml', 'D:\\PythonProject\\HugMergeUI\\eval\\merged\\olmo2_1b__sft+dpo', '--cuda']' returned non-zero exit status 1.
+[olmo2_1b__sft+dpo] worker crashed (exit 1)
+[olmo2_1b__sft+dpo] giving up after 2 attempt(s)
+
+=== ALL RESULTS ===
+
+=== CORRELATIONS (n=0) ===
+Traceback (most recent call last):
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 204, in <module>
+    main()
+  File "D:\PythonProject\HugMergeUI\eval\phase_arch_olmo.py", line 195, in main
+    pearson_r, pearson_p = stats.pearsonr(values, perplexities)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PythonProject\HugMergeUI\.venv\Lib\site-packages\scipy\stats\_stats_py.py", line 4696, in pearsonr
+    raise ValueError('`x` and `y` must have length at least 2.')
+ValueError: `x` and `y` must have length at least 2.
