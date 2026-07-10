@@ -1,3 +1,5 @@
+import { useSimpleMode } from '../context/SimpleModeContext'
+
 interface Props {
   models: string[]
   baseModelOptions: string[]
@@ -27,12 +29,26 @@ export function ModelPicker({
   onScore,
   loading,
 }: Props) {
+  const { simple } = useSimpleMode()
+
   return (
     <section className="panel" data-tour-id="picker">
-      <h2>Conflict score inputs</h2>
+      <h2>{simple ? 'Set up the comparison' : 'Conflict score inputs'}</h2>
+      {simple && (
+        <p className="simple-intro">
+          The "ancestor" is the shared starting point both models were built from. Model A and Model B are the two
+          versions you want to check for clashes.
+        </p>
+      )}
       <label>
-        Base / ancestor model (used as the diff reference — doesn't have to
-        match mergekit's own <code>base_model</code> field)
+        {simple ? (
+          'Ancestor model (the shared starting point)'
+        ) : (
+          <>
+            Base / ancestor model (used as the diff reference — doesn't have to match mergekit's own{' '}
+            <code>base_model</code> field)
+          </>
+        )}
         <select value={baseModel} onChange={(e) => onBaseModelChange(e.target.value)}>
           {baseModelOptions.map((m) => (
             <option key={m} value={m}>
@@ -62,7 +78,7 @@ export function ModelPicker({
         </select>
       </label>
       <label>
-        TIES density: {density.toFixed(2)}
+        {simple ? `How much of each model to keep: ${density.toFixed(2)}` : `TIES density: ${density.toFixed(2)}`}
         <input
           type="range"
           min={0}
@@ -73,7 +89,7 @@ export function ModelPicker({
         />
       </label>
       <button onClick={onScore} disabled={loading}>
-        {loading ? 'Scoring…' : 'Score conflict'}
+        {loading ? (simple ? 'Checking for clashes…' : 'Scoring…') : simple ? 'Check for clashes' : 'Score conflict'}
       </button>
     </section>
   )

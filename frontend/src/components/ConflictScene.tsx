@@ -5,6 +5,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import type { LayerScore, OtherScore } from '../api/types'
+import { useSimpleMode } from '../context/SimpleModeContext'
 
 const MAX_RINGS = 16
 const CONJUNCTION_WINDOW = 0.2
@@ -87,6 +88,7 @@ function easeInOutCubic(t: number): number {
 }
 
 export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: OtherScore | null }) {
+  const { simple } = useSimpleMode()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const backRef = useRef<(() => void) | null>(null)
   const [selected, setSelected] = useState<SelectedInfo | null>(null)
@@ -491,14 +493,14 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
 
   return (
     <section className="panel orbit-panel">
-      <h2>Merge interaction</h2>
+      <h2>{simple ? 'The two models, up close' : 'Merge interaction'}</h2>
       <div ref={containerRef} className="orbit-canvas-3d">
         {selected && (
           <div className="inspect-panel">
             <h3>{selected.label}</h3>
             <div className="inspect-row">
               <div className="inspect-row-label">
-                <span>Drift risk</span>
+                <span>{simple ? 'How much friction' : 'Drift risk'}</span>
                 <span>{selected.drift.toFixed(3)}</span>
               </div>
               <div className="inspect-bar">
@@ -513,7 +515,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             </div>
             <div className="inspect-row">
               <div className="inspect-row-label">
-                <span>Redundancy A</span>
+                <span>{simple ? 'Model A overlap' : 'Redundancy A'}</span>
                 <span>{Math.round(selected.redundancyA * 100)}%</span>
               </div>
               <div className="inspect-bar">
@@ -525,7 +527,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             </div>
             <div className="inspect-row">
               <div className="inspect-row-label">
-                <span>Redundancy B</span>
+                <span>{simple ? 'Model B overlap' : 'Redundancy B'}</span>
                 <span>{Math.round(selected.redundancyB * 100)}%</span>
               </div>
               <div className="inspect-bar">
@@ -536,7 +538,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
               </div>
             </div>
             <p className="inspect-meta">
-              Sign conflict {(selected.conflict * 100).toFixed(1)}%
+              {simple ? 'Disagree on direction' : 'Sign conflict'} {(selected.conflict * 100).toFixed(1)}%
               {!selected.isCore && ` · ${selected.layerCount} layer${selected.layerCount === 1 ? '' : 's'}`}
               {' · '}
               {selected.tensorCount} tensor{selected.tensorCount === 1 ? '' : 's'}
@@ -548,26 +550,49 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
         )}
       </div>
       <div className="orbit-legend">
-        <p className="orbit-legend-intro">
-          Drag to orbit, scroll to zoom — it also drifts on its own. Click any ring or the center sphere to zoom in
-          and inspect its real data.
-        </p>
+        {simple ? (
+          <p className="orbit-legend-intro">
+            Drag to spin it around, scroll to zoom. Click any ring — or the glowing center — to see exactly how
+            much friction that part of the models has.
+          </p>
+        ) : (
+          <p className="orbit-legend-intro">
+            Drag to orbit, scroll to zoom — it also drifts on its own. Click any ring or the center sphere to zoom in
+            and inspect its real data.
+          </p>
+        )}
         <dl className="orbit-legend-grid">
           <div>
             <dt>Center</dt>
-            <dd>Non-layer tensors — embeddings, norms, lm_head.</dd>
+            <dd>
+              {simple
+                ? "The model's vocabulary and \"output voice\" — separate from its step-by-step reasoning."
+                : 'Non-layer tensors — embeddings, norms, lm_head.'}
+            </dd>
           </div>
           <div>
             <dt>Rings</dt>
-            <dd>Each ring is a layer (or a band of layers for deep models), stacked in a spiral so rotating reveals real depth.</dd>
+            <dd>
+              {simple
+                ? "Each ring is one \"layer\" of reasoning inside the model. Stacked like a spiral staircase."
+                : 'Each ring is a layer (or a band of layers for deep models), stacked in a spiral so rotating reveals real depth.'}
+            </dd>
           </div>
           <div>
             <dt>Blue / orange</dt>
-            <dd>Model A and model B, orbiting at slightly different speeds so they drift in and out of alignment.</dd>
+            <dd>
+              {simple
+                ? 'Model A and Model B — watch them circle each other at different speeds.'
+                : 'Model A and model B, orbiting at slightly different speeds so they drift in and out of alignment.'}
+            </dd>
           </div>
           <div>
             <dt>Flashes</dt>
-            <dd>Green = low drift risk, red = high, right on the orbiting pair. Size and color track that layer's real drift magnitude — the metric validated to actually predict merge quality.</dd>
+            <dd>
+              {simple
+                ? "Green means the two models basically agree there. Red means real friction — the two models learned genuinely different things in that part."
+                : "Green = low drift risk, red = high, right on the orbiting pair. Size and color track that layer's real drift magnitude — the metric validated to actually predict merge quality."}
+            </dd>
           </div>
         </dl>
       </div>

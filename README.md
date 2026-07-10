@@ -6,7 +6,9 @@ Point it at a mergekit config. It pulls the real weights, diffs them layer by la
 
 ## Status: early beta
 
-This is a solo side project, not a product. The app works end to end: config editor, architecture checks, model picker, 3D visualization, all wired up against real Hugging Face models. The conflict score itself is still a heuristic, not a validated quality predictor, full details in `VALIDATION.txt`. Expect rough edges, and better scoring methods are on the way.
+This is a solo side project, not a product, and it's a diagnostic tool, not a merge engine — it doesn't run mergekit for you, it tells you whether a merge is worth attempting before you do. The app works end to end: config editor, architecture checks, model picker, 3D visualization, all wired up against real Hugging Face models.
+
+The `drift_magnitude` score is validated at 1.5B+ params — it correlates strongly with real post-merge perplexity (spearman rho up to 0.96 across 29 pairs, three model families, several rounds of replication). It is **not** validated at smaller scale (0.5B/360M), where the same tests found no signal at all. The example presets in the app are now all 1.5B+ for exactly this reason — full details, including what was tried and rejected, in `VALIDATION.txt`.
 
 ## Quick start
 
@@ -46,4 +48,4 @@ Click "Try an example" in the app for a few ready-made model pairs, no config wr
 
 ## Does the score actually predict merge quality?
 
-Tested against real merges, real perplexity, and real task accuracy (MMLU, GSM8K), across 28 model pairs. Short answer: not reliably yet, at least not at small model scale. The full investigation, including what was tried and what didn't pan out, is in `VALIDATION.txt`.
+Yes, at 1.5B+ params — tested against real merges and real perplexity across 29 model pairs spanning three architecture families (Qwen2.5, SmolLM2, Llama 3.2), with `drift_magnitude` holding a spearman rank correlation of 0.80-0.96 depending on the cut. It does not hold at 0.5B/360M scale (tested separately, no significant signal there). The full investigation, including what was tried and what didn't pan out, is in `VALIDATION.txt`.

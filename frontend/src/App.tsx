@@ -6,6 +6,7 @@ import { ConfigEditor } from './components/ConfigEditor'
 import { GuideTour } from './components/GuideTour'
 import { ModelPicker } from './components/ModelPicker'
 import { ResultsPanel } from './components/ResultsPanel'
+import { useSimpleMode } from './context/SimpleModeContext'
 import { EXAMPLE_PAIRS } from './data/examplePairs'
 import './App.css'
 
@@ -24,6 +25,7 @@ dtype: float32
 `
 
 function App() {
+  const { simple, toggle } = useSimpleMode()
   const [yamlText, setYamlText] = useState(DEFAULT_YAML)
   const [analyzing, setAnalyzing] = useState(false)
   const [scoring, setScoring] = useState(false)
@@ -107,8 +109,23 @@ function App() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <h1>HugMergeUI</h1>
-          <p className="subtitle">Predictive conflict diagnostics for mergekit merges.</p>
+          <p className="subtitle">
+            {simple
+              ? "A tool that peeks inside two AI models before you mix them, so you're not surprised afterward."
+              : 'Predictive conflict diagnostics for mergekit merges.'}
+          </p>
         </div>
+        <button
+          type="button"
+          className="mode-toggle"
+          onClick={toggle}
+          role="switch"
+          aria-checked={simple}
+          title={simple ? 'Switch to Expert mode' : 'Switch to Explorer mode'}
+        >
+          <span className={simple ? undefined : 'mode-toggle-active'}>🔬 Expert</span>
+          <span className={simple ? 'mode-toggle-active' : undefined}>🪐 Explorer</span>
+        </button>
         <nav className="sidebar-nav">
           <button type="button" onClick={() => scrollToSection('examples')}>
             Try an example
@@ -137,6 +154,12 @@ function App() {
         <div className="workflow-col">
           <section className="panel" data-tour-id="examples">
             <h2>Try an example</h2>
+            {simple && (
+              <p className="simple-intro">
+                Pick a pair below — think of it as picking two ingredients to see if they mix well before you
+                commit to the recipe.
+              </p>
+            )}
             <div className="example-grid">
               {EXAMPLE_PAIRS.map((ex) => (
                 <button
@@ -147,7 +170,7 @@ function App() {
                   disabled={analyzing}
                 >
                   <span className="example-label">{ex.label}</span>
-                  <span className="example-note">{ex.note}</span>
+                  <span className="example-note">{simple ? ex.simpleNote : ex.note}</span>
                 </button>
               ))}
             </div>
@@ -162,7 +185,7 @@ function App() {
 
           {warnings && (
             <section className="panel" data-tour-id="architecture">
-              <h2>Architecture check</h2>
+              <h2>{simple ? 'Do these two fit together?' : 'Architecture check'}</h2>
               <ArchitectureWarnings warnings={warnings} />
             </section>
           )}
@@ -192,7 +215,11 @@ function App() {
 
           {models.length === 0 && !scoring && !scoreResult && (
             <div className="insights-placeholder">
-              <p>Score inputs and results will appear here once you analyze a config.</p>
+              <p>
+                {simple
+                  ? 'Pick an example on the left to see what happens when two AI models get mixed together.'
+                  : 'Score inputs and results will appear here once you analyze a config.'}
+              </p>
             </div>
           )}
         </div>
