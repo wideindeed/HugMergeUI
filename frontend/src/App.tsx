@@ -42,7 +42,6 @@ function App() {
   const [resultsSession, setResultsSession] = useState(0)
   const [tourActive, setTourActive] = useState(false)
   const resolveCount = useRef(0)
-  const loadCount = useRef(0)
 
   async function handleAnalyze(yamlOverride?: string) {
     const text = yamlOverride ?? yamlText
@@ -73,11 +72,8 @@ function App() {
     if (event.stage === 'resolve') {
       resolveCount.current += 1
       setProgress({ percent: (resolveCount.current / 3) * 15, label: `Resolving ${event.repo}` })
-    } else if (event.stage === 'load') {
-      loadCount.current += 1
-      setProgress({ percent: 15 + (loadCount.current / 3) * 15, label: `Loading weights: ${event.repo}` })
     } else if (event.stage === 'scoring') {
-      const pct = 30 + (event.tensor_index / event.tensor_total) * 70
+      const pct = 15 + (event.tensor_index / event.tensor_total) * 85
       setProgress({ percent: pct, label: `Scoring tensor ${event.tensor_index}/${event.tensor_total}` })
     }
   }
@@ -87,7 +83,6 @@ function App() {
     setError(null)
     setResultsSession((s) => s + 1)
     resolveCount.current = 0
-    loadCount.current = 0
     setProgress({ percent: 0, label: 'Starting…' })
     try {
       const result = await streamConflictScore(baseModel, modelA, modelB, density, handleProgress)

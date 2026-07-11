@@ -41,7 +41,6 @@ export interface ConflictScoreResult {
 
 export type ScoreProgressEvent =
   | { stage: 'resolve'; repo: string }
-  | { stage: 'load'; repo: string }
   | { stage: 'scoring'; tensor_index: number; tensor_total: number }
   | { stage: 'scored'; result: ConflictScoreResult }
   | { stage: 'error'; message: string }
