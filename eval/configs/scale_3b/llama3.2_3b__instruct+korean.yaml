@@ -1,0 +1,14 @@
+base_model: unsloth/Llama-3.2-3B
+dtype: float16
+merge_method: ties
+models:
+- model: unsloth/Llama-3.2-3B-Instruct
+  parameters:
+    density: 0.5
+    weight: 0.5
+- model: Bllossom/llama-3.2-Korean-Bllossom-3B
+  parameters:
+    density: 0.5
+    weight: 0.5
+parameters:
+  normalize: true

@@ -1,0 +1,14 @@
+base_model: unsloth/Llama-3.2-3B
+dtype: float16
+merge_method: ties
+models:
+- model: acon96/Home-Llama-3.2-3B
+  parameters:
+    density: 0.5
+    weight: 0.5
+- model: EpistemeAI/Llama-3.2-3B-Agent007-Coder
+  parameters:
+    density: 0.5
+    weight: 0.5
+parameters:
+  normalize: true

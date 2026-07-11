@@ -1,0 +1,14 @@
+base_model: Qwen/Qwen2.5-3B
+dtype: float16
+merge_method: ties
+models:
+- model: Qwen/Qwen2.5-3B
+  parameters:
+    density: 0.5
+    weight: 0.5
+- model: Qwen/Qwen2.5-3B
+  parameters:
+    density: 0.5
+    weight: 0.5
+parameters:
+  normalize: true

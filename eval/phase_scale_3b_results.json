@@ -38,5 +38,145 @@
     "conflict_weighted": 0.47292253405109674,
     "drift_magnitude": 0.9347911970703671,
     "perplexity": 70.89162590013709
+  },
+  {
+    "family": "qwen3b",
+    "pair": "instruct+abliterated",
+    "model_a": "Qwen/Qwen2.5-3B-Instruct",
+    "model_b": "huihui-ai/Qwen2.5-3B-Instruct-abliterated",
+    "conflict": 0.07684250956529451,
+    "conflict_weighted": 0.05485746583178375,
+    "drift_magnitude": 0.03190831389549377,
+    "perplexity": 9.112705835738902
+  },
+  {
+    "family": "qwen3b",
+    "pair": "coder+abliterated",
+    "model_a": "Qwen/Qwen2.5-Coder-3B",
+    "model_b": "huihui-ai/Qwen2.5-3B-Instruct-abliterated",
+    "conflict": 0.4839648095561096,
+    "conflict_weighted": 0.47551036150566645,
+    "drift_magnitude": 0.9422015758975292,
+    "perplexity": 103.02321561445157
+  },
+  {
+    "family": "qwen3b",
+    "pair": "coder_instruct+abliterated",
+    "model_a": "Qwen/Qwen2.5-Coder-3B-Instruct",
+    "model_b": "huihui-ai/Qwen2.5-3B-Instruct-abliterated",
+    "conflict": 0.48371221512231566,
+    "conflict_weighted": 0.4751949617885281,
+    "drift_magnitude": 0.9422233489289492,
+    "perplexity": 28.687947013082255
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "base+base2",
+    "model_a": "unsloth/Llama-3.2-3B",
+    "model_b": "unsloth/Llama-3.2-3B",
+    "conflict": 0.0,
+    "conflict_weighted": 0.0,
+    "drift_magnitude": 0.0,
+    "perplexity": 6.968630325216492
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "instruct+dolphin",
+    "model_a": "unsloth/Llama-3.2-3B-Instruct",
+    "model_b": "dphn/Dolphin3.0-Llama3.2-3B",
+    "conflict": 0.4305277243830278,
+    "conflict_weighted": 0.37953204865267515,
+    "drift_magnitude": 0.22349703954122369,
+    "perplexity": 8.2635369127981
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "instruct+home",
+    "model_a": "unsloth/Llama-3.2-3B-Instruct",
+    "model_b": "acon96/Home-Llama-3.2-3B",
+    "conflict": 0.004705170150205589,
+    "conflict_weighted": 0.00030796934151331817,
+    "drift_magnitude": 0.29744192809481695,
+    "perplexity": 8.364272325885306
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "instruct+korean",
+    "model_a": "unsloth/Llama-3.2-3B-Instruct",
+    "model_b": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "conflict": 0.010755769983054582,
+    "conflict_weighted": 0.002149361098600218,
+    "drift_magnitude": 0.29934106926744614,
+    "perplexity": 8.13215598704094
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "dolphin+home",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-3B",
+    "model_b": "acon96/Home-Llama-3.2-3B",
+    "conflict": 0.43062006745559434,
+    "conflict_weighted": 0.37968363643219943,
+    "drift_magnitude": 0.2236697758453481,
+    "perplexity": 8.379777009719671
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "dolphin+korean",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-3B",
+    "model_b": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "conflict": 0.4309889441377675,
+    "conflict_weighted": 0.3803961618500486,
+    "drift_magnitude": 0.22556891701797727,
+    "perplexity": 8.104449330003753
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "home+korean",
+    "model_a": "acon96/Home-Llama-3.2-3B",
+    "model_b": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "conflict": 0.012190620017220497,
+    "conflict_weighted": 0.0024556982389051262,
+    "drift_magnitude": 0.2995138055715706,
+    "perplexity": 8.188168867824643
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "instruct+coder",
+    "model_a": "unsloth/Llama-3.2-3B-Instruct",
+    "model_b": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
+    "conflict": 0.17293980203755246,
+    "conflict_weighted": 0.050755479275209965,
+    "drift_magnitude": 0.32380933372125476,
+    "perplexity": 8.561340715336604
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "dolphin+coder",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-3B",
+    "model_b": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
+    "conflict": 0.44149810077081036,
+    "conflict_weighted": 0.3977509386736074,
+    "drift_magnitude": 0.25003718147178594,
+    "perplexity": 8.934525558807305
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "home+coder",
+    "model_a": "acon96/Home-Llama-3.2-3B",
+    "model_b": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
+    "conflict": 0.1735509897323755,
+    "conflict_weighted": 0.05099255228133319,
+    "drift_magnitude": 0.3239820700253792,
+    "perplexity": 8.66365613388383
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "korean+coder",
+    "model_a": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "model_b": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
+    "conflict": 0.17420740461621334,
+    "conflict_weighted": 0.05203873304209881,
+    "drift_magnitude": 0.3258812111980084,
+    "perplexity": 8.62019835273576
   }
 ]

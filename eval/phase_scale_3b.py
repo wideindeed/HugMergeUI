@@ -1,11 +1,28 @@
-"""Round Five's fp16-merge-dtype pilot (pilot_3b.py) confirmed a 3B TIES
-merge + fp16 perplexity + conflict scoring fits on this 8GB card with no
-OOM (~8min/pair). This is the follow-up full family pass at that scale:
-Qwen/Qwen2.5-3B (base + instruct/coder/coder_instruct fine-tunes, all
-official, ungated), 3 non-trivial pairs + 1 self-anchor, 4 points total.
-Small n on purpose - this is about broadening the scale axis (1.7B -> 3B)
-and confirming fp16 merges don't change the drift_magnitude signal, not a
-from-scratch full validation pass.
+"""Round Six was deliberately small (n=4, one family) - a feasibility check,
+not a validation pass. This is the from-scratch rigorous 3B campaign
+(Round Eleven), matching Round Four/Five's design: multiple fine-tunes per
+family, multiple architecturally distinct families, real mergekit-yaml
+--cuda TIES merges, real perplexity, real conflict/drift_magnitude scoring.
+
+Two families, 4 fine-tunes each -> C(4,2)=6 non-trivial pairs + 1
+self-anchor per family, 14 points total:
+
+- qwen3b: extends Round Six's family with a 4th fine-tune,
+  huihui-ai/Qwen2.5-3B-Instruct-abliterated - an abliteration fine-tune
+  built directly on top of Qwen2.5-3B-Instruct (parent/child, but NOT
+  domain-divergent, still general instruction-following). This directly
+  replicates Round Nine's confound-closing design (which was only ever
+  run at 1.5B) at 3B, closing the one remaining gap flagged after Round
+  Six: the parent/child anomaly was explained by domain-divergence at
+  1.5B, never re-confirmed at 3B itself.
+- llama3.2_3b: a second, architecturally distinct family (base
+  unsloth/Llama-3.2-3B, an ungated mirror of the gated official
+  meta-llama repo - same reasoning as phase_scale_1_5b.py's llama3.2_1b
+  family), with instruct + 3 community fine-tunes spanning a healthy/
+  domain-divergent mix: dolphin (general chat), a home-assistant JSON
+  fine-tune, and a Korean-language fine-tune (both meaningfully
+  domain-divergent, echoing the coder/math pairs that produced the
+  catastrophic-perplexity findings in Round Four/Five).
 
 Same subprocess-per-pair + resume-from-checkpoint design as
 phase_scale_1_5b.py.
@@ -38,6 +55,27 @@ FAMILIES = {
             "instruct": "Qwen/Qwen2.5-3B-Instruct",
             "coder": "Qwen/Qwen2.5-Coder-3B",
             "coder_instruct": "Qwen/Qwen2.5-Coder-3B-Instruct",
+            "abliterated": "huihui-ai/Qwen2.5-3B-Instruct-abliterated",
+        },
+    },
+    "llama3.2_3b": {
+        # unsloth mirror used as base: meta-llama/Llama-3.2-3B is gated and
+        # requires an accepted-license HF token we don't have configured;
+        # unsloth's re-upload is bit-identical, ungated, and used as the base
+        # for several of the fine-tunes below anyway.
+        "base": "unsloth/Llama-3.2-3B",
+        "finetunes": {
+            "instruct": "unsloth/Llama-3.2-3B-Instruct",  # ungated mirror of meta-llama's official instruct
+            "dolphin": "dphn/Dolphin3.0-Llama3.2-3B",
+            "home": "acon96/Home-Llama-3.2-3B",
+            "korean": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+            # added after Round Eleven: dolphin/home/korean turned out not to be
+            # domain-divergent enough to reproduce the catastrophic-perplexity
+            # pattern Qwen2.5-Coder showed in Round Four/Five/Six. This one is
+            # fine-tuned from unsloth/Llama-3.2-3B-Instruct (same base as the
+            # other three) on CodeAlpaca-20K + an agent dataset - a real code
+            # domain shift, the closest available analog on this base model.
+            "coder": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
         },
     },
 }

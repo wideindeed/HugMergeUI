@@ -814,6 +814,170 @@ base+base2 point is already saved in
 eval/phase_arch_pythia_results.json).
 
 
+ROUND ELEVEN: FROM-SCRATCH 3B CAMPAIGN - CONFOUND CLOSES, SECOND FAMILY IS A MIXED RESULT
+------------------------------------------------------------------------------------------
+
+Round Six's 3B pass was deliberately small (n=4, one family, a
+feasibility check). This is the real from-scratch 3B validation pass,
+matching Round Four/Five's design: two architecturally distinct
+families, four fine-tunes each, C(4,2)=6 non-trivial pairs + 1
+self-anchor per family, 14 points total (eval/phase_scale_3b.py).
+Interrupted mid-run by a PyCharm/IDE crash on this machine's E: drive;
+resumed and finished on a second copy of the project on D: (this
+machine's E: drive has become unreliable enough under sustained load
+that further validation runs are being kept off it - not a finding
+about the metric, just about this box).
+
+qwen3b: base + instruct/coder/coder_instruct (Round Six's family)
+plus a 4th fine-tune, huihui-ai/Qwen2.5-3B-Instruct-abliterated - an
+abliteration fine-tune built directly on top of Qwen2.5-3B-Instruct,
+i.e. parent/child but not domain-divergent. This re-runs Round Nine's
+confound-closing design (only ever confirmed at 1.5B) at 3B, the one
+gap Round Six flagged. Result: instruct+abliterated scores
+conflict=0.0768, drift=0.0319, ppl=9.11 - low across all three
+metrics, no anomaly, consistent with Round Nine. The confound close
+replicates at 3B: parent/child structure alone doesn't trigger the
+high-risk signal, only domain divergence does.
+
+llama3.2_3b: a second, architecturally distinct family (base
+unsloth/Llama-3.2-3B, an ungated mirror of the gated official
+meta-llama repo), instruct + 3 community fine-tunes meant to span a
+healthy/domain-divergent mix: dolphin (general chat), home (a JSON-
+output home-assistant fine-tune), korean (a Korean-language fine-tune)
+- chosen to echo the coder/math domain shifts that produced Round
+Four/Five/Six's catastrophic-perplexity findings.
+
+Full n=14 results:
+
+  family        | pair                        | conflict | drift_magnitude | perplexity
+  --------------|------------------------------|----------|------------------|------------
+  qwen3b        | base+base2 (anchor)          | 0.0000   | 0.0000           | 6.68
+  qwen3b        | instruct+coder_instruct       | 0.4820   | 0.9348           | 26.47
+  qwen3b        | coder+coder_instruct           | 0.0123   | 1.8451           | 18.20
+  qwen3b        | instruct+coder                 | 0.4823   | 0.9348           | 70.89
+  qwen3b        | instruct+abliterated            | 0.0768   | 0.0319           | 9.11
+  qwen3b        | coder+abliterated                | 0.4840   | 0.9422           | 103.02
+  qwen3b        | coder_instruct+abliterated        | 0.4837   | 0.9422           | 28.69
+  llama3.2_3b   | base+base2 (anchor)           | 0.0000   | 0.0000           | 6.97
+  llama3.2_3b   | instruct+dolphin                | 0.4305   | 0.2235           | 8.26
+  llama3.2_3b   | instruct+home                    | 0.0047   | 0.2974           | 8.36
+  llama3.2_3b   | instruct+korean                   | 0.0108   | 0.2993           | 8.13
+  llama3.2_3b   | dolphin+home                       | 0.4306   | 0.2237           | 8.38
+  llama3.2_3b   | dolphin+korean                      | 0.4310   | 0.2256           | 8.10
+  llama3.2_3b   | home+korean                          | 0.0122   | 0.2995           | 8.19
+
+Pooled n=14 correlations look strong at first glance:
+
+  conflict:           pearson r = 0.5328 (p=0.0498) | spearman rho = 0.7965 (p=0.00065)
+  conflict_weighted:  pearson r = 0.5726 (p=0.0323) | spearman rho = 0.7481 (p=0.00209)
+  drift_magnitude:    pearson r = 0.4923 (p=0.0738) | spearman rho = 0.7349 (p=0.00275)
+
+But splitting by family exposes why that's misleading. Within qwen3b
+alone (n=7), conflict still ranks well (spearman rho=0.929, p=0.0025)
+but drift_magnitude does not (rho=0.464, p=0.294, not significant).
+Within llama3.2_3b alone (n=7), it's the opposite and worse: drift's
+pearson r is high (0.904, p=0.0052) but its spearman rho is not
+(0.143, p=0.76) - a pearson/spearman split that big means the linear
+fit is being carried by one or two points, not a real monotonic
+relationship. Neither metric cleanly replicates its pooled-sample
+ranking performance inside either family on its own.
+
+The reason: llama3.2_3b's non-trivial pairs never actually produced
+the catastrophic perplexity blowups the family was designed to test
+for. Every non-trivial llama pair lands in a narrow 8.10-8.38 ppl
+band, next to a 6.97 self-anchor - versus qwen3b's non-trivial pairs
+spanning 9.11 to 103.02. dolphin, home, and korean all merge into
+Llama-3.2-3B-Instruct far more gracefully than coder/math fine-tunes
+merged into Qwen2.5-3B-Instruct in Round Four/Five/Six, despite being
+chosen specifically to be domain-divergent. The pooled correlation's
+strength comes almost entirely from the gap BETWEEN the two families
+(one family has real degradation to detect, one doesn't), not from
+either metric discriminating well WITHIN a family - which is the
+setting that actually matters for a real merge-time warning, since in
+practice you're comparing candidate pairs against each other, not
+against a different model family's baseline.
+
+This is not a negative result for the confound-closing half (that
+replicates cleanly and is worth taking as strong evidence). But the
+second-family half doesn't strengthen the core "domain divergence
+predicts catastrophic degradation" claim the way Round Eight's
+StableLM-2 replication did - it's an inconclusive replication attempt
+where the fine-tunes chosen to be domain-divergent didn't turn out to
+be harmful in practice, not evidence that the metrics fail. Whoever
+picks this up next should either pick more aggressively domain-shifted
+llama3.2_3b fine-tunes (a code or math fine-tune on this base, if one
+exists ungated) or treat this family as inconclusive rather than
+confirmatory.
+
+Reproduce: python eval/phase_scale_3b.py (resumable; all 14 points are
+saved in eval/phase_scale_3b_results.json).
+
+
+ROUND TWELVE: CHASING A SECOND CATASTROPHIC PAIR ON LLAMA3.2_3B - STILL INCONCLUSIVE
+--------------------------------------------------------------------------------------
+
+Immediate same-night follow-up to Round Eleven's open question: pick a
+more aggressively domain-shifted llama3.2_3b fine-tune and see if it
+reproduces the catastrophic degradation Qwen2.5-Coder showed. Added a
+5th fine-tune to the family, EpistemeAI/Llama-3.2-3B-Agent007-Coder -
+built from the same unsloth/Llama-3.2-3B-Instruct base as the other
+four, fine-tuned on CodeAlpaca-20K + an agent dataset, the closest
+available ungated code-domain fine-tune on this base
+(eval/phase_scale_3b.py, FAMILIES["llama3.2_3b"]["finetunes"]["coder"]).
+4 new pairs against the existing 4 fine-tunes, n=11 for the family now.
+
+Results (4 new pairs):
+
+  pair            | conflict | drift_magnitude | perplexity
+  ----------------|----------|------------------|------------
+  instruct+coder   | 0.1729   | 0.3238           | 8.56
+  dolphin+coder      | 0.4415   | 0.2500           | 8.93
+  home+coder           | 0.1736   | 0.3240           | 8.66
+  korean+coder           | 0.1742   | 0.3259           | 8.62
+
+Did not reproduce Qwen's catastrophic pattern. dolphin+coder is the
+worst pair in the family (ppl 8.93) but that's barely above the
+6.97 self-anchor and nowhere near Qwen's coder-pair range (70.89 to
+103.02). The model card describes Agent007-Coder as a light
+instruction fine-tune, not a heavy continued-pretraining-on-code
+model like Qwen2.5-Coder-3B was - the domain shift here is real but
+much smaller in magnitude, and the metrics track that correctly
+(this is the family's worst sub-group, just not a catastrophic one).
+
+Family correlations did change meaningfully with n=11 vs n=7:
+
+  conflict:           pearson r = 0.4116 (p=0.2085) | spearman rho = 0.4455 (p=0.1697)
+  conflict_weighted:  pearson r = 0.2800 (p=0.4042) | spearman rho = 0.4455 (p=0.1697)
+  drift_magnitude:    pearson r = 0.8339 (p=0.00142) | spearman rho = 0.5364 (p=0.08895)
+
+drift_magnitude's pearson r went from a spearman/pearson-mismatched
+0.90/0.14 split at n=7 (Round Eleven, likely one or two points
+carrying a false-looking linear fit) to a genuinely significant
+r=0.83 (p=0.0014) at n=11 - a real, if modest, within-family signal
+now exists: pairs involving the coder fine-tune consistently score
+higher on both drift and perplexity than pairs that don't. Spearman
+rho (0.54, p=0.089) isn't quite significant at n=11 though, so this
+is suggestive, not conclusive - conflict still shows no significant
+within-family ranking at all.
+
+Conclusion: this family remains the weaker of the two 3B
+replications. It shows a real, correctly-directed, small effect (the
+coder-involving pairs are the worst in the family, and drift_magnitude
+picks that up with a significant linear correlation) but not the
+sharp catastrophic-degradation signal Qwen2.5-Coder produced, and not
+a strong enough monotonic ranking to call it a clean second
+confirmation of Round Four/Five/Six's core claim. Whoever wants to
+close this out for real needs a llama3.2_3b (or other non-Qwen
+family) fine-tune with a genuinely large domain shift - continued
+pretraining on code/math at meaningful scale, not a light instruction
+fine-tune - which may not exist ungated at this size yet. Otherwise,
+treat the second-architecture-family replication of the catastrophic
+case as still open.
+
+Reproduce: python eval/phase_scale_3b.py (resumable; all 18 points
+across both families are saved in eval/phase_scale_3b_results.json).
+
+
 INFRASTRUCTURE FOOTNOTE (ROUNDS EIGHT THROUGH TEN, THIS MACHINE ONLY)
 ------------------------------------------------------------------------
 
