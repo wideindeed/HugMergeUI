@@ -7,8 +7,10 @@ import { GuideTour } from './components/GuideTour'
 import { ModelPicker } from './components/ModelPicker'
 import { ResultsPanel } from './components/ResultsPanel'
 import { useSimpleMode } from './context/SimpleModeContext'
-import { EXAMPLE_PAIRS } from './data/examplePairs'
+import { EXAMPLE_PAIRS, TIER_INFO, type ExampleTier } from './data/examplePairs'
 import './App.css'
+
+const TIER_ORDER: ExampleTier[] = ['self-merge', 'healthy', 'parent-child', 'moderate', 'edge-case', 'catastrophic']
 
 const DEFAULT_YAML = `merge_method: linear
 models:
@@ -118,8 +120,8 @@ function App() {
           aria-checked={simple}
           title={simple ? 'Switch to Expert mode' : 'Switch to Explorer mode'}
         >
-          <span className={simple ? undefined : 'mode-toggle-active'}>🔬 Expert</span>
-          <span className={simple ? 'mode-toggle-active' : undefined}>🪐 Explorer</span>
+          <span className={simple ? undefined : 'mode-toggle-active'}>Expert</span>
+          <span className={simple ? 'mode-toggle-active' : undefined}>Explorer</span>
         </button>
         <nav className="sidebar-nav">
           <button type="button" onClick={() => scrollToSection('examples')}>
@@ -149,26 +151,41 @@ function App() {
         <div className="workflow-col">
           <section className="panel" data-tour-id="examples">
             <h2>Try an example</h2>
+            <p className="examples-count">
+              {EXAMPLE_PAIRS.length} real, measured pairs across three model families (1B-3B params) — every
+              number below came from an actual mergekit merge and perplexity run, not an estimate.
+            </p>
             {simple && (
               <p className="simple-intro">
                 Pick a pair below — think of it as picking two ingredients to see if they mix well before you
                 commit to the recipe.
               </p>
             )}
-            <div className="example-grid">
-              {EXAMPLE_PAIRS.map((ex) => (
-                <button
-                  key={ex.id}
-                  type="button"
-                  className="example-card"
-                  onClick={() => handleExampleClick(ex.yaml)}
-                  disabled={analyzing}
-                >
-                  <span className="example-label">{ex.label}</span>
-                  <span className="example-note">{simple ? ex.simpleNote : ex.note}</span>
-                </button>
-              ))}
-            </div>
+            {TIER_ORDER.map((tier) => {
+              const pairs = EXAMPLE_PAIRS.filter((ex) => ex.tier === tier)
+              if (pairs.length === 0) return null
+              return (
+                <div className={`example-tier-group tier-${tier}`} key={tier}>
+                  <h3 className="example-tier-heading">
+                    {simple ? TIER_INFO[tier].simpleLabel : TIER_INFO[tier].label}
+                  </h3>
+                  <div className="example-grid">
+                    {pairs.map((ex) => (
+                      <button
+                        key={ex.id}
+                        type="button"
+                        className="example-card"
+                        onClick={() => handleExampleClick(ex.yaml)}
+                        disabled={analyzing}
+                      >
+                        <span className="example-label">{ex.label}</span>
+                        <span className="example-note">{simple ? ex.simpleNote : ex.note}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
           </section>
 
           <ConfigEditor
