@@ -23,11 +23,11 @@ export function explainResult(result: ConflictScoreResult): PlainExplanation {
   } else if (avgLayerDrift < RISK_CEILING) {
     headline = 'These two models pull in noticeably different directions.'
   } else {
-    headline = "These two models are fighting hard — expect real damage if you merge them."
+    headline = 'These two models are fighting hard: expect real damage if you merge them.'
   }
 
   const paragraphs: string[] = [
-    'Think of each model as a set of learned habits. When you merge two models, you\'re averaging their habits together — and averaging works fine when they agree, but gets messy when they don\'t.',
+    'Think of each model as a set of learned habits. When you merge two models, you\'re averaging their habits together, and averaging works fine when they agree, but gets messy when they don\'t.',
   ]
 
   if (other) {
@@ -38,13 +38,13 @@ export function explainResult(result: ConflictScoreResult): PlainExplanation {
       paragraphs.push(
         "One thing worth noticing: the \"vocabulary and output\" section (labeled other) shows a lot more risk " +
           "than the typical layer above. That usually means one of the two models was pushed hard into a narrow " +
-          "specialty — like math, code, or a specific writing style — which reshapes how it turns its thinking " +
+          "specialty (like math, code, or a specific writing style), which reshapes how it turns its thinking " +
           'into words, even when the general reasoning underneath barely changed. Different parts of a merge can ' +
           'genuinely disagree like this; it\'s not a bug, it\'s two independent readings.',
       )
     } else {
       paragraphs.push(
-        'The "vocabulary and output" section (labeled other) is roughly in line with the typical layer — no ' +
+        'The "vocabulary and output" section (labeled other) is roughly in line with the typical layer, no ' +
           'single part is carrying a wildly different amount of risk here.',
       )
     }
@@ -52,9 +52,8 @@ export function explainResult(result: ConflictScoreResult): PlainExplanation {
 
   paragraphs.push(
     'The color scale is driven by how much each model\'s training actually changed its weights (not just whether ' +
-      'they disagree) — a signal that has been tested against real merge quality. It\'s solidly proven at larger ' +
-      'model sizes (1.5B+ parameters); at the small scale most examples here use, treat it as a helpful hint ' +
-      'rather than a guarantee.',
+      'they disagree), a signal that has been tested against real merge quality and is validated at the 1.5B+ ' +
+      'parameter scale used by the examples above.',
   )
 
   return { headline, paragraphs }

@@ -10,9 +10,9 @@ function describe(warning: ArchitectureWarning): string {
 
 function describeSimple(warning: ArchitectureWarning): string {
   if (warning.type === 'config_fetch_failed') {
-    return `Couldn't even find the blueprint for ${warning.model} — that one might not be a real, public model.`
+    return `Couldn't even find the blueprint for ${warning.model}, that one might not be a real, public model.`
   }
-  return `These two models are built differently under the hood (mismatched "${warning.field}") — like trying to bolt together parts from two different machines.`
+  return `These two models are built differently under the hood (mismatched "${warning.field}"), like trying to bolt together parts from two different machines.`
 }
 
 export function ArchitectureWarnings({ warnings }: { warnings: ArchitectureWarning[] }) {
@@ -22,7 +22,7 @@ export function ArchitectureWarnings({ warnings }: { warnings: ArchitectureWarni
     return (
       <p className="ok-banner">
         {simple
-          ? "Good news — these models are built the same way underneath. They're compatible."
+          ? "Good news: these models are built the same way underneath. They're compatible."
           : 'Architectures compatible across all referenced models.'}
       </p>
     )

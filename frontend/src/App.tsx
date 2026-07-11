@@ -5,6 +5,7 @@ import { ArchitectureWarnings } from './components/ArchitectureWarnings'
 import { ConfigEditor } from './components/ConfigEditor'
 import { GuideTour } from './components/GuideTour'
 import { ModelPicker } from './components/ModelPicker'
+import { QuickCompare } from './components/QuickCompare'
 import { ResultsPanel } from './components/ResultsPanel'
 import { useSimpleMode } from './context/SimpleModeContext'
 import { EXAMPLE_PAIRS, TIER_INFO, type ExampleTier } from './data/examplePairs'
@@ -80,14 +81,15 @@ function App() {
     }
   }
 
-  async function handleScore() {
+  async function runScore(base: string, a: string, b: string, dens: number) {
     setScoring(true)
     setError(null)
+    setScoreResult(null)
     setResultsSession((s) => s + 1)
     resolveCount.current = 0
     setProgress({ percent: 0, label: 'Starting…' })
     try {
-      const result = await streamConflictScore(baseModel, modelA, modelB, density, handleProgress)
+      const result = await streamConflictScore(base, a, b, dens, handleProgress)
       setScoreResult(result)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
@@ -95,6 +97,10 @@ function App() {
       setScoring(false)
       setProgress(null)
     }
+  }
+
+  function handleScore() {
+    void runScore(baseModel, modelA, modelB, density)
   }
 
   function scrollToSection(id: string) {
@@ -124,6 +130,9 @@ function App() {
           <span className={simple ? 'mode-toggle-active' : undefined}>Explorer</span>
         </button>
         <nav className="sidebar-nav">
+          <button type="button" onClick={() => scrollToSection('quick-compare')}>
+            Compare any two
+          </button>
           <button type="button" onClick={() => scrollToSection('examples')}>
             Try an example
           </button>
@@ -149,15 +158,17 @@ function App() {
         {error && <p className="error-banner">{error}</p>}
 
         <div className="workflow-col">
+          <QuickCompare scoring={scoring} onScore={runScore} />
+
           <section className="panel" data-tour-id="examples">
             <h2>Try an example</h2>
             <p className="examples-count">
-              {EXAMPLE_PAIRS.length} real, measured pairs across three model families (1B-3B params) — every
+              {EXAMPLE_PAIRS.length} real, measured pairs across three model families (1B-3B params). Every
               number below came from an actual mergekit merge and perplexity run, not an estimate.
             </p>
             {simple && (
               <p className="simple-intro">
-                Pick a pair below — think of it as picking two ingredients to see if they mix well before you
+                Pick a pair below, think of it as picking two ingredients to see if they mix well before you
                 commit to the recipe.
               </p>
             )}

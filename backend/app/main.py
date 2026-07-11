@@ -5,7 +5,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from .conflict.engine import ModelWeightsFetchError, score_model_pair, score_model_pair_progress
-from .hf.service import check_architecture
+from .hf.client import search_model_ids
+from .hf.service import browse_validated_models, check_architecture, check_model
 from .parser.loader import load_config, parse_raw_config
 
 app = FastAPI(title="HugMergeUI API")
@@ -48,6 +49,21 @@ def check_architecture_route(request: CheckArchitectureRequest) -> dict:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
     return check_architecture(raw)
+
+
+@app.get("/hf-search")
+def hf_search_route(q: str = "") -> list[str]:
+    return search_model_ids(q)
+
+
+@app.get("/model-check")
+def model_check_route(model_id: str) -> dict:
+    return check_model(model_id)
+
+
+@app.get("/curated-models")
+def curated_models_route() -> list[dict]:
+    return browse_validated_models()
 
 
 @app.post("/conflict-score")

@@ -15,7 +15,7 @@ export function ConfigEditor({ value, onChange, onAnalyze, loading }: Props) {
       <h2>{simple ? 'The recipe' : 'Merge config'}</h2>
       {simple && (
         <p className="simple-intro">
-          This is the exact recipe for combining the models — which ones, and how much of each. You don't need to
+          This is the exact recipe for combining the models: which ones, and how much of each. You don't need to
           read it. Pick an example above, then hit Analyze below.
         </p>
       )}

@@ -39,6 +39,23 @@ export interface ConflictScoreResult {
   other: OtherScore | null
 }
 
+export type ModelValidationZone = 'validated' | 'below_range' | 'above_range' | 'untested_family' | 'unknown'
+
+export interface ModelCheckResult {
+  model_type: string | null
+  total_params: number | null
+  validated: boolean | null
+  zone: ModelValidationZone
+  error?: string
+}
+
+export interface CuratedModel {
+  id: string
+  model_type: string
+  total_params: number
+  downloads: number
+}
+
 export type ScoreProgressEvent =
   | { stage: 'resolve'; repo: string }
   | { stage: 'scoring'; tensor_index: number; tensor_total: number }

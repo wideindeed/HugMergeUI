@@ -48,6 +48,37 @@ models:
     assert body["num_layers"] > 0
 
 
+def test_hf_search_route():
+    response = client.get("/hf-search", params={"q": "Qwen2.5-1.5B"})
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, list)
+    assert any("Qwen2.5-1.5B" in m for m in body)
+
+
+def test_hf_search_route_blank_query_returns_empty():
+    response = client.get("/hf-search", params={"q": ""})
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_model_check_route():
+    response = client.get("/model-check", params={"model_id": "Qwen/Qwen2.5-1.5B"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["model_type"] == "qwen2"
+    assert body["validated"] is True
+
+
+def test_curated_models_route():
+    response = client.get("/curated-models")
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, list)
+    assert len(body) > 0
+    assert {"id", "model_type", "total_params", "downloads"} <= body[0].keys()
+
+
 def test_conflict_score_route():
     response = client.post("/conflict-score", json={
         "base_model": "Qwen/Qwen2.5-0.5B",

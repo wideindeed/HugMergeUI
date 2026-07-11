@@ -1,4 +1,11 @@
-import type { ArchitectureCheckResult, ConflictScoreResult, ParsedConfig, ScoreProgressEvent } from './types'
+import type {
+  ArchitectureCheckResult,
+  ConflictScoreResult,
+  CuratedModel,
+  ModelCheckResult,
+  ParsedConfig,
+  ScoreProgressEvent,
+} from './types'
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`/api${path}`, {
@@ -11,6 +18,27 @@ async function post<T>(path: string, body: unknown): Promise<T> {
     throw new Error(detail?.detail ?? `${path} failed with status ${res.status}`)
   }
   return res.json()
+}
+
+async function get<T>(path: string): Promise<T> {
+  const res = await fetch(`/api${path}`)
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null)
+    throw new Error(detail?.detail ?? `${path} failed with status ${res.status}`)
+  }
+  return res.json()
+}
+
+export function searchModels(query: string): Promise<string[]> {
+  return get(`/hf-search?q=${encodeURIComponent(query)}`)
+}
+
+export function checkModel(modelId: string): Promise<ModelCheckResult> {
+  return get(`/model-check?model_id=${encodeURIComponent(modelId)}`)
+}
+
+export function getCuratedModels(): Promise<CuratedModel[]> {
+  return get('/curated-models')
 }
 
 export function parseConfig(yamlText: string, numLayers: number | null): Promise<ParsedConfig> {

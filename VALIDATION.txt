@@ -978,6 +978,66 @@ Reproduce: python eval/phase_scale_3b.py (resumable; all 18 points
 across both families are saved in eval/phase_scale_3b_results.json).
 
 
+ROUND THIRTEEN: CROSSING TWO DOMAIN-DIVERGENT SIBLINGS DIRECTLY - WORST CASE ON RECORD
+------------------------------------------------------------------------------------------
+
+Every domain-divergent pair tested through Round Twelve crossed one
+domain fine-tune against the plain instruct model (instruct+coder,
+instruct+math) or was a parent/child chain within a single domain
+(Qwen2.5-Coder-1.5B -> Coder-1.5B-Instruct, Qwen2.5-Math-1.5B ->
+Math-1.5B-Instruct, both Round Seven). Nobody had crossed two
+independently-trained, domain-divergent siblings directly against EACH
+OTHER - both instruction-tuned off the same base, pulling in unrelated
+directions, neither one a parent of the other.
+
+Pair: Qwen/Qwen2.5-Coder-1.5B-Instruct x Qwen/Qwen2.5-Math-1.5B-Instruct,
+base Qwen/Qwen2.5-1.5B, TIES merge (density=0.5, weight=0.5 each),
+fp32, same subprocess-isolation methodology as phase_hierarchy2.py
+(eval/phase_cross_domain.py, single ad hoc point, not a full family
+pass).
+
+Predicted ahead of the run (via the live Quick Compare UI, before the
+real merge was run) as high-risk based on drift_magnitude=1.997,
+conflict=0.261 alone - reasoning: domain-divergent sibling pairs are
+the category most reliably linked to catastrophic degradation since
+Round Four/Five, and unlike the Round Seven parent/child cases this
+pair has real conflict (not near-zero), so both metrics should agree
+rather than diverge.
+
+Result:
+
+  pair                        | conflict | drift_magnitude | perplexity
+  -----------------------------|----------|------------------|------------
+  coder_instruct+math_instruct | 0.3607   | 2.3695           | 735,232.33
+
+This is the single worst merge measured across the entire project.
+The previous worst (Round Seven's Math-1.5B parent/child chain) was
+perplexity 893.1 - already called catastrophic. This pair is roughly
+800x worse than that, at a perplexity level where the merged model's
+output is effectively noise. drift_magnitude (2.37) sits above every
+previously-recorded point except Round Seven's Math chain (3.01), and
+unlike that near-zero-conflict parent/child case, conflict here is
+real (0.36) - both metrics agree in the same direction, which they
+did not for the earlier near-zero-conflict anomalies. The prediction
+made from the metrics alone (before running the real merge) called
+this correctly as a severe risk case; the actual outcome exceeded even
+that expectation.
+
+Caveat: single data point, not a family pass - this is a striking
+anecdote, not a statistically powered result. It does strongly suggest
+a promising follow-up axis for whoever runs the next full round:
+crossing domain-divergent siblings against each other (rather than
+each against the shared instruct baseline) as its own tested category,
+across more pairs and at least one more family (llama3.2_3b has a
+coder fine-tune per Round Twelve; a math-domain llama3.2_3b fine-tune
+would be needed to build the analogous cross there).
+
+Reproduce: python eval/phase_cross_domain.py (resumable; run from
+D:\PythonProject\HugMergeUI per the standing drive-usage rule, scripts
+and result JSON live in eval/ on that copy, not committed to this
+repo).
+
+
 INFRASTRUCTURE FOOTNOTE (ROUNDS EIGHT THROUGH TEN, THIS MACHINE ONLY)
 ------------------------------------------------------------------------
 

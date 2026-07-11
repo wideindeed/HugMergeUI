@@ -67,11 +67,10 @@ export function ResultsPanel({ scoring, progress, scoreResult }: Props) {
                   <LayerHeatmap result={scoreResult} />
                   <p className="caveat">
                     drift_magnitude (the color/size signal above) is validated against real merge
-                    quality — significant at 1.5B+ params (Round Four/Five: n=29, spearman
-                    ρ=0.96), but not yet shown to hold at the 0.5B/360M scale most example
-                    presets use here. conflict/conflict_weighted, shown as secondary stats,
-                    did not reach significance in the original Phase 5/6 sweep. See VALIDATION.txt
-                    for the full round-by-round history.
+                    quality: significant at 1.5B+ params (Round Four/Five: n=29, spearman
+                    ρ=0.96), the scale used by every example preset here. conflict/conflict_weighted,
+                    shown as secondary stats, did not reach significance in the original Phase 5/6
+                    sweep. See VALIDATION.txt for the full round-by-round history.
                   </p>
                 </>
               )}

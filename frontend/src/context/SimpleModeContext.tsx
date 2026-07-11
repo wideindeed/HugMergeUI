@@ -24,7 +24,7 @@ export function SimpleModeProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, mode)
     } catch {
-      // localStorage unavailable (private mode, etc.) — mode just won't persist
+      // localStorage unavailable (private mode, etc.), mode just won't persist
     }
   }, [mode])
 

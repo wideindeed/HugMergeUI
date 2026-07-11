@@ -45,7 +45,7 @@ export function ModelPicker({
           'Ancestor model (the shared starting point)'
         ) : (
           <>
-            Base / ancestor model (used as the diff reference — doesn't have to match mergekit's own{' '}
+            Base / ancestor model (used as the diff reference, doesn't have to match mergekit's own{' '}
             <code>base_model</code> field)
           </>
         )}

@@ -26,3 +26,6 @@ mergekit_conflict_visualizer_plan*.txt
 # OS
 .DS_Store
 Thumbs.db
+
+# Dev/eval run logs (scratch, not reproducible artifacts)
+*.log

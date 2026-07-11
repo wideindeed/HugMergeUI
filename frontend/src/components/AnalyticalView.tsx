@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ConflictScoreResult, LayerScore } from '../api/types'
 
-// Same validated risk framing as ConflictScene.tsx / LayerHeatmap.tsx — this
+// Same validated risk framing as ConflictScene.tsx / LayerHeatmap.tsx, this
 // view exists to show the exact numbers behind that color, not a new metric.
 const DRIFT_RISK_CEILING = 0.9
 
@@ -57,7 +57,7 @@ export function AnalyticalView({ result }: { result: ConflictScoreResult }) {
     <section className="panel analytical-panel">
       <h2>Layer-by-layer breakdown</h2>
       <p className="analytical-intro">
-        Bars are drift magnitude (the validated risk signal) per layer, exact values — no shaping beyond color.
+        Bars are drift magnitude (the validated risk signal) per layer, exact values, no shaping beyond color.
         The dashed line is the sign-conflict fraction, right-aligned to the same 0–1 span. The red dotted line marks
         the {DRIFT_RISK_CEILING} risk ceiling used for coloring elsewhere in this app.
       </p>
@@ -131,7 +131,7 @@ export function AnalyticalView({ result }: { result: ConflictScoreResult }) {
       <div className="analytical-hover-readout">
         {hovered ? (
           <span>
-            layer {hovered.layer} — drift {hovered.drift_magnitude.toFixed(4)}, conflict{' '}
+            layer {hovered.layer}, drift {hovered.drift_magnitude.toFixed(4)}, conflict{' '}
             {hovered.conflict.toFixed(4)}, redundancy A {hovered.redundancy_a.toFixed(4)}, redundancy B{' '}
             {hovered.redundancy_b.toFixed(4)}, {hovered.tensor_count} tensor
             {hovered.tensor_count === 1 ? '' : 's'}

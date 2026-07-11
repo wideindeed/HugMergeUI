@@ -552,12 +552,12 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
       <div className="orbit-legend">
         {simple ? (
           <p className="orbit-legend-intro">
-            Drag to spin it around, scroll to zoom. Click any ring — or the glowing center — to see exactly how
+            Drag to spin it around, scroll to zoom. Click any ring (or the glowing center) to see exactly how
             much friction that part of the models has.
           </p>
         ) : (
           <p className="orbit-legend-intro">
-            Drag to orbit, scroll to zoom — it also drifts on its own. Click any ring or the center sphere to zoom in
+            Drag to orbit, scroll to zoom, it also drifts on its own. Click any ring or the center sphere to zoom in
             and inspect its real data.
           </p>
         )}
@@ -566,8 +566,8 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             <dt>Center</dt>
             <dd>
               {simple
-                ? "The model's vocabulary and \"output voice\" — separate from its step-by-step reasoning."
-                : 'Non-layer tensors — embeddings, norms, lm_head.'}
+                ? "The model's vocabulary and \"output voice\", separate from its step-by-step reasoning."
+                : 'Non-layer tensors: embeddings, norms, lm_head.'}
             </dd>
           </div>
           <div>
@@ -582,7 +582,7 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             <dt>Blue / orange</dt>
             <dd>
               {simple
-                ? 'Model A and Model B — watch them circle each other at different speeds.'
+                ? 'Model A and Model B, watch them circle each other at different speeds.'
                 : 'Model A and model B, orbiting at slightly different speeds so they drift in and out of alignment.'}
             </dd>
           </div>
@@ -590,8 +590,8 @@ export function ConflictScene({ layers, other }: { layers: LayerScore[]; other: 
             <dt>Flashes</dt>
             <dd>
               {simple
-                ? "Green means the two models basically agree there. Red means real friction — the two models learned genuinely different things in that part."
-                : "Green = low drift risk, red = high, right on the orbiting pair. Size and color track that layer's real drift magnitude — the metric validated to actually predict merge quality."}
+                ? "Green means the two models basically agree there. Red means real friction: the two models learned genuinely different things in that part."
+                : "Green = low drift risk, red = high, right on the orbiting pair. Size and color track that layer's real drift magnitude, the metric validated to actually predict merge quality."}
             </dd>
           </div>
         </dl>
