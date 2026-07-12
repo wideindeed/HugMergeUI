@@ -1,0 +1,42 @@
+[
+  {
+    "family": "mistral7b",
+    "pair": "openhermes+dolphin",
+    "model_a": "teknium/OpenHermes-2.5-Mistral-7B",
+    "model_b": "cognitivecomputations/dolphin-2.1-mistral-7b",
+    "conflict": 0.40189711399769595,
+    "conflict_weighted": 0.34030169793762105,
+    "drift_magnitude": 0.04873850473732652,
+    "perplexity": 4.774572078077611
+  },
+  {
+    "family": "mistral7b",
+    "pair": "metamath+code",
+    "model_a": "abacusai/Fewshot-Metamath-OrcaVicuna-Mistral",
+    "model_b": "ajibawa-2023/Code-Mistral-7B",
+    "conflict": 0.4962700594916069,
+    "conflict_weighted": 0.4934623928110528,
+    "drift_magnitude": 0.18589762711679234,
+    "perplexity": 4.695140573331585
+  },
+  {
+    "family": "mistral7b",
+    "pair": "openhermes+metamath",
+    "model_a": "teknium/OpenHermes-2.5-Mistral-7B",
+    "model_b": "abacusai/Fewshot-Metamath-OrcaVicuna-Mistral",
+    "conflict": 0.4955769300130759,
+    "conflict_weighted": 0.49248322011605805,
+    "drift_magnitude": 0.16334262282736406,
+    "perplexity": 4.628840739757641
+  },
+  {
+    "family": "mistral7b",
+    "pair": "dolphin+code",
+    "model_a": "cognitivecomputations/dolphin-2.1-mistral-7b",
+    "model_b": "ajibawa-2023/Code-Mistral-7B",
+    "conflict": 0.45212362511266196,
+    "conflict_weighted": 0.4198379431322099,
+    "drift_magnitude": 0.07129350902675481,
+    "perplexity": 4.416726948684839
+  }
+]

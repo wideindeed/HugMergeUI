@@ -1,0 +1,34 @@
+[
+  {
+    "pair": "openhermes+metamath",
+    "domain": "math",
+    "merged_perplexity": 3.394185037952948,
+    "solo_perplexity": 3.577328913371936,
+    "degradation": -0.1831438754189878,
+    "degradation_pct": -5.119570491111459
+  },
+  {
+    "pair": "dolphin+code",
+    "domain": "code",
+    "merged_perplexity": 1.4883518089030707,
+    "solo_perplexity": 1.4848738529080823,
+    "degradation": 0.0034779559949884575,
+    "degradation_pct": 0.23422568780351152
+  },
+  {
+    "pair": "metamath+code",
+    "domain": "math",
+    "merged_perplexity": 3.511520157341607,
+    "solo_perplexity": 3.577328913371936,
+    "degradation": -0.0658087560303291,
+    "degradation_pct": -1.8396059636657442
+  },
+  {
+    "pair": "metamath+code",
+    "domain": "code",
+    "merged_perplexity": 1.507669235095787,
+    "solo_perplexity": 1.4848738529080823,
+    "degradation": 0.022795382187704716,
+    "degradation_pct": 1.5351729807256436
+  }
+]

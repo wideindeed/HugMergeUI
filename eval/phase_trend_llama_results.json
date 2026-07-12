@@ -1,0 +1,42 @@
+[
+  {
+    "family": "llama3.2_3b",
+    "pair": "instruct+megamath",
+    "model_a": "unsloth/Llama-3.2-3B-Instruct",
+    "model_b": "LLM360/MegaMath-Llama-3.2-3B",
+    "conflict": 0.47054296253331185,
+    "conflict_weighted": 0.44692144755463276,
+    "drift_magnitude": 0.4060644661555713,
+    "perplexity": 27.20487737976238
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "dolphin+megamath",
+    "model_a": "dphn/Dolphin3.0-Llama3.2-3B",
+    "model_b": "LLM360/MegaMath-Llama-3.2-3B",
+    "conflict": 0.4835512130643858,
+    "conflict_weighted": 0.4720113390477325,
+    "drift_magnitude": 0.3322923139061024,
+    "perplexity": 56.127813475265604
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "home+megamath",
+    "model_a": "acon96/Home-Llama-3.2-3B",
+    "model_b": "LLM360/MegaMath-Llama-3.2-3B",
+    "conflict": 0.4705884002284956,
+    "conflict_weighted": 0.44698422440545105,
+    "drift_magnitude": 0.40623720245969575,
+    "perplexity": 27.916901983152094
+  },
+  {
+    "family": "llama3.2_3b",
+    "pair": "korean+megamath",
+    "model_a": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "model_b": "LLM360/MegaMath-Llama-3.2-3B",
+    "conflict": 0.4707905426839668,
+    "conflict_weighted": 0.4473327454383276,
+    "drift_magnitude": 0.4081363436323249,
+    "perplexity": 24.72138449818733
+  }
+]

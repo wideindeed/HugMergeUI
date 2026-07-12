@@ -1038,6 +1038,148 @@ and result JSON live in eval/ on that copy, not committed to this
 repo).
 
 
+ROUND FOURTEEN: THE LLAMA3.2_3B CROSS-DOMAIN ANALOG - A WEAK-FINE-TUNE CONFOUND, QUANTIFIED THIS TIME
+--------------------------------------------------------------------------------------------------------
+
+Direct follow-up to Round Thirteen's suggested next axis: crossing two
+independently-trained, domain-divergent siblings directly against each
+other (not each against the shared instruct baseline) on the
+llama3.2_3b family, mirroring the exact design that produced Qwen's
+735,232-ppl catastrophe. Round Twelve's one llama coder attempt
+(EpistemeAI/Llama-3.2-3B-Agent007-Coder) had already left this
+ambiguous - a small, non-catastrophic effect that could mean either
+"the family doesn't reproduce the pattern" or "that fine-tune wasn't a
+strong enough test." This round tried to remove that ambiguity by using
+MergeBench/Llama-3.2-3B-Instruct_coding and
+MergeBench/Llama-3.2-3B-Instruct_math - checkpoints purpose-built for
+model-merging research (the MergeBench paper, "A Systematic Study of
+In-the-Wild Model Merging for LLMs"), both derived from
+unsloth/Llama-3.2-3B-Instruct, crossed directly against each other
+(eval/phase_cross_domain_llama.py). fp16 throughout (not fp32 - two
+loaded 3B models don't comfortably fit fp32 on this 8GB card, same
+reasoning as phase_scale_3b.py; the first draft of this script wrongly
+copied phase_cross_domain.py's fp32 pattern from the 1.5B round and was
+corrected before running for real).
+
+Result:
+
+  pair          | conflict | drift_magnitude | perplexity
+  --------------|----------|------------------|------------
+  coding+math   | 0.4867   | 0.0223           | 7.92
+
+Healthy merge, perplexity actually below every other non-anchor pair
+in the family (previous best was 8.10). conflict read as the highest
+value ever recorded on this family (0.4867) while drift_magnitude read
+as the lowest non-zero value ever recorded (0.0223) - the two metrics
+disagree sharply here, and on the surface this looks like "the alarm
+stayed quiet and nothing burned," ambiguous between "correctly quiet"
+and "blind."
+
+Rather than leave that ambiguous like Round Eleven/Twelve did, ran a
+direct follow-up (eval/phase_cross_domain_llama_selfcheck.py):
+score_model_pair(base, finetune, finetune) for each MergeBench
+checkpoint individually against unsloth/Llama-3.2-3B-Instruct - passing
+the same repo as both model_a and model_b makes conflict trivially 0
+but drift_magnitude still reports 2x that fine-tune's own solo
+rms(delta)/rms(base), directly comparable to the cross-pair sum (no
+merge or perplexity needed, so this took under two minutes with both
+checkpoints already cached).
+
+  finetune (solo, vs base) | drift_magnitude
+  --------------------------|------------------
+  coding                    | 0.00642
+  math                      | 0.01584
+  sum                       | 0.02226 (exact match to the cross-pair reading above)
+
+Quantitative confirmation of the suspected confound: these two
+checkpoints moved the weights roughly 10-15x LESS than every other
+domain fine-tune tested on this family (dolphin ~0.11, home/korean
+~0.15, EpistemeAI coder ~0.16, all measured as their own cross-pair
+drift against instruct in Rounds Eleven/Twelve). MergeBench's
+checkpoints are evidently a light SFT touch-up, not the kind of heavy
+continued-pretraining Qwen2.5-Coder-3B/Math-3B actually were (which
+moved weights on the order of 50x harder than this pair). A near-zero
+drift reading on a near-zero-magnitude update is not evidence the
+metric is blind - there was no real fire to detect - but it means this
+attempt, like Round Eleven/Twelve before it, still does not resolve
+whether drift_magnitude's edge holds on this family under a fair,
+comparably-aggressive domain-divergent test.
+
+Status: three attempts now (dolphin/home/korean, EpistemeAI-coder,
+MergeBench coding/math), three different reasons for inconclusiveness,
+all traceable to the same root cause - no ungated llama3.2_3b fine-tune
+found so far reaches Qwen2.5-Coder-3B/Math-3B's magnitude of domain
+shift. This may reflect a genuine gap in what's publicly available at
+this scale rather than a pattern of bad picks. Whoever picks this up
+next should check a candidate's solo drift_magnitude against base
+BEFORE spending time on a full merge+perplexity run - this round's
+selfcheck script makes that a ~2-minute check instead of a
+20-40-minute one.
+
+Reproduce: python eval/phase_cross_domain_llama.py and
+eval/phase_cross_domain_llama_selfcheck.py (both resumable; run from
+D:\PythonProject\HugMergeUI per the standing drive-usage rule, scripts
+and result JSON live in eval/ on that copy, not committed to this
+repo).
+
+ROUND FOURTEEN, CONTINUED: A FAIR HEAVY-DOMAIN TEST, AND A CLEAR ANSWER
+------------------------------------------------------------------------
+
+Went hunting for a genuinely heavy llama3.2_3b domain fine-tune to
+replace the confounded MergeBench pair. No public continued-pretraining
+checkpoint at this exact scale matches Qwen2.5-Coder-3B/Math-3B's
+magnitude of shift (OpenCoder only ships at 1.5B/8B, StarCoder2 is an
+incompatible architecture), but two candidates cleared the solo-drift
+bar by a wide margin, checked with a new pre-flight script
+(eval/phase_cross_domain_llama_v2_selfcheck.py) BEFORE committing to a
+full merge:
+
+  candidate (solo, vs unsloth/Llama-3.2-3B) | drift_magnitude
+  -------------------------------------------|------------------
+  LLM360/MegaMath-Llama-3.2-3B               | 0.2574 (heaviest yet on this family)
+  EpistemeAI/Llama-3.2-3B-Agent007-Coder     | 0.1752 (Round Twelve's pick, 2nd heaviest)
+
+LLM360/MegaMath-Llama-3.2-3B is a real continued-pretraining checkpoint
+(300B+ token MegaMath corpus), not an instruction SFT touch-up - the
+kind of heavy domain shift the MergeBench pair turned out not to be.
+Both candidates cleared the bar (10-40x heavier than the confounded
+MergeBench pair's 0.0064/0.0158), so per the plan this triggered the
+full merge run (eval/phase_cross_domain_llama_v2.py, same TIES/fp16
+methodology, base=unsloth/Llama-3.2-3B):
+
+  megamath + episteme_coder: conflict=0.4755, conflict_weighted=0.4548,
+  drift_magnitude=0.4326, perplexity=30.73
+
+This is the first result on this family with both real damage AND a
+drift reading that moved to match it. Perplexity jumped to 30.73 -
+roughly 3.4x worse than the family's previous worst non-anchor pair
+(8.93, Round Twelve) and well outside the family's healthy band
+(~6.97-9). drift_magnitude=0.4326 is the highest value ever recorded
+on llama3.2_3b (previous max ~0.33), and it tracked the damage this
+time instead of contradicting it: a ~19x rise in drift accompanied an
+~11x rise in perplexity, in the same direction, within the same
+family - resolving the ambiguity that Round Eleven/Twelve and the
+first Round Fourteen attempt each left open in their own way.
+conflict, by contrast, stayed pinned near its usual ceiling (0.4755)
+regardless of outcome, same as every other pair tested on this family -
+this result rehabilitates drift_magnitude specifically, not conflict.
+
+Caveats: this is a single data point, not a family-wide replication,
+and the pairing is asymmetric (megamath's solo drift is ~1.5x
+episteme_coder's) rather than two evenly-matched heavy fine-tunes.
+It also doesn't reach Qwen2.5-Coder-3B/Math-3B's catastrophic tier
+(perplexity 735,232 in Round Thirteen) - this is real, moderate
+degradation, not a total collapse. But given three prior inconclusive
+attempts on this family, a within-family result where light shift
+tracked low drift/low damage and heavy shift tracked high drift/real
+damage is the clearest evidence yet that drift_magnitude is reading a
+real signal on llama3.2_3b, not blind to it.
+
+Reproduce: python eval/phase_cross_domain_llama_v2_selfcheck.py then
+eval/phase_cross_domain_llama_v2.py (same D:\PythonProject\HugMergeUI
+drive-usage rule and resumability as above).
+
+
 INFRASTRUCTURE FOOTNOTE (ROUNDS EIGHT THROUGH TEN, THIS MACHINE ONLY)
 ------------------------------------------------------------------------
 
@@ -1063,12 +1205,117 @@ HARDWARE, FOR CONTEXT
 
 RTX 2060 Super, 8GB VRAM (~6.2GB free idle), 32GB system RAM (~9.8GB free
 under load), ~400GB+ free disk. Clean fp16 inference tops out around 3-4B
-params without quantization or CPU offload on this machine. A 7B model run
-would additionally need a streaming rewrite of
-backend/app/conflict/engine.py's _load_tensors (it currently materializes
-all common tensors for base/model_a/model_b into RAM upfront, ~3x full
-model size, which would exceed 32GB at 7B) plus either 4-bit/8-bit
-quantization or accelerate CPU offload for the perplexity/task-accuracy
-side, since 8GB VRAM can't hold a 7B model in fp16. None of this was
-needed or attempted, since the metric itself was the bottleneck, not
-model size.
+params without quantization or CPU offload on this machine.
+
+Correction (added later): the scoring engine itself is NOT the RAM
+blocker at 7B - score_model_pair() already streams tensors shard-by-shard
+via _TensorStreamer/_score_common_streaming (backend/app/conflict/
+engine.py), closing each shard's handle as soon as its tensors are read,
+so peak memory is bounded by shard size, not full model size. The older
+_load_tensors/score_tensors path that materializes everything upfront
+still exists but is dead code for the real pipeline - only backend/tests/
+test_engine.py still calls it. The real 7B blocker is narrower: the eval
+scripts' mean_perplexity() does a normal full from_pretrained(...).to(gpu)
+load of the merged model to run a forward pass (inference genuinely needs
+the whole model resident), which needs ~24GB-class VRAM in fp16 at 7B -
+this machine's 8GB card can't do that regardless of the scoring engine.
+mergekit's own merge step also needs ~1x model size of disk space for the
+merged output (~14GB fp16 at 7B). Neither of these was attempted on this
+machine, since the metric itself was the bottleneck through Round
+Fourteen, not model size - but if this project moves to 7B on rented
+GPU hardware, budget for a 24GB VRAM card, not a bigger-RAM instance.
+
+
+ROUND FIFTEEN: FIRST REAL 7B RUN - CORRELATION DOES NOT SURVIVE THE JUMP
+----------------------------------------------------------------------------
+
+First attempt at the 7B jump flagged as future work at the end of Round
+Fourteen, run for real this time on a rented Vast.ai RTX 4090 (24GB
+VRAM), not this project's usual 8GB card. Family: mistralai/Mistral-7B-v0.1
+crossed with four independent fine-tunes - openhermes
+(teknium/OpenHermes-2.5-Mistral-7B, chat), dolphin
+(cognitivecomputations/dolphin-2.1-mistral-7b, chat), metamath
+(abacusai/Fewshot-Metamath-OrcaVicuna-Mistral, math), code
+(ajibawa-2023/Code-Mistral-7B, code) - chosen to span the same
+light-to-heavy chat/chat -> math/code domain-shift spectrum as the
+3B trend-line work. (meta-math/MetaMath-Mistral-7B was the first choice
+for the math slot but ships no .safetensors files, only legacy .bin
+checkpoints mergekit can't read; swapped for the abacusai checkpoint,
+architecturally verified as a matching MistralForCausalLM before use.)
+Same TIES config as every other round - density=0.5, weight=0.5,
+normalize=True - fp16 (eval/phase_7b_mistral.py).
+
+Generic-prose perplexity results (4 pairs, eval/eval_texts.py's 5 fixed
+passages):
+
+  pair                  | conflict | drift_magnitude | perplexity
+  ----------------------|----------|------------------|------------
+  openhermes+dolphin     | 0.4019   | 0.0487           | 4.775
+  dolphin+code             | 0.4521   | 0.0713           | 4.417
+  openhermes+metamath        | 0.4956   | 0.1633           | 4.629
+  metamath+code                | 0.4963   | 0.1859           | 4.695
+
+No correlation. Pearson r between drift_magnitude and perplexity across
+these 4 points is ~0.14 - noise. The lowest-drift pair has the worst
+perplexity in the set; the highest-drift pair is merely middling.
+conflict is even less useful here, clustering tightly at 0.40-0.50
+across every pair regardless of domain shift - it isn't discriminating
+anything at this scale.
+
+Follow-up, to rule out a specific alternative explanation before calling
+this a real negative result: generic prose can't see damage to a
+fine-tune's specific specialty. A math+code merge could stay fluent
+describing coral reefs while quietly losing math or code competency,
+and 5 generic passages would never notice. Built domain-matched eval
+text instead - 5 worked math problems, 5 idiomatic code snippets
+(eval/eval_texts_domain.py) - and re-measured perplexity for the three
+pairs touching a domain fine-tune, comparing each merged model against
+its own unmerged solo fine-tune's perplexity on the same domain text
+(eval/phase_7b_domain.py; conflict/drift_magnitude reused unchanged
+from the run above since they don't depend on eval text):
+
+  pair                | domain | merged ppl | solo ppl | degradation
+  --------------------|--------|------------|----------|-------------
+  openhermes+metamath  | math   | 3.394      | 3.577    | -5.1%
+  dolphin+code           | code   | 1.488      | 1.485    | +0.2%
+  metamath+code             | math   | 3.512      | 3.577    | -1.8%
+  metamath+code             | code   | 1.508      | 1.485    | +1.5%
+
+Same result. Every degradation is within noise (-5.1% to +1.5%), two
+of the four are negative (the merged model reads as marginally BETTER
+than the solo fine-tune on its own specialty), and the highest-drift
+pair (metamath+code, 0.186) shows the smallest degradation of the
+three measured, not the largest. Domain-matched eval doesn't rescue
+the correlation - it confirms there's nothing here to rescue.
+
+Conclusion, stated plainly: at 7B, with TIES at density=0.5,
+drift_magnitude and conflict do not predict real perplexity damage,
+on either generic or domain-matched text, across these 4 pairs. This
+is not being spun - no further eval-text tuning was attempted after
+the domain-matched result came back flat, specifically to avoid
+p-hacking a correlation into existence by trying eval sets until one
+sticks. Working hypothesis for why: TIES at 50% density is a gentle,
+well-regularized merge method, and a 7B model likely carries enough
+parameter redundancy to absorb pairwise weight conflicts that would
+have shown up as real damage in a 3B model with less slack. If true,
+the metrics' predictive value may specifically decouple from real
+damage as model size grows - itself a useful, if unwelcome, finding.
+
+Caveats: n=4 is a small sample, same limitation flagged in every prior
+round with this few points - a genuine effect could exist and just not
+show up this small. Only one merge method/density was tried; a higher
+density or a different merge method (e.g. dare_ties, or TIES at
+density=0.9) might reintroduce visible damage that 0.5-density TIES is
+specifically absorbing. Whoever picks this up next should either scale
+to a full pairwise matrix at 7B (expensive - this round alone burned
+most of a $10 rented-GPU budget on model bandwidth before any real
+compute happened) or test a denser/less-regularized merge config on
+the same 4 fine-tunes before concluding the metrics fail to generalize
+past 3B outright.
+
+Reproduce: python eval/phase_7b_mistral.py then python
+eval/phase_7b_domain.py (both resumable; results in
+eval/phase_7b_mistral_results.json and eval/phase_7b_domain_results.json).
+Requires a 24GB-VRAM GPU and transformers==4.46.3 pinned
+(eval/requirements.txt) - newer transformers breaks mergekit's pydantic
+model schema.
