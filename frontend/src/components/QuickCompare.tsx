@@ -20,8 +20,11 @@ function zoneBadge(check: Check | undefined) {
   if (check.error) return <span className="zone-badge zone-error">Couldn't find this model</span>
 
   switch (check.zone) {
-    case 'validated':
-      return <span className="zone-badge zone-ok">Validated zone ({check.model_type}, 1-3B)</span>
+    case 'validated': {
+      const isQwenExtended = check.model_type === 'qwen2' && (check.total_params ?? 0) < 1_300_000_000
+      const rangeLabel = isQwenExtended ? '0.4-0.65B' : '1-3B'
+      return <span className="zone-badge zone-ok">Validated zone ({check.model_type}, {rangeLabel})</span>
+    }
     case 'below_range':
       return (
         <span className="zone-badge zone-bad">

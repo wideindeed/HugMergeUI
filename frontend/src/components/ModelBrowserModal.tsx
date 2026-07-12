@@ -67,7 +67,11 @@ export function ModelBrowserModal({ targetLabel, onSelect, onClose }: Props) {
         <div className="model-browser-header">
           <div>
             <h3>Browse validated models</h3>
-            <p>Picking for {targetLabel}. Every model here is in the validated 1-3B zone.</p>
+            <p>
+              Picking for {targetLabel}. Every model here is in a validated zone: 1-3B for
+              qwen2/llama/stablelm, or 0.4-0.65B for qwen2 specifically (VALIDATION.txt, Round
+              Sixteen).
+            </p>
           </div>
           <button type="button" className="model-browser-close" onClick={onClose} aria-label="Close">
             ×

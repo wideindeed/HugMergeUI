@@ -67,10 +67,13 @@ export function ResultsPanel({ scoring, progress, scoreResult }: Props) {
                   <LayerHeatmap result={scoreResult} />
                   <p className="caveat">
                     drift_magnitude (the color/size signal above) is validated against real merge
-                    quality: significant at 1.5B+ params (Round Four/Five: n=29, spearman
-                    ρ=0.96), the scale used by every example preset here. conflict/conflict_weighted,
-                    shown as secondary stats, did not reach significance in the original Phase 5/6
-                    sweep. See VALIDATION.txt for the full round-by-round history.
+                    quality: significant at 1.5B+ params for qwen2/llama/stablelm (Round Four/Five:
+                    n=29, spearman ρ=0.96), the scale used by every example preset here. It also
+                    holds at ~0.5B specifically for qwen2 (Round Sixteen: n=28, pearson r=0.417,
+                    p=0.027) - but not for llama at that size (SmolLM2-360M, tested the same round,
+                    did not replicate). conflict/conflict_weighted, shown as secondary stats, have
+                    not reached significance at any scale tested. See VALIDATION.txt for the full
+                    round-by-round history.
                   </p>
                 </>
               )}

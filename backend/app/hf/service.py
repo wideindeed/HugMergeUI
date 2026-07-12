@@ -19,6 +19,17 @@ VALIDATED_MAX_PARAMS = 3_200_000_000
 # Below this, we're not just untested, VALIDATION.txt Rounds 1-3 measured
 # 0.5B/360M directly and found the signal doesn't hold. "below_range" means
 # known to break, not merely unmeasured.
+#
+# Round Sixteen re-tested this specifically at 0.5B/360M with a properly
+# powered n=28-per-family sample (up from n=10). qwen2 cleared significance
+# (drift_magnitude r=0.417, p=0.027) bracketing Qwen2.5-0.5B-scale models -
+# the "known to break" verdict no longer holds for qwen2 in that narrow
+# band. llama (tested via SmolLM2-360M) did not replicate (r=-0.345,
+# p=0.072, still non-significant, still wrong-signed) - "below_range" stands
+# for llama/stablelm, and for qwen2 outside this band too, since the gap
+# between it and VALIDATED_MIN_PARAMS was never tested.
+QWEN2_EXTENDED_MIN_PARAMS = 400_000_000
+QWEN2_EXTENDED_MAX_PARAMS = 650_000_000
 
 
 def _zone(model_type: str | None, total_params: int | None) -> str:
@@ -26,6 +37,8 @@ def _zone(model_type: str | None, total_params: int | None) -> str:
         return "unknown"
     if model_type not in VALIDATED_MODEL_TYPES:
         return "untested_family"
+    if model_type == "qwen2" and QWEN2_EXTENDED_MIN_PARAMS <= total_params <= QWEN2_EXTENDED_MAX_PARAMS:
+        return "validated"
     if total_params < VALIDATED_MIN_PARAMS:
         return "below_range"
     if total_params > VALIDATED_MAX_PARAMS:
@@ -61,14 +74,14 @@ _browse_cache: dict = {"models": None, "fetched_at": 0.0}
 
 def _probe_candidate(model_id: str, downloads: int) -> dict | None:
     total_params = fetch_total_params(model_id)
-    if total_params is None or not (VALIDATED_MIN_PARAMS <= total_params <= VALIDATED_MAX_PARAMS):
+    if total_params is None or not (QWEN2_EXTENDED_MIN_PARAMS <= total_params <= VALIDATED_MAX_PARAMS):
         return None
     try:
         config = fetch_config_json(model_id)
     except ModelConfigFetchError:
         return None
     model_type = config.get("model_type")
-    if model_type not in VALIDATED_MODEL_TYPES:
+    if _zone(model_type, total_params) != "validated":
         return None
     return {"id": model_id, "model_type": model_type, "total_params": total_params, "downloads": downloads}
 
