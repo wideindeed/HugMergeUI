@@ -1319,3 +1319,111 @@ eval/phase_7b_mistral_results.json and eval/phase_7b_domain_results.json).
 Requires a 24GB-VRAM GPU and transformers==4.46.3 pinned
 (eval/requirements.txt) - newer transformers breaks mergekit's pydantic
 model schema.
+
+
+ROUND SIXTEEN: BACK TO 0.5B/360M, PROPERLY POWERED - QWEN CLEARS SIGNIFICANCE, SMOLLM2 STILL DOESN'T
+----------------------------------------------------------------------------
+
+Round One's original 0.5B/360M pass (n=22, pooled across both families)
+came back null. A later re-analysis fixed two real problems with that
+run without touching a single eval text or threshold: it had pooled two
+architecturally-unrelated families into one Pearson figure (fixed by
+splitting qwen and smollm2 into separate correlations), and several of
+the smollm2 fine-tunes are hobbyist checkpoints of unknown standalone
+quality, so a pair looked "damaged" whenever one component was just a
+weak model on its own, independent of any real merge conflict (fixed by
+measuring each fine-tune's own solo perplexity and correlating against
+degradation = merged_ppl - max(solo_ppl_a, solo_ppl_b), the same fix
+that worked for the 7B domain-eval follow-up in Round Fifteen). Both
+fixes moved the numbers in the right direction: qwen went from noise to
+r=0.53 (p=0.116), smollm2's inverted r=-0.77 anomaly attenuated to
+r=-0.36 (p=0.31). Neither reached significance, but at n=10 pairs per
+family, that's expected even for a real medium effect - this looked
+like an underpowered test of a real trend, not a null result.
+
+The honest next step for "underpowered but directionally right" is more
+data, not a different eval text or a lower bar. Pulled 3 more real
+community fine-tunes per family from the HF Hub (base_model:finetune
+filter on Qwen2.5-0.5B and SmolLM2-360M, sorted by downloads, manually
+filtered to plain causal-LM SFT checkpoints - no quantized/GGUF/mlx
+reuploads, no VLA/vision adapters): qwen gained nuextract
+(numind/NuExtract-1.5-tiny), gsm8k (OhhMoo/qwen05b-gsm8k-sft-instruct),
+bcarr92 (BCarr92/Qwen2.5-0.5B-SFT); smollm2 gained gsm8k
+(qiuyu8290/SmolLM2-360M-sft-math-gsm8k), instructmath
+(srmty/smolLM2-360M-instruct-math-v1), everyday
+(lewtun/SmolLM2-360M-SFT-everyday-conversations). That takes each
+family from 5 fine-tunes (10 pairs) to 8 fine-tunes (28 pairs), same
+TIES config as every other round (density=0.5, weight=0.5,
+normalize=True, fp32), same solo-baseline-degradation methodology
+(eval/phase_d_expand_families.py, resumable, reuses run_pair() from
+big_validation.py).
+
+Per-family correlations, degradation vs. best solo baseline, n=28 each:
+
+  qwen
+  metric              | pearson r | p       | spearman rho | p
+  --------------------|-----------|---------|---------------|--------
+  conflict             | 0.0409    | 0.836   | 0.2759        | 0.155
+  conflict_weighted    | 0.0966    | 0.625   | 0.2233        | 0.253
+  drift_magnitude      | 0.4173    | 0.0272  | 0.2786        | 0.151
+
+  smollm2
+  metric              | pearson r | p       | spearman rho | p
+  --------------------|-----------|---------|---------------|--------
+  conflict             | -0.0421   | 0.832   | -0.1396       | 0.479
+  conflict_weighted    | -0.0545   | 0.783   | -0.1500       | 0.446
+  drift_magnitude      | -0.3454   | 0.0718  | -0.2939       | 0.129
+
+qwen's drift_magnitude clears p<0.05 for the first time in this
+project's history at small scale - r=0.417, p=0.027, n=28. It's a
+medium effect (~17% of variance explained), not a strong one, and
+Spearman on the same data (rho=0.28, p=0.15) is noticeably weaker than
+Pearson, meaning the relationship isn't cleanly monotonic across the
+whole range - a handful of high-drift, high-degradation pairs (e.g.
+dolphin+gsm8k, drift=0.157, degradation=+1.15) are doing real work in
+the Pearson figure. Still, this is the first time any metric in this
+project has beaten chance on a real GPU-merged dataset with a
+p-value that would pass a normal significance bar.
+
+smollm2 did not replicate. drift_magnitude is still negative-trending
+(r=-0.345, p=0.072) - the "wrong" direction, same as every smollm2 run
+in this project - and still short of significance even at n=28. It is
+much weaker than the original raw-perplexity anomaly (r=-0.77) that
+kicked off this whole line of investigation, which the solo-baseline
+fix mostly explained away, but the residual negative trend hasn't
+gone anywhere across three separate sample sizes now (n=10, n=28) and
+should not be waved off as pure noise. conflict and conflict_weighted
+show nothing in either family at any sample size tested so far -
+whatever signal exists at this scale lives entirely in drift_magnitude.
+
+Conclusion, stated plainly: drift_magnitude predicts real perplexity
+degradation for the qwen family at 0.5B, at a statistically significant
+but modest level (r=0.417, p=0.027, n=28), using TIES at density=0.5
+and the solo-baseline-degradation correction. It does not predict
+degradation for the smollm2 family at 360M - the correlation there is
+still non-significant and still runs the opposite sign. conflict and
+conflict_weighted predict nothing in either family. This is a real,
+family-specific positive result, not a general one: one architecture
+out of two tested clears the bar, and even for qwen the effect
+explains a minority of the variance in outcomes.
+
+Caveats: n=28 is enough to clear significance but is still one
+family's worth of data - this hasn't been replicated on a second
+qwen-architecture base or a third family entirely. Only one merge
+method (TIES) and one density (0.5) were tested; the effect might be
+config-specific. All eight qwen fine-tunes share the same base model
+and mostly the same rough training recipe (community SFT checkpoints),
+so this doesn't cover heavier domain-divergent crosses of the kind
+that caused trouble at 3B in Round Thirteen/Fourteen. Why smollm2
+diverges from qwen is still an open question - tokenizer differences,
+SmolLM2's own pretraining recipe, or something about that specific set
+of fine-tunes could all be candidates, and none has been tested.
+Whoever extends this next should either replicate the qwen result on
+a different Qwen2.5 size (1.5B, 3B) before trusting it broadly, or
+dig into why smollm2 behaves oppositely instead of just excluding it.
+
+Reproduce: python eval/phase_d_expand_families.py (resumable, reads
+and extends eval/big_validation_results.json and
+eval/phase_c_solo_results.json in place - safe to re-run after a
+partial failure). Same environment as every other round at this scale
+(eval/requirements.txt, an 8GB-VRAM GPU is sufficient at 0.5B/360M).

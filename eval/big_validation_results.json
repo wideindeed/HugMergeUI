@@ -218,5 +218,365 @@
     "conflict_weighted": 0.4898842954251891,
     "drift_magnitude": 0.078743685420197,
     "perplexity": 10.028362685807945
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+nuextract",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "numind/NuExtract-1.5-tiny",
+    "conflict": 0.4991765683229791,
+    "conflict_weighted": 0.4978304253703659,
+    "drift_magnitude": 0.08587105425688166,
+    "perplexity": 13.200780606989325
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+gsm8k",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.46869523546594344,
+    "conflict_weighted": 0.4438435737932142,
+    "drift_magnitude": 0.15669687302182847,
+    "perplexity": 13.69043882041622
+  },
+  {
+    "family": "qwen",
+    "pair": "dolphin+bcarr92",
+    "model_a": "dphn/Dolphin3.0-Qwen2.5-0.5B",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.49449840270291606,
+    "conflict_weighted": 0.49100016374737454,
+    "drift_magnitude": 0.0866399565546749,
+    "perplexity": 11.999650671801051
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+nuextract",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "numind/NuExtract-1.5-tiny",
+    "conflict": 0.49987324378102926,
+    "conflict_weighted": 0.4997803224121882,
+    "drift_magnitude": 0.03248320576578389,
+    "perplexity": 12.145767009434875
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+gsm8k",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.49491478201061856,
+    "conflict_weighted": 0.49169301113600583,
+    "drift_magnitude": 0.10330902453073071,
+    "perplexity": 11.63425864156784
+  },
+  {
+    "family": "qwen",
+    "pair": "capybara+bcarr92",
+    "model_a": "wulli/Qwen2.5-0.5B-sft-capybara",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4078780139969572,
+    "conflict_weighted": 0.3498565248606684,
+    "drift_magnitude": 0.03325210806357713,
+    "perplexity": 11.64016616570479
+  },
+  {
+    "family": "qwen",
+    "pair": "instruct+nuextract",
+    "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_b": "numind/NuExtract-1.5-tiny",
+    "conflict": 0.49898634604034303,
+    "conflict_weighted": 0.4969631453145042,
+    "drift_magnitude": 0.0842262627546998,
+    "perplexity": 12.414226068717696
+  },
+  {
+    "family": "qwen",
+    "pair": "instruct+gsm8k",
+    "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.01927748245133309,
+    "conflict_weighted": 0.0008275116588847479,
+    "drift_magnitude": 0.15505208151964664,
+    "perplexity": 11.40009776312103
+  },
+  {
+    "family": "qwen",
+    "pair": "instruct+bcarr92",
+    "model_a": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.49747089366228003,
+    "conflict_weighted": 0.4958408378401756,
+    "drift_magnitude": 0.08499516505249304,
+    "perplexity": 11.227229867706786
+  },
+  {
+    "family": "qwen",
+    "pair": "jayhyeon+nuextract",
+    "model_a": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "model_b": "numind/NuExtract-1.5-tiny",
+    "conflict": 0.49976161835304744,
+    "conflict_weighted": 0.4996417305689678,
+    "drift_magnitude": 0.022317408093946684,
+    "perplexity": 11.762231464472439
+  },
+  {
+    "family": "qwen",
+    "pair": "jayhyeon+gsm8k",
+    "model_a": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.4960540335863722,
+    "conflict_weighted": 0.4940204605702653,
+    "drift_magnitude": 0.0931432268588935,
+    "perplexity": 11.2236518505298
+  },
+  {
+    "family": "qwen",
+    "pair": "jayhyeon+bcarr92",
+    "model_a": "JayHyeon/Qwen2.5-0.5B-SFT",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.46669000478618194,
+    "conflict_weighted": 0.445686738911157,
+    "drift_magnitude": 0.023086310391739927,
+    "perplexity": 11.39658013306434
+  },
+  {
+    "family": "qwen",
+    "pair": "qgallouedec+nuextract",
+    "model_a": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "model_b": "numind/NuExtract-1.5-tiny",
+    "conflict": 0.5000212536197597,
+    "conflict_weighted": 0.5000474150356783,
+    "drift_magnitude": 0.01190722729069733,
+    "perplexity": 11.537840639541937
+  },
+  {
+    "family": "qwen",
+    "pair": "qgallouedec+gsm8k",
+    "model_a": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.4982669872064863,
+    "conflict_weighted": 0.49728768770161796,
+    "drift_magnitude": 0.08273304605564415,
+    "perplexity": 11.208975164090576
+  },
+  {
+    "family": "qwen",
+    "pair": "qgallouedec+bcarr92",
+    "model_a": "qgallouedec/Qwen2.5-0.5B-SFT",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.3890584140315318,
+    "conflict_weighted": 0.3081204399070984,
+    "drift_magnitude": 0.01267612958849057,
+    "perplexity": 11.541235119706757
+  },
+  {
+    "family": "qwen",
+    "pair": "nuextract+gsm8k",
+    "model_a": "numind/NuExtract-1.5-tiny",
+    "model_b": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "conflict": 0.4990440912601991,
+    "conflict_weighted": 0.4970830985531809,
+    "drift_magnitude": 0.08454572306485647,
+    "perplexity": 12.833807145732152
+  },
+  {
+    "family": "qwen",
+    "pair": "nuextract+bcarr92",
+    "model_a": "numind/NuExtract-1.5-tiny",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.499771340779513,
+    "conflict_weighted": 0.4996041954030862,
+    "drift_magnitude": 0.01448880659770288,
+    "perplexity": 12.190736907964585
+  },
+  {
+    "family": "qwen",
+    "pair": "gsm8k+bcarr92",
+    "model_a": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+    "model_b": "BCarr92/Qwen2.5-0.5B-SFT",
+    "conflict": 0.4975107016417787,
+    "conflict_weighted": 0.4958373009234227,
+    "drift_magnitude": 0.08531462536264971,
+    "perplexity": 11.618177152244122
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+gsm8k",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "conflict": 0.494121475897643,
+    "conflict_weighted": 0.49018536387177825,
+    "drift_magnitude": 0.07850342752891644,
+    "perplexity": 10.034424853217311
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+instructmath",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.4980585215505072,
+    "conflict_weighted": 0.49712982683620993,
+    "drift_magnitude": 0.08033545564349276,
+    "perplexity": 9.834226369246139
+  },
+  {
+    "family": "smollm2",
+    "pair": "instruct+everyday",
+    "model_a": "HuggingFaceTB/SmolLM2-360M-Instruct",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.4854075920376338,
+    "conflict_weighted": 0.4785390097000696,
+    "drift_magnitude": 0.07926476908371072,
+    "perplexity": 9.839159368701347
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+gsm8k",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "conflict": 0.49962719289878854,
+    "conflict_weighted": 0.49924918217212977,
+    "drift_magnitude": 0.00718376469171139,
+    "perplexity": 12.290023340519687
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+instructmath",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.49973355172102785,
+    "conflict_weighted": 0.499644946661573,
+    "drift_magnitude": 0.009015792806287703,
+    "perplexity": 11.805566273985471
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1+everyday",
+    "model_a": "Michaelj1/finetune-smolLM2-360M",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.4996697735257362,
+    "conflict_weighted": 0.4993741558200703,
+    "drift_magnitude": 0.007945106246505655,
+    "perplexity": 11.694948982999243
+  },
+  {
+    "family": "smollm2",
+    "pair": "cot+gsm8k",
+    "model_a": "prithivMLmods/SmolLM2-CoT-360M",
+    "model_b": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "conflict": 0.4797005488921393,
+    "conflict_weighted": 0.4643917546203586,
+    "drift_magnitude": 0.009064975856904082,
+    "perplexity": 13.816304634905741
+  },
+  {
+    "family": "smollm2",
+    "pair": "cot+instructmath",
+    "model_a": "prithivMLmods/SmolLM2-CoT-360M",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.4969358755303986,
+    "conflict_weighted": 0.4954635845129584,
+    "drift_magnitude": 0.010897003971480393,
+    "perplexity": 13.667477192187798
+  },
+  {
+    "family": "smollm2",
+    "pair": "cot+everyday",
+    "model_a": "prithivMLmods/SmolLM2-CoT-360M",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.49066041912457375,
+    "conflict_weighted": 0.4848700173642457,
+    "drift_magnitude": 0.009826317411698348,
+    "perplexity": 14.198337168618295
+  },
+  {
+    "family": "smollm2",
+    "pair": "rickified+gsm8k",
+    "model_a": "Masorian06/SmolLM2-360M-Rickified",
+    "model_b": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "conflict": 0.481624020591072,
+    "conflict_weighted": 0.4691772223672664,
+    "drift_magnitude": 0.004900763337160518,
+    "perplexity": 9.707980825700025
+  },
+  {
+    "family": "smollm2",
+    "pair": "rickified+instructmath",
+    "model_a": "Masorian06/SmolLM2-360M-Rickified",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.4974429507977074,
+    "conflict_weighted": 0.4957399166313298,
+    "drift_magnitude": 0.00673279145173683,
+    "perplexity": 9.716608255810119
+  },
+  {
+    "family": "smollm2",
+    "pair": "rickified+everyday",
+    "model_a": "Masorian06/SmolLM2-360M-Rickified",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.46031398408650254,
+    "conflict_weighted": 0.4324249720490364,
+    "drift_magnitude": 0.005662104891954784,
+    "perplexity": 10.723549870723398
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1_wikitext+gsm8k",
+    "model_a": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "model_b": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "conflict": 0.4941104842392821,
+    "conflict_weighted": 0.49018003184118314,
+    "drift_magnitude": 0.07850127138647586,
+    "perplexity": 10.008665819386579
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1_wikitext+instructmath",
+    "model_a": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.4981003198476705,
+    "conflict_weighted": 0.49716667663053143,
+    "drift_magnitude": 0.08033329950105217,
+    "perplexity": 9.815290607661126
+  },
+  {
+    "family": "smollm2",
+    "pair": "michaelj1_wikitext+everyday",
+    "model_a": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.4858866587494529,
+    "conflict_weighted": 0.4788204814530862,
+    "drift_magnitude": 0.07926261294127013,
+    "perplexity": 9.907636527327805
+  },
+  {
+    "family": "smollm2",
+    "pair": "gsm8k+instructmath",
+    "model_a": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "model_b": "srmty/smolLM2-360M-instruct-math-v1",
+    "conflict": 0.49499798887477225,
+    "conflict_weighted": 0.4898738126824521,
+    "drift_magnitude": 0.0064903774180157,
+    "perplexity": 9.541198407026954
+  },
+  {
+    "family": "smollm2",
+    "pair": "gsm8k+everyday",
+    "model_a": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.48345616024737226,
+    "conflict_weighted": 0.47380031578134385,
+    "drift_magnitude": 0.005419690858233652,
+    "perplexity": 9.887023075617932
+  },
+  {
+    "family": "smollm2",
+    "pair": "instructmath+everyday",
+    "model_a": "srmty/smolLM2-360M-instruct-math-v1",
+    "model_b": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
+    "conflict": 0.49762701566638573,
+    "conflict_weighted": 0.49625885119474955,
+    "drift_magnitude": 0.007251718972809965,
+    "perplexity": 9.94268723658445
   }
 ]

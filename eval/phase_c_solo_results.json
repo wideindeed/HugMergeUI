@@ -1,0 +1,20 @@
+{
+  "Qwen/Qwen2.5-0.5B": 10.709006275334913,
+  "dphn/Dolphin3.0-Qwen2.5-0.5B": 12.538076233021508,
+  "wulli/Qwen2.5-0.5B-sft-capybara": 12.606934464667777,
+  "Qwen/Qwen2.5-0.5B-Instruct": 11.19463901390553,
+  "JayHyeon/Qwen2.5-0.5B-SFT": 11.473484540414352,
+  "qgallouedec/Qwen2.5-0.5B-SFT": 11.59913303525716,
+  "HuggingFaceTB/SmolLM2-360M": 9.562887296582769,
+  "HuggingFaceTB/SmolLM2-360M-Instruct": 10.221009846449602,
+  "Michaelj1/finetune-smolLM2-360M": 13.368012840273664,
+  "prithivMLmods/SmolLM2-CoT-360M": 14.339226801551975,
+  "Masorian06/SmolLM2-360M-Rickified": 10.38796214582833,
+  "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1": 11.011235898795839,
+  "numind/NuExtract-1.5-tiny": 11.852962191243702,
+  "OhhMoo/qwen05b-gsm8k-sft-instruct": 11.908731455227219,
+  "BCarr92/Qwen2.5-0.5B-SFT": 14.278989706315292,
+  "qiuyu8290/SmolLM2-360M-sft-math-gsm8k": 10.390762661256472,
+  "srmty/smolLM2-360M-instruct-math-v1": 10.530340723814756,
+  "lewtun/SmolLM2-360M-SFT-everyday-conversations": 11.579860611556773
+}

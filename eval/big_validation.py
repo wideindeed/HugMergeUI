@@ -38,6 +38,9 @@ FAMILIES = {
             "instruct": "Qwen/Qwen2.5-0.5B-Instruct",
             "jayhyeon": "JayHyeon/Qwen2.5-0.5B-SFT",
             "qgallouedec": "qgallouedec/Qwen2.5-0.5B-SFT",
+            "nuextract": "numind/NuExtract-1.5-tiny",
+            "gsm8k": "OhhMoo/qwen05b-gsm8k-sft-instruct",
+            "bcarr92": "BCarr92/Qwen2.5-0.5B-SFT",
         },
     },
     "smollm2": {
@@ -48,6 +51,9 @@ FAMILIES = {
             "cot": "prithivMLmods/SmolLM2-CoT-360M",
             "rickified": "Masorian06/SmolLM2-360M-Rickified",
             "michaelj1_wikitext": "Michaelj1/INSTRUCT_smolLM2-360M-finetuned-wikitext2-raw-v1",
+            "gsm8k": "qiuyu8290/SmolLM2-360M-sft-math-gsm8k",
+            "instructmath": "srmty/smolLM2-360M-instruct-math-v1",
+            "everyday": "lewtun/SmolLM2-360M-SFT-everyday-conversations",
         },
     },
 }
