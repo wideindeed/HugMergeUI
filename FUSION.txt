@@ -1,0 +1,89 @@
+HUGMERGEUI — CAN A 0.5B AND A 3B MODEL BE COMBINED AT ALL?
+======================================================================
+
+Spun off from VALIDATION.txt, which is entirely about whether the
+conflict/drift_magnitude score predicts merge damage between same-shape
+fine-tunes of one base model. This is a different question: can two
+different-sized models of the same family - not fine-tunes of a shared
+checkpoint, but genuinely different architectures in width and depth -
+be combined into one model at all? Standard mergekit merge methods
+(TIES, linear, dare_ties, ...) are elementwise and require identical
+tensor shapes, so they don't apply here by construction. This file
+tracks attempts at something that does.
+
+eval/phase_e_cross_size_fusion.py holds the code for round one.
+
+
+ROUND ONE: NAIVE ZERO-PAD-AND-AVERAGE - CLEANLY KILLED
+----------------------------------------------------------------------------
+
+Picked Qwen2.5-0.5B and Qwen2.5-3B: same family, same tokenizer
+(vocab_size=151936), otherwise nothing shape-compatible.
+
+  config field         | 0.5B | 3B
+  ----------------------|------|------
+  hidden_size            | 896  | 2048
+  num_hidden_layers       | 24   | 36
+  intermediate_size        | 4864 | 11008
+  num_attention_heads       | 14   | 16
+  num_key_value_heads        | 2    | 2
+  vocab_size                  | 151936 | 151936
+
+Every tensor in the 0.5B is a different shape from its 3B counterpart,
+including the (tied) embedding table - its second dimension is
+hidden_size, so even that doesn't line up.
+
+The naive approach tested: map each of the 0.5B's 24 layers onto one
+of the 3B's 36 layers by proportional index (layer i -> round(i *
+35/23), so 24 of the 3B's 36 layers get an injection and 12 are left
+untouched); zero-pad every 0.5B tensor independently on each axis up
+to its mapped 3B tensor's shape (no attempt at semantic alignment -
+just pad with zeros and hope); blend the padded tensor 50/50 with the
+real 3B tensor at that position, for every touched tensor, non-layer
+tensors (embeddings, final norm) included.
+
+Perplexity on the same 5 fixed passages used throughout VALIDATION.txt:
+
+  model                          | perplexity
+  --------------------------------|------------
+  Qwen2.5-0.5B (solo)              | 10.71
+  Qwen2.5-3B (solo)                 | 6.68
+  fused (zero-pad + 50/50 blend)     | 54,805.62
+
+The fused model isn't "degraded," it's destroyed - a perplexity in the
+tens of thousands over a ~152k-token vocabulary means it's close to
+producing uniform random noise. This is not a subtle result requiring
+careful interpretation: the naive approach fails completely and
+obviously, on the very first real attempt.
+
+Why, in plain terms: zero-padding doesn't encode "this dimension
+doesn't exist for the small model," it encodes "this dimension is
+exactly zero," which then gets averaged 50/50 into a real, fully
+trained value from the 3B model, corrupting it directly. Every touched
+tensor in 24 of the 3B's 36 layers got half its information replaced
+by a mix of real 0.5B signal (in the first 896 of 2048 dims, roughly)
+and hard zeros (in the rest) - there was never a plausible path to
+this working, and the perplexity confirms it did not.
+
+Conclusion, stated plainly: naive zero-pad-and-average is not a
+viable cross-size fusion method, full stop. This was expected going
+in (see VALIDATION.txt's future-work note, candidate 1 of 3) and is
+reported here as a clean negative result, not a setback - it rules
+out the cheapest option fast, which is the point of testing it first.
+
+Caveats: only one blend weight (0.5) and one layer-mapping scheme
+(proportional index) were tried; a much lower blend weight (e.g. 0.05,
+barely nudging the 3B) might avoid outright destruction but would also
+likely inject too little of the 0.5B to matter, so it's not obviously
+worth chasing. Only one pair (Qwen2.5-0.5B + Qwen2.5-3B) was tested.
+No further tuning of this approach was attempted after the result came
+back this decisively broken, to avoid wasting effort on a method with
+no real path forward - see the future-work note in VALIDATION.txt for
+the two untried candidates (function-preserving growth, and knowledge
+fusion / logit distillation) that don't share this failure mode.
+
+Reproduce: python eval/phase_e_cross_size_fusion.py (not resumable -
+single run, no checkpointing, takes one shot at the whole pipeline).
+Requires downloading Qwen2.5-3B (~6GB, not needed by any other round)
+in addition to the usual environment; an 8GB-VRAM GPU is sufficient
+since the fused model is only run in fp16 inference.

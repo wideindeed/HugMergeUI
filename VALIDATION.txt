@@ -1427,3 +1427,19 @@ and extends eval/big_validation_results.json and
 eval/phase_c_solo_results.json in place - safe to re-run after a
 partial failure). Same environment as every other round at this scale
 (eval/requirements.txt, an 8GB-VRAM GPU is sufficient at 0.5B/360M).
+
+
+FUTURE WORK: CROSS-SIZE WEIGHT-SPACE FUSION (0.5B + 3B, SAME FAMILY)
+----------------------------------------------------------------------------
+
+Everything above merges same-shape fine-tunes of one base checkpoint.
+A separate open question - can a 0.5B and a 3B model of the same
+family be combined at all, given they share no tensor shapes except
+vocab_size - is different enough from the conflict/drift_magnitude
+question this file tracks that it now has its own log: FUSION.txt.
+Round One there (naive zero-pad-and-average) is done and cleanly
+negative - see that file for the full writeup. Two candidates remain
+untried: function-preserving growth (Net2Net/LiGO-style expansion of
+the 0.5B into 3B shape) and knowledge fusion / logit distillation
+(FuseLLM-style, sidesteps weight merging entirely). Picked back up
+whenever - not blocking anything here.
