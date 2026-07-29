@@ -45,3 +45,11 @@ def test_sign_agreement_does_not_reduce_drift():
 def test_shape_mismatch_raises():
     with pytest.raises(ValueError):
         drift_magnitude(torch.zeros(4), torch.zeros(4), torch.zeros(5))
+
+
+def test_all_zero_base_returns_zero_instead_of_dividing_by_zero():
+    """A base tensor that's genuinely all-zero (e.g. a zero-initialized
+    bias) would otherwise divide by a zero base_rms."""
+    base = torch.zeros(10)
+    diff = torch.full((10,), 1.0)
+    assert drift_magnitude(diff, diff, base) == 0.0

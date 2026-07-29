@@ -1,0 +1,12 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+# Real bug-catchers, not style opinions: pyflakes (unused imports/names,
+# undefined names, ...), pycodestyle errors, and bugbear (common footguns
+# like mutable default args). Left off on purpose: import-sorting (I),
+# exception-style nitpicks (TRY), "simplify this" suggestions (SIM) - ruff
+# enables a much larger default set with no config at all, which is mostly
+# noise for a project this size.
+select = ["E4", "E7", "E9", "F", "B"]

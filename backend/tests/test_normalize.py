@@ -73,3 +73,44 @@ def test_ties_density_gradient_and_weight_filter():
     wizardmath_last = result["layers"][2]["sources"][2]
     assert wizardmath_last["parameters"]["mlp"]["weight"] == 0.5
     assert wizardmath_last["parameters"]["self_attn"]["weight"] == 0
+
+
+def test_passthrough_slice_with_two_sources_raises():
+    raw = {
+        "merge_method": "passthrough",
+        "slices": [
+            {"sources": [
+                {"model": "a", "layer_range": [0, 2]},
+                {"model": "b", "layer_range": [0, 2]},
+            ]}
+        ],
+    }
+    with pytest.raises(ValueError, match="exactly one source"):
+        normalize(raw)
+
+
+def test_slerp_slice_with_one_source_raises():
+    raw = {
+        "merge_method": "slerp",
+        "base_model": "base",
+        "slices": [
+            {"sources": [{"model": "a", "layer_range": [0, 2]}]}
+        ],
+    }
+    with pytest.raises(ValueError, match="exactly two sources"):
+        normalize(raw)
+
+
+def test_slerp_slice_with_mismatched_layer_range_lengths_raises():
+    raw = {
+        "merge_method": "slerp",
+        "base_model": "base",
+        "slices": [
+            {"sources": [
+                {"model": "a", "layer_range": [0, 2]},
+                {"model": "b", "layer_range": [0, 3]},
+            ]}
+        ],
+    }
+    with pytest.raises(ValueError, match="mismatched layer_range lengths"):
+        normalize(raw)

@@ -50,7 +50,7 @@ Click "Try an example" in the app for a few ready-made model pairs, no config wr
 
 ## Testing
 
-`backend/tests/` (pytest) covers the scoring engine, architecture checks, and config resolution against real Hugging Face models and real weight tensors — no mocking, same philosophy as the validation work in `VALIDATION.txt`. `frontend/` is currently type-checked and linted (`tsc`, `oxlint`) in CI; it has no dedicated unit tests yet. Every push and PR to `main` runs both via GitHub Actions (`.github/workflows/ci.yml`) — see the badge above.
+`backend/tests/` (pytest) covers the scoring engine, architecture checks, and config resolution against real Hugging Face models and real weight tensors — no mocking, same philosophy as the validation work in `VALIDATION.txt`. `backend/` is also linted with `ruff`. `frontend/` is currently type-checked and linted (`tsc`, `oxlint`) in CI; it has no dedicated unit tests yet. Every push and PR to `main` runs all of this via GitHub Actions (`.github/workflows/ci.yml`) — see the badge above.
 
 ## Does the score actually predict merge quality?
 

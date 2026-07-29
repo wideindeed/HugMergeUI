@@ -7,7 +7,11 @@ import torch
 from huggingface_hub import hf_hub_download
 from safetensors import safe_open
 
-from app.conflict.sign_conflict import magnitude_weighted_conflict_rate, sign_conflict_rate
+from app.conflict.sign_conflict import (
+    magnitude_weighted_conflict_rate,
+    sign_conflict_rate,
+    thresholded_sign_conflict_rate,
+)
 
 
 @pytest.fixture(scope="module")
@@ -76,3 +80,28 @@ def test_weighted_conflict_favors_large_magnitude_over_count():
 
     assert raw == pytest.approx(0.1)
     assert weighted > 0.9
+
+
+def test_thresholded_shape_mismatch_raises():
+    with pytest.raises(ValueError):
+        thresholded_sign_conflict_rate(torch.zeros(4), torch.zeros(5))
+
+
+def test_thresholded_excludes_small_magnitude_disagreement():
+    """A tiny conflicting element, dwarfed by one large element in the same
+    tensor, registers as a 50% conflict rate under plain sign_conflict_rate
+    but should be excluded entirely once thresholded against RMS."""
+    diff_a = torch.tensor([1.0, 0.01])
+    diff_b = torch.tensor([1.0, -0.01])
+
+    assert sign_conflict_rate(diff_a, diff_b) == pytest.approx(0.5)
+    assert thresholded_sign_conflict_rate(diff_a, diff_b, threshold_frac=0.1) == 0.0
+
+
+def test_thresholded_returns_zero_when_no_elements_clear_the_bar_in_both():
+    """Each tensor's own "meaningfully moved" element sits at a different
+    index, so no position clears the threshold in both at once."""
+    diff_a = torch.tensor([100.0, 0.001, 0.001, 0.001])
+    diff_b = torch.tensor([0.001, 0.001, 0.001, 100.0])
+
+    assert thresholded_sign_conflict_rate(diff_a, diff_b, threshold_frac=0.1) == 0.0

@@ -33,6 +33,10 @@ jobs:
       - name: Install backend dependencies
         run: pip install -r backend/requirements.txt
 
+      - name: Lint (ruff)
+        working-directory: backend
+        run: ruff check .
+
       # -m "not slow" matches backend/pytest.ini's own convention: skips the
       # one test that downloads a ~6GB sharded model, keeps everything else.
       - name: Run backend tests

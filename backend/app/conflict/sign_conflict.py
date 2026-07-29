@@ -68,6 +68,13 @@ def thresholded_sign_conflict_rate(
     real signal from the elements that actually changed on purpose. This
     thresholds each tensor's own delta by a fraction of its RMS magnitude
     and only counts elements that moved meaningfully in *both* models.
+
+    VALIDATION.txt Round Three tested this against all 28 already-merged
+    Phase 5/6 pairs and rejected it - thresholding didn't rescue the
+    correlation at any threshold_frac tried, and made rank-order worse.
+    Kept for that result's reproducibility (see eval/retest_threshold_fix.py);
+    not called anywhere in the live scoring pipeline (app/conflict/engine.py
+    only uses sign_conflict_rate and magnitude_weighted_conflict_rate).
     """
     if diff_a.shape != diff_b.shape:
         raise ValueError(f"shape mismatch: {diff_a.shape} vs {diff_b.shape}")
