@@ -30,7 +30,7 @@ def search_model_ids(query: str, limit: int = 15) -> list[str]:
     are fetched here, just repo names."""
     if not query.strip():
         return []
-    models = _api.list_models(search=query, limit=limit, sort="downloads", direction=-1)
+    models = _api.list_models(search=query, limit=limit, sort="downloads")
     return [m.id for m in models]
 
 
@@ -50,5 +50,5 @@ def fetch_total_params(model_id: str) -> int | None:
 def list_models_by_family(model_type: str, limit: int) -> list[tuple[str, int]]:
     """Repo ids and download counts for the most-downloaded models tagged
     with a given architecture family, no configs or weights fetched here."""
-    models = _api.list_models(filter=model_type, sort="downloads", direction=-1, limit=limit)
+    models = _api.list_models(filter=model_type, sort="downloads", limit=limit)
     return [(m.id, m.downloads or 0) for m in models]
