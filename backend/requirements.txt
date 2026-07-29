@@ -5,7 +5,7 @@ ruff
 httpx
 pydantic
 pyyaml
-huggingface_hub
+huggingface_hub==1.25.1  # pin: an unpinned install of this silently dropped list_models()'s direction kwarg, broke search/browse in prod. app/hf/client.py is fixed for 1.25.1 - re-verify before bumping.
 safetensors
 numpy
 
