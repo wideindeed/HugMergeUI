@@ -206,7 +206,12 @@ example activation-based probing (CKA / representation divergence between
 parent models on a probe set) instead of static weight diffs. That reuses
 the existing merge pipeline, validation methodology, and layer-heatmap UI,
 but is a bigger scope: needs a probe dataset, forward-hook code, and a
-divergence metric. Not started.
+divergence metric.
+
+[Update: this was run - see ROUND EIGHTEEN below. CKA activation
+probing came back dead too, same pattern as the raw-weight-diff family
+(only the coarse trivial/non-trivial split shows anything, no
+fine-grained ranking signal within real merges).]
 
 One cheap, untried angle on the current metric worth a quick retest before
 committing to a new metric family: the sign-conflict rate between two
@@ -1427,6 +1432,322 @@ and extends eval/big_validation_results.json and
 eval/phase_c_solo_results.json in place - safe to re-run after a
 partial failure). Same environment as every other round at this scale
 (eval/requirements.txt, an 8GB-VRAM GPU is sufficient at 0.5B/360M).
+
+
+ROUND SEVENTEEN: POOLED META-ANALYSIS ACROSS ALL PRIOR ROUNDS
+------------------------------------------------------------------
+
+Every round above tests one family at one scale. Fifteen rounds in,
+the question none of them individually could answer: pooled across
+every family and every scale tested so far, is drift_magnitude
+actually tracking merge damage, or has each round been reading its own
+private noise? eval/phase_pooled_meta.py answers this the cheap way -
+zero GPU, zero downloads, it just loads every committed results JSON
+and correlates across all of them at once. Two things matter for this
+to be a fair pooled comparison, not an artifact:
+
+  1. Raw perplexity isn't comparable across families - a 7B model's
+     baseline perplexity is lower than a 360M model's regardless of
+     merge quality. Every point is normalized to its own family's
+     self-merge anchor first: damage_ratio = merged_ppl / anchor_ppl.
+  2. Damage ratios in this corpus span ~1x to ~10^5x. Both axes
+     (damage_ratio and drift_magnitude) are log-transformed before
+     correlating, or the fit is dominated by a handful of extreme
+     points.
+
+Self-merge anchors (drift=0, trivially perfect) are excluded, same as
+every non-trivial cut in every prior round. mistral7b has no self-merge
+anchor on record (Round Fifteen never ran one); its cleanest observed
+pair (openhermes+dolphin, 4.417) is used as a proxy baseline instead,
+flagged explicitly in the script as an assumption, not measured data.
+
+Pooled result, n=115 non-trivial merges, 9 families, 0.36B-7B:
+
+  pearson r = 0.5394 (r^2 = 0.291), p = 4.96e-10
+  spearman rho = 0.5669, p = 3.98e-11
+
+This is the strongest, best-powered result in the project - more real
+merged pairs than any single round, and the correlation clears
+significance by nine orders of magnitude on p alone. Leave-one-family-out
+holds up: dropping any single family, pearson r stays between 0.5049
+(dropping qwen1.5b) and 0.6217 (dropping smollm2) - no one family is
+carrying the pooled result.
+
+Does parameter count add anything beyond drift_magnitude itself? Fit
+the pooled regression, then check whether the residuals correlate with
+model size:
+
+  pearson r = -0.1169, p = 0.213 (not significant)
+  spearman rho = -0.3610, p = 7.39e-05 (significant)
+
+A rank-level effect that doesn't confirm on Pearson usually means a few
+points are driving it rather than a smooth trend, and that's visible
+in the per-family residual means (positive = worse than the pooled
+curve predicts): qwen1.5b sits at +3.42 (by far the widest spread of
+any family, std 3.41), smollm2 at +0.32, and every other family is
+negative (llama3.2_1b -0.81, llama3.2_3b -1.08, mistral7b -0.80, qwen
+-0.32, qwen3b -0.60, smollm2_1.7b -0.50, stablelm2_1.6b -0.78). Read
+this as a modest, rank-level size effect worth flagging, not a
+confirmed one - bigger models trending toward LESS damage than drift
+alone predicts is the opposite of "scale invalidates the metric," but
+it isn't settled by this pass.
+
+Caveats, found during this pass and worth stating plainly:
+
+  - qwen1.5b is a major outlier within the pooled set. Its damage
+    ratios range from 1.02x to 971,575x (the coder+math catastrophe -
+    see Round Thirteen), and its mean residual (+3.42 +/- 3.42) dwarfs
+    every other family. Leave-one-out confirms it is NOT distorting the
+    pooled correlation (dropping it moves r from 0.54 to 0.50, still
+    significant), but r^2=0.291 conflates two different claims: "the
+    metric correctly flags total catastrophes" and "the metric
+    fine-grained-ranks merges that are all reasonably okay." Splitting
+    the pooled set at log(damage) < 1 (i.e. damage ratio under ~2.7x,
+    excluding the 16 catastrophic points - all from qwen1.5b, qwen3b,
+    and llama3.2_3b's megamath crosses) makes the split concrete:
+
+      healthy-merge-only subset, n=99:
+      pearson r = 0.1809 (r^2 = 0.033), p = 0.0731 (not significant)
+      spearman rho = 0.3239, p = 0.00107 (significant)
+
+    Most of the pooled r^2 comes from correctly separating catastrophic
+    blowups from everything else, not from finely ranking merges that
+    are all "reasonably fine." The rank-order signal (spearman) survives
+    the cut and stays significant; the linear fit (pearson) mostly
+    doesn't. Both claims are true and worth reporting separately - this
+    is not the same result stated two ways.
+
+  - Residual vs parameter count (above): report as "a modest,
+    rank-level size effect, not yet a confirmed one." Do not claim
+    scale is fully explained - the mismatch between a significant
+    spearman and a non-significant pearson usually means a few points,
+    not a smooth trend, are behind it.
+
+  - mistral7b's own 4 points sit consistently BELOW the pooled curve:
+    predicted damage 1.36x-3.62x from drift alone, actual 1.00x-1.08x.
+    At matched drift, these 7B merges took markedly less damage than
+    3B merges did at the same drift level. Suggestive of real
+    redundancy/slack at larger scale (consistent with the working
+    hypothesis floated at the end of Round Fifteen), but it's n=4, all
+    four points cluster in a narrow, low-drift range (0.049-0.186 -
+    see the per-family drift range table the script prints), and
+    mistral7b is the only family in the pool with no wide-drift point
+    to test whether the gap holds under real domain-divergent stress.
+    Flag as a hypothesis worth a targeted follow-up (a genuinely heavy
+    domain-divergent 7B cross, the way Round Fourteen's megamath test
+    was for llama3.2_3b), not a settled finding.
+
+Reproduce: python eval/phase_pooled_meta.py (resumable in the sense
+that it just re-reads whatever's currently committed in eval/ - no
+state of its own). Depends only on json/os/numpy/scipy, no GPU, no
+network, runs in under a second.
+
+[Update: Round Thirteen (qwen1.5b, coder_instruct+math_instruct,
+perplexity 735,232) and the megamath+episteme_coder point from Round
+Fourteen Continued had run from a D:\ drive copy and were only ever
+recorded in this file's prose, not in this repo's eval/ - the pooled
+run above did not include them. Both are now recovered as real JSON
+records (eval/phase_cross_domain_results.json,
+eval/phase_cross_domain_llama_v2_results.json, family names normalized
+to "qwen1.5b"/"llama3.2_3b" to pool correctly - see each script's
+docstring) and added to phase_pooled_meta.py's FILES list. Rerunning
+with these 2 extra points, n=117:
+
+  pearson r = 0.5641 (r^2 = 0.318), p = 3.53e-11
+  spearman rho = 0.5885, p = 3e-12
+  leave-one-family-out: r stays between 0.5171 (dropping qwen1.5b) and
+  0.6456 (dropping smollm2)
+  residual vs parameter count: pearson r=-0.1377 p=0.139 (still not
+  significant), spearman rho=-0.4150 p=3.29e-06 (still significant) -
+  same rank-level-only pattern as before
+  healthy-merge-only subset (log damage < 1): unchanged at n=99,
+  pearson r=0.1809 (r^2=0.033) p=0.0731, spearman rho=0.3239 p=0.00107
+  - both new points are extreme enough (damage 103,308x and 4.41x,
+  log-damage 11.5 and 1.48) to land in the excluded catastrophic tail
+  (now 18 points, was 16), not the healthy subset
+  mistral7b predicted-vs-actual: predicted damage now 1.37x-4.19x
+  (was 1.36x-3.62x) against the same actual 1.00x-1.08x - the gap is
+  if anything slightly wider, not narrower
+
+As expected going in, both new points widened rather than changed the
+overall shape of the result: qwen1.5b's mean residual moved from +3.42
+to +3.62 (std 3.41 to 3.43, still by far the widest spread of any
+family), and llama3.2_3b's mean residual moved from -1.08 to -1.23
+(more negative - megamath+episteme_coder's drift, 0.4326, is now this
+family's highest recorded, and its damage, 4.41x, sits below what the
+pooled curve predicts at that drift, consistent with the rest of the
+family's below-curve pattern). Every headline number (pearson r,
+spearman rho, leave-one-family-out range, the healthy/catastrophic
+split, the residual-vs-size mismatch) holds in the same direction and
+at essentially the same strength with n=117 as it did at n=115 - this
+was a robustness check, not a different result.]
+
+
+ROUND EIGHTEEN: THE CKA ACTIVATION-PROBING FOLLOW-UP - ALSO DEAD
+------------------------------------------------------------------
+
+Round Two's "WHERE THAT LEAVES THINGS" section (above) named
+activation-based probing - CKA / representation divergence between
+parent models on a probe set, instead of static weight diffs - as "the
+real fix, if pursued" and marked it "Not started." It was, in fact,
+started and finished; the result just never made it into this file.
+This round documents it and corrects that pointer.
+
+Method (eval/phase7_probe.py, then eval/phase7_full_validation.py):
+for each fine-tune, run forward passes over the same fixed eval-text
+probe set already used for perplexity (eval/eval_texts.py), capture
+hidden states at every layer (embedding output + all transformer
+blocks), and compute linear CKA between each fine-tune's hidden states
+and the shared base model's, per layer. 1 - CKA gives a per-layer
+divergence-from-base score; averaging across layers gives one number
+per model. A few candidate combinations of the two fine-tunes' scores
+were tried per pair: cka_div_a, cka_div_b (each model's own divergence
+from base), cka_combined (sum), cka_product, and cka_combined_excl_last
+(sum excluding the final layer, in case the last hidden state -
+closest to the LM head - behaves differently from the rest).
+
+phase7_probe.py ran this on 3 pairs first, chosen because the old
+conflict score couldn't tell them apart (all ~0.49-0.50) despite very
+different real perplexity: anchor-self (base+base2, ppl 9.563,
+trivial), instruct+michaelj1_wikitext (ppl 9.867, this family's best
+real pair), michaelj1+cot (ppl 14.985, this family's worst real pair).
+The anchor separated cleanly (combined divergence exactly 0, as
+expected for two identical models), confirming the plumbing works, but
+the two real pairs came out backwards - instruct+michaelj1_wikitext
+(the better merge) showed higher combined divergence (0.0121) than
+michaelj1+cot (the worse merge, 0.0043). Worth flagging on its own:
+even in this 3-pair sanity check, the metric didn't rank the two real
+pairs in the right direction. That result alone wasn't enough to kill
+the approach - n=2 real pairs is not a validation - so it went to a
+full pass anyway.
+
+phase7_full_validation.py reused all 28 pairs already merged and
+perplexity-scored in Phase 5/6 (big_validation_results.json +
+phase_b_results.json, qwen 0.5B and smollm2 360M, no re-merging or
+re-measuring perplexity needed) and correlated every CKA variant
+against the existing perplexity column. Results:
+eval/phase7_full_validation_results.json.
+
+  metric                  | all n=28              | non-trivial n=26
+  ------------------------|------------------------|------------------------
+  old_conflict             | rho=+0.118 (p=0.55)    | rho=-0.030 (p=0.88)
+  cka_div_a                | rho=+0.426 (p=0.024)   | rho=+0.342 (p=0.087)
+  cka_div_b                | rho=-0.016 (p=0.94)    | rho=-0.176 (p=0.39)
+  cka_combined             | rho=+0.142 (p=0.47)    | rho=+0.014 (p=0.95)
+  cka_product               | rho=+0.307 (p=0.11)    | rho=+0.199 (p=0.33)
+  cka_combined_excl_last    | rho=+0.077 (p=0.70)    | rho=-0.062 (p=0.76)
+
+Bottom line: same failure pattern as the raw-weight-diff metric family.
+cka_div_a clears p<0.05 on the full n=28 (which includes the two
+trivial self-merge anchors at exactly 0 divergence/near-base
+perplexity - the same kind of coarse trivial/non-trivial separation
+that made conflict look meaningful in early rounds before the
+non-trivial cut was applied), but drops to non-significant the moment
+the anchors are excluded (n=26, rho=0.342, p=0.087). Every other
+combination (cka_div_b, cka_combined, cka_product,
+cka_combined_excl_last) is non-significant in both cuts. old_conflict
+on this same data reads rho=+0.118 (p=0.55), consistent with its
+performance in every other round. CKA activation probing distinguishes
+"a merge happened" from "nothing happened," the same coarse signal
+static weight diffs already provided, and does not provide fine-grained
+ranking within real, non-trivial merges. This is not being spun as a
+partial win: the one metric that looked promising (cka_div_a) only
+clears significance when the trivial anchors are still in the pool,
+and the 3-pair sanity check that came before the full run got the
+direction backwards on both real pairs it looked at.
+
+Caveats: this ran on the same two small-scale families (0.5B/360M)
+already shown to be a hard case for the raw-weight-diff metrics
+(Round Two/Three), using the same generic eval-text probe set as
+perplexity (not a purpose-built probe dataset, which the original
+Round Two proposal implied might matter), and only linear CKA was
+tried (kernel CKA or other representation-similarity metrics remain
+untested). It's possible activation probing fares better at a scale or
+with a probe design this pass didn't try - but on the same footing as
+every other metric tested so far, it did not beat the pattern.
+
+[Update, corrects the "Not started" line under WHERE THAT LEAVES
+THINGS above: this was run - see this round. CKA activation probing
+came back dead, same pattern as the raw-weight-diff family.]
+
+Reproduce: python eval/phase7_probe.py (3-pair sanity check) then
+python eval/phase7_full_validation.py (full n=28 pass, resumable in
+the sense that hidden-state computation is cached per unique repo
+within a run; reads big_validation_results.json and
+phase_b_results.json, writes phase7_full_validation_results.json).
+Same environment as Round Two/Three (eval/requirements.txt, an
+8GB-VRAM GPU is sufficient at 0.5B/360M).
+
+
+ROUND NINETEEN: COMPLETING THE LLAMA3.2_3B DOMAIN-SHIFT MATRIX
+--------------------------------------------------------------------
+
+eval/phase_trend_llama_results.json (n=4) sat in the repo with no
+matching round in this file. On inspection, it is NOT the same result
+already narrated in "ROUND FOURTEEN, CONTINUED" (a reasonable guess
+before checking - both involve megamath - but the pair in that
+narration, megamath+episteme_coder, conflict=0.4755,
+drift_magnitude=0.4326, perplexity=30.73, does not appear in this
+JSON at all; that point was run separately and is one of the two
+Round Thirteen/Fourteen results still only living in prose, see
+ROUND THIRTEEN and ROUND FOURTEEN's reproduction notes above). What
+this file actually contains, per its own script's docstring
+(eval/phase_trend_llama.py, itself labeled "Round Fifteen" internally
+- superseded by the time this file's Round Fifteen became the 7B jump,
+which is why the numbering here doesn't match the script's own
+comment): the llama3.2_3b family has 6 fine-tunes sharing one base
+(instruct, dolphin, home, korean, coder, megamath), a full C(6,2)=15-
+pair matrix. 11 of those 15 pairs were already measured across Round
+Eleven (instruct/dolphin/home/korean, 6 pairs), Round Twelve (+coder,
+4 more), and Round Fourteen v2 (megamath+coder, 1 point, the
+episteme_coder pair above). This script filled the remaining gap:
+megamath crossed against each of the original four (instruct, dolphin,
+home, korean), completing the matrix without needing any new
+candidate model. Same TIES config as every other round on this family
+(density=0.5, weight=0.5, normalize=True, fp16).
+
+Result:
+
+  pair                 | conflict | drift_magnitude | perplexity | damage
+  ----------------------|----------|------------------|------------|--------
+  instruct+megamath      | 0.4705   | 0.4061           | 27.20      | 3.90x
+  home+megamath           | 0.4706   | 0.4062           | 27.92      | 4.01x
+  korean+megamath         | 0.4708   | 0.4081           | 24.72      | 3.55x
+  dolphin+megamath        | 0.4836   | 0.3323           | 56.13      | 8.05x
+
+(damage = perplexity / this family's self-merge anchor, 6.969, same
+normalization used in Round Seventeen's pooled analysis.)
+
+Three of the four land close together (drift 0.406-0.408, damage
+3.55x-4.01x) and close to the already-narrated megamath+episteme_coder
+point (drift 0.433, damage 4.41x) - consistent with megamath being the
+single heaviest fine-tune on this family regardless of which lighter
+fine-tune it's crossed against. dolphin+megamath breaks that pattern:
+the LOWEST drift_magnitude of the four (0.332) paired with the HIGHEST
+perplexity (56.13, the worst point recorded anywhere in the
+llama3.2_3b family, in either this round or any prior one on this
+family). That's a rank-order inversion within a single, otherwise
+tight cluster - lower drift, more damage - the same kind of local
+disagreement between the metric and real outcome seen in isolated
+cases elsewhere in this project (Round Fourteen's first MergeBench
+attempt, the smollm2 anomaly in Round One/Sixteen), not something this
+n=4 pass can explain on its own. conflict stays flat across all four
+(0.470-0.484), same non-discrimination pattern as every other round.
+
+Caveats: n=4, one merge method/density, same limitation as every small
+pass in this file. The dolphin+megamath inversion is a single point -
+worth a look at whether dolphin's own fine-tuning (Dolphin3.0, a
+general chat/reasoning SFT) has some specific interaction with
+megamath's continued-pretraining shift that instruct/home/korean don't
+share, but that's speculation pending a follow-up, not a finding.
+These 4 points are already included in eval/phase_pooled_meta.py's
+FILES list and are part of the n=115 pooled in Round Seventeen (they
+account for 4 of llama3.2_3b's 14 pooled points, and dolphin+megamath
+is that family's single worst pooled residual point).
+
+Reproduce: python eval/phase_trend_llama.py (resumable; results in
+eval/phase_trend_llama_results.json). Same environment as Round
+Eleven/Twelve/Fourteen on this family (eval/requirements.txt).
 
 
 FUTURE WORK: CROSS-SIZE WEIGHT-SPACE FUSION (0.5B + 3B, SAME FAMILY)

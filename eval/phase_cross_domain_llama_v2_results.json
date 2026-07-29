@@ -1,0 +1,12 @@
+[
+  {
+    "family": "llama3.2_3b",
+    "pair": "megamath+episteme_coder",
+    "model_a": "LLM360/MegaMath-Llama-3.2-3B",
+    "model_b": "EpistemeAI/Llama-3.2-3B-Agent007-Coder",
+    "conflict": 0.4755243304672601,
+    "conflict_weighted": 0.45481431211419354,
+    "drift_magnitude": 0.43260460808613355,
+    "perplexity": 30.731759780902756
+  }
+]

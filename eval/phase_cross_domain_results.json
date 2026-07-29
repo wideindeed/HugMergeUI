@@ -1,0 +1,12 @@
+[
+  {
+    "family": "qwen1.5b",
+    "pair": "coder_instruct+math_instruct",
+    "model_a": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "model_b": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "conflict": 0.360742598160418,
+    "conflict_weighted": 0.25408717285867216,
+    "drift_magnitude": 2.369547663645658,
+    "perplexity": 735232.326141361
+  }
+]
