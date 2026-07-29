@@ -1,5 +1,7 @@
 # HugMergeUI
 
+[![CI](https://github.com/wideindeed/HugMergeUI/actions/workflows/ci.yml/badge.svg)](https://github.com/wideindeed/HugMergeUI/actions/workflows/ci.yml)
+
 See whether two fine-tuned models are going to fight each other before you burn GPU hours merging them for real.
 
 Point it at a mergekit config. It pulls the real weights, diffs them layer by layer, and shows where the two models agree and where they clash. The result renders as a 3D orbiting system you can fly around, click into, and inspect layer by layer.
@@ -45,6 +47,10 @@ Click "Try an example" in the app for a few ready-made model pairs, no config wr
 
 - `backend/` — FastAPI. Parses mergekit configs, checks architecture compatibility, pulls safetensors weights from Hugging Face, scores sign-conflict and redundancy per layer.
 - `frontend/` — React, TypeScript, Three.js. Config editor, architecture warnings, model picker, and a 3D layer-by-layer scene you can fly around and click into.
+
+## Testing
+
+`backend/tests/` (pytest) covers the scoring engine, architecture checks, and config resolution against real Hugging Face models and real weight tensors — no mocking, same philosophy as the validation work in `VALIDATION.txt`. `frontend/` is currently type-checked and linted (`tsc`, `oxlint`) in CI; it has no dedicated unit tests yet. Every push and PR to `main` runs both via GitHub Actions (`.github/workflows/ci.yml`) — see the badge above.
 
 ## Does the score actually predict merge quality?
 
