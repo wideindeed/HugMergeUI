@@ -110,6 +110,18 @@ def main():
         rr, _ = stats.pearsonr(x[m], y[m])
         print(f"  drop {f:16s} -> r={rr:.4f}  n={m.sum()}")
 
+    print("\nhealthy-vs-catastrophic split (catastrophic = log(damage ratio) >= 1, "
+          "i.e. damage >= ~2.72x)")
+    healthy = y < 1
+    cat_fam = fam[~healthy]
+    print(f"  catastrophic tail: n={(~healthy).sum()}  families: "
+          f"{', '.join(f'{f}x{(cat_fam == f).sum()}' for f in sorted(set(cat_fam)))}")
+    hr, hp = stats.pearsonr(x[healthy], y[healthy])
+    hrho, hrp = stats.spearmanr(drift[healthy], damage[healthy])
+    print(f"  healthy-merge-only subset: n={healthy.sum()}")
+    print(f"    pearson r={hr:.4f} (r^2={hr**2:.3f}) p={hp:.3g}   "
+          f"spearman rho={hrho:.4f} p={hrp:.3g}")
+
     print("\nobserved drift range per family (detectability check)")
     for f in sorted(set(fam), key=lambda k: SIZE[k]):
         m = fam == f

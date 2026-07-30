@@ -1540,7 +1540,12 @@ Caveats, found during this pass and worth stating plainly:
 Reproduce: python eval/phase_pooled_meta.py (resumable in the sense
 that it just re-reads whatever's currently committed in eval/ - no
 state of its own). Depends only on json/os/numpy/scipy, no GPU, no
-network, runs in under a second.
+network, runs in under a second. [Update: the healthy-vs-catastrophic
+split above was originally computed ad hoc and only reported in this
+file's prose; the script now prints it directly (catastrophic tail
+count/family breakdown + healthy-subset pearson/spearman) as part of
+its normal output, so it no longer needs a separate reproduction
+step.]
 
 [Update: Round Thirteen (qwen1.5b, coder_instruct+math_instruct,
 perplexity 735,232) and the megamath+episteme_coder point from Round
