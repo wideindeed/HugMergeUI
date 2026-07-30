@@ -1,22 +1,11 @@
 import type { ConflictScoreResult, LayerScore, OtherScore } from '../api/types'
-
-// drift_magnitude is validated (VALIDATION.txt Rounds 4-8) as the metric
-// that actually tracks merge quality; conflict is shown as a secondary
-// stat only. See the same ceiling rationale in ConflictScene.tsx.
-const DRIFT_RISK_CEILING = 0.9
-
-function driftColor(drift: number): string {
-  // 0 -> green (low drift risk), ceiling+ -> red (high)
-  const shaped = Math.pow(Math.min(Math.max(drift, 0), DRIFT_RISK_CEILING) / DRIFT_RISK_CEILING, 0.6)
-  const hue = 120 * (1 - shaped)
-  return `hsl(${hue}, 70%, 45%)`
-}
+import { driftColor } from '../lib/risk'
 
 function LayerCell({ layer }: { layer: LayerScore }) {
   return (
     <div
       className="layer-cell"
-      style={{ backgroundColor: driftColor(layer.drift_magnitude) }}
+      style={{ backgroundColor: driftColor(layer.drift_magnitude, 45) }}
       title={
         `layer ${layer.layer}\n` +
         `drift magnitude: ${layer.drift_magnitude.toFixed(3)}\n` +
@@ -33,7 +22,7 @@ function LayerCell({ layer }: { layer: LayerScore }) {
 
 function OtherCard({ other }: { other: OtherScore }) {
   return (
-    <div className="other-card" style={{ borderColor: driftColor(other.drift_magnitude) }}>
+    <div className="other-card" style={{ borderColor: driftColor(other.drift_magnitude, 45) }}>
       <strong>Non-layer tensors</strong> (embeddings, norms, lm_head, …)
       <div>drift magnitude: {other.drift_magnitude.toFixed(3)}</div>
       <div>conflict: {other.conflict.toFixed(3)}</div>

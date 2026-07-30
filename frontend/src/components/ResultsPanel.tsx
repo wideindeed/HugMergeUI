@@ -3,7 +3,7 @@ import type { ConflictScoreResult } from '../api/types'
 import { useSimpleMode } from '../context/SimpleModeContext'
 import { explainResult } from '../lib/plainEnglish'
 import { AnalyticalView } from './AnalyticalView'
-import { ConflictScene } from './ConflictScene'
+import { DataView } from './DataView'
 import { LayerHeatmap } from './LayerHeatmap'
 import { ScoreProgress } from './ScoreProgress'
 
@@ -13,12 +13,12 @@ interface Props {
   scoreResult: ConflictScoreResult | null
 }
 
-type ViewMode = 'orbit' | 'analytical'
+type ViewMode = 'data' | 'analytical'
 
 export function ResultsPanel({ scoring, progress, scoreResult }: Props) {
   const { simple } = useSimpleMode()
   const [collapsed, setCollapsed] = useState(false)
-  const [viewMode, setViewMode] = useState<ViewMode>('orbit')
+  const [viewMode, setViewMode] = useState<ViewMode>('data')
 
   return (
     <section className="panel results-panel" data-tour-id="results">
@@ -38,11 +38,11 @@ export function ResultsPanel({ scoring, progress, scoreResult }: Props) {
                   <button
                     type="button"
                     role="tab"
-                    aria-selected={viewMode === 'orbit'}
-                    className={viewMode === 'orbit' ? 'view-toggle-active' : undefined}
-                    onClick={() => setViewMode('orbit')}
+                    aria-selected={viewMode === 'data'}
+                    className={viewMode === 'data' ? 'view-toggle-active' : undefined}
+                    onClick={() => setViewMode('data')}
                   >
-                    Orbit view
+                    Data view
                   </button>
                   <button
                     type="button"
@@ -55,8 +55,10 @@ export function ResultsPanel({ scoring, progress, scoreResult }: Props) {
                   </button>
                 </div>
               )}
-              {simple || viewMode === 'orbit' ? (
-                <ConflictScene layers={scoreResult.layers} other={scoreResult.other} />
+              {simple ? (
+                <LayerHeatmap result={scoreResult} />
+              ) : viewMode === 'data' ? (
+                <DataView result={scoreResult} />
               ) : (
                 <AnalyticalView result={scoreResult} />
               )}

@@ -1,15 +1,6 @@
 import { useState } from 'react'
-import type { ConflictScoreResult, LayerScore } from '../api/types'
-
-// Same validated risk framing as ConflictScene.tsx / LayerHeatmap.tsx, this
-// view exists to show the exact numbers behind that color, not a new metric.
-const DRIFT_RISK_CEILING = 0.9
-
-function driftColor(drift: number): string {
-  const shaped = Math.pow(Math.min(Math.max(drift, 0), DRIFT_RISK_CEILING) / DRIFT_RISK_CEILING, 0.6)
-  const hue = 120 * (1 - shaped)
-  return `hsl(${hue}, 70%, 50%)`
-}
+import type { ConflictScoreResult } from '../api/types'
+import { DRIFT_RISK_CEILING, driftColor } from '../lib/risk'
 
 const CHART_HEIGHT = 220
 const CHART_PAD_LEFT = 42
@@ -139,48 +130,6 @@ export function AnalyticalView({ result }: { result: ConflictScoreResult }) {
         ) : (
           <span className="analytical-hover-hint">Hover a bar for exact values.</span>
         )}
-      </div>
-
-      <div className="analytical-table-scroll">
-        <table className="analytical-table">
-          <thead>
-            <tr>
-              <th>Layer</th>
-              <th>Tensors</th>
-              <th>Drift</th>
-              <th>Conflict</th>
-              <th>Redund. A</th>
-              <th>Redund. B</th>
-            </tr>
-          </thead>
-          <tbody>
-            {layers.map((l: LayerScore, i) => (
-              <tr
-                key={l.layer}
-                className={hoverIdx === i ? 'analytical-row-hover' : undefined}
-                onMouseEnter={() => setHoverIdx(i)}
-                onMouseLeave={() => setHoverIdx(null)}
-              >
-                <td>{l.layer}</td>
-                <td>{l.tensor_count}</td>
-                <td style={{ color: driftColor(l.drift_magnitude) }}>{l.drift_magnitude.toFixed(4)}</td>
-                <td>{l.conflict.toFixed(4)}</td>
-                <td>{l.redundancy_a.toFixed(4)}</td>
-                <td>{l.redundancy_b.toFixed(4)}</td>
-              </tr>
-            ))}
-            {other && (
-              <tr className="analytical-other-row">
-                <td>other</td>
-                <td>{other.tensor_count}</td>
-                <td style={{ color: driftColor(other.drift_magnitude) }}>{other.drift_magnitude.toFixed(4)}</td>
-                <td>{other.conflict.toFixed(4)}</td>
-                <td>{other.redundancy_a.toFixed(4)}</td>
-                <td>{other.redundancy_b.toFixed(4)}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
       </div>
     </section>
   )
